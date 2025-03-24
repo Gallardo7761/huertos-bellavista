@@ -1,11 +1,17 @@
 import '../css/App.css'
 
+import Header from './Header'
+import NavBar from './NavBar'
+import Footer from './Footer'
+
 function App() {
 
   return (
     <>
-      <h1>Prueba</h1>
-      <p>Esto es una prueba</p>
+      <Header />
+      <NavBar />
+
+      <Footer />
     </>
   )
 }
