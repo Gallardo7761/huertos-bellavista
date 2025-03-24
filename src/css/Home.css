@@ -1,0 +1,97 @@
+/* Contenedor principal */
+.home-container {
+  padding: 2rem;
+  font-family: 'Open Sans';
+  color: #333;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: 'Product Sans';
+}
+
+/* Centrado del contenido */
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Separador estilizado */
+.section-divider {
+  border: none;
+  height: 2px;
+  background: black;
+  margin: 1rem 0 2rem;
+  width: 50px;
+}
+
+/* Espaciado entre secciones */
+.about-section,
+.gallery-section,
+.map-section {
+  margin-bottom: 4rem;
+}
+
+/* Sección "Sobre nosotros" */
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+}
+
+.text-content {
+  flex: 1 1 60%;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.img-content {
+  flex: 1 1 30%;
+}
+
+/* Imagen sobre nosotros */
+.about-img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Galería de imágenes */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.gallery-img {
+  width: 100%;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-img:hover {
+  transform: scale(1.05);
+}
+
+/* Mapa */
+.map-wrapper iframe {
+  width: 100%;
+  height: 60vh;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+  }
+  .img-content {
+    flex: 1 1 100%;
+  }
+}

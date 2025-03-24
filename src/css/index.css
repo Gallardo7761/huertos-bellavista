@@ -35,6 +35,11 @@ html, main {
   background-color: var(--bg-green);
 }
 
+body {
+  background-color: transparent !important;
+  font-family: 'Open Sans';
+}
+
 * {
   font-family: 'Open Sans';
 }
