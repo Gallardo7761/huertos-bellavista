@@ -1,0 +1,104 @@
+/* Navbar base */
+.navbar {
+    background-color: var(--white) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    z-index: 1000;
+}
+  
+/* Marca / logo */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: #2e7d32 !important;
+    transition: color 0.2s ease-in-out;
+}
+
+.navbar-brand:hover {
+    color: #1b5e20 !important;
+}
+
+/* Links del nav */
+.nav-link {
+    font-weight: 500;
+    color: #444 !important;
+    transition: all 0.2s ease-in-out;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    background-color: rgba(46, 125, 50, 0.1);
+    color: #2e7d32 !important;
+}
+
+/* Dropdown menus */
+.custom-hamburger{
+    background-color: #2e7d32;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    border: none;
+    margin-top: 8px;
+    padding: 0.5rem 0;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-item {
+    font-weight: 400;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* Botón del menú colapsable */
+.navbar-toggler {
+    border: none;
+    background-color: transparent;
+}
+
+.navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Divider visual */
+hr {
+    border-top: 1px solid #dee2e6;
+}
+
+/* Animación fade */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-item > a.nav-link {
+    padding: 0.5rem 1rem;
+    font-size: larger;
+    font-family: "Product Sans";
+}
+
+a.dropdown-item {
+    font-size: larger;
+    font-family: "Product Sans";
+}

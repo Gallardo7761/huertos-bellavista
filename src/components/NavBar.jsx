@@ -6,6 +6,8 @@ import {
   faSignOut
 } from '@fortawesome/free-solid-svg-icons';
 
+import '../css/NavBar.css';
+
 import NavHome from './NavHome';
 import NavListaEspera from './NavListaEspera';
 import NavHerramientas from './NavHerramientas';
@@ -13,14 +15,14 @@ import NavGestion from './NavGestion';
 
 const Navbar = () => {
   return (
-    <nav className="row navbar navbar-expand-lg sticky-top border-bottom bg-light px-3">
-      <div className="container-fluid d-flex justify-content-between">
+    <nav className="navbar navbar-expand-lg sticky-top shadow px-3 rounded-bottom-4">
+      <div className="container-fluid d-flex justify-content-between p-0">
         {/* Logo a la izquierda */}
         <Link className="navbar-brand ms-1" id="nav-username" to="/perfil"></Link>
 
         {/* Botón de menú */}
         <button
-          className="navbar-toggler collapsed green"
+          className="navbar-toggler collapsed custom-hamburger"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#collapse"
@@ -33,7 +35,7 @@ const Navbar = () => {
 
         {/* Menú */}
         <div className="navbar-collapse collapse" id="collapse">
-          <ul className="navbar-nav me-auto mb-2 mb-md-0 m-0 p-0">
+          <ul className="navbar-nav me-auto mb-2 mb-md-0 m-0 p-2 gap-2">
             <NavHome />
             <NavListaEspera />
             <NavHerramientas />
@@ -42,7 +44,7 @@ const Navbar = () => {
           <hr className="m-0 p-0 mt-2 mb-2" />
 
           {/* Login */}
-          <ul className="navbar-nav d-flex flex-md-none m-0 p-0">
+          <ul className="navbar-nav d-flex flex-md-none mb-2 mb-md-0 m-0 p-2 gap-2">
             <li className="nav-item" id="nav-login">
               <Link className="nav-link" to="/login" title="Iniciar sesión">
                 <FontAwesomeIcon icon={faSignIn} className="me-2" />Iniciar sesión

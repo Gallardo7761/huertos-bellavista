@@ -24,5 +24,17 @@
 }
 
 :root {
+  --white: #f8f9fa;
+  --light-green: #3e8f5a;
+  --dark-green: #132c18;
+  --bg-green: #bad3b9;
+}
+
+html, main {
+  font-family: 'Open Sans';
+  background-color: var(--bg-green);
+}
+
+* {
   font-family: 'Open Sans';
 }
