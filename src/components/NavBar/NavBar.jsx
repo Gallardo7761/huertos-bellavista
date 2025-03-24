@@ -6,7 +6,7 @@ import {
   faSignOut
 } from '@fortawesome/free-solid-svg-icons';
 
-import '../css/NavBar.css';
+import '../../css/NavBar.css';
 
 import NavHome from './NavHome';
 import NavListaEspera from './NavListaEspera';
