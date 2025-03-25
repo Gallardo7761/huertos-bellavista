@@ -32,8 +32,12 @@ export function ThemeProvider({ children }) {
     useEffect(() => {
         document.body.classList.remove("light", "dark");
         document.body.classList.add(theme);
+
+        document.querySelector("html").classList.remove("light", "dark");
+        document.querySelector("html").classList.add(theme);
+    
         localStorage.setItem("theme", theme);
-    }, [theme]);
+    }, [theme]);    
 
     const toggleTheme = () => {
         setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));

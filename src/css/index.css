@@ -1,45 +1,110 @@
+/* === CARGA DE FUENTES === */
 @font-face {
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
   src: url('../fonts/OpenSans.ttf');
 }
 
 @font-face {
-  font-family: 'Product Sans';
+  font-family: "Product Sans";
   src: url('../fonts/ProductSansRegular.ttf');
 }
 
 @font-face {
-  font-family: 'Product Sans Italic';
+  font-family: "Product Sans Italic";
   src: url('../fonts/ProductSansItalic.ttf');
 }
 
 @font-face {
-  font-family: 'Product Sans Italic Bold';
+  font-family: "Product Sans Italic Bold";
   src: url('../fonts/ProductSansBoldItalic.ttf');
 }
 
 @font-face {
-  font-family: 'Product Sans Bold';
+  font-family: "Product Sans Bold";
   src: url('../fonts/ProductSansBold.ttf');
 }
 
-:root {
+/* === VARIABLES POR TEMA === */
+.light {
   --white: #f8f9fa;
   --light-green: #3e8f5a;
   --dark-green: #132c18;
   --bg-green: #bad3b9;
+  --text-color: var(--dark-green);
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --placeholder-color: #6c757d;
 }
 
-html, main {
-  font-family: 'Open Sans';
+.dark {
+  --white: #f8f9fa;
+  --light-green: #81c784;
+  --dark-green: #121212;
+  --bg-green: #121212;
+  --text-color: var(--white);
+  --input-bg: #1e1e1e;
+  --input-border: #555;
+  --placeholder-color: #999;
+}
+
+/* === ESTILOS BASE === */
+html {
+  font-family: "Open Sans", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Fondo y color general del tema */
+html {
+  background-color: var(--bg-green);
+  color: var(--text-color);
+}
+
+/* Body transparente para evitar solapamientos con navbar */
+body {
+  background-color: transparent !important;
+  font-family: "Open Sans", sans-serif;
+  color: var(--text-color);
+}
+
+/* Main u otros wrappers (pueden heredar el color del html) */
+main {
+  color: var(--text-color);
   background-color: var(--bg-green);
 }
 
-body {
-  background-color: transparent !important;
-  font-family: 'Open Sans';
+/* === TIPOGRAFÍA GLOBAL === */
+div,
+label,
+input,
+p,
+span,
+a,
+button {
+  font-family: "Open Sans", sans-serif;
+  color: var(--text-color);
 }
 
-* {
-  font-family: 'Open Sans';
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Product Sans", sans-serif;
+  color: var(--text-color);
+}
+
+/* === INPUTS ADAPTADOS AL TEMA === */
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border-color: var(--input-border);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--placeholder-color);
 }

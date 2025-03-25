@@ -1,5 +1,6 @@
 import '../css/App.css'
 
+import ThemeButton from './ThemeButton'
 import Header from './Header'
 import NavBar from './NavBar/NavBar'
 import Footer from './Footer'
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <>
+      <ThemeButton />
       <Header />
       <NavBar />
       <Routes>

@@ -12,10 +12,13 @@ import NavHome from './NavHome';
 import NavListaEspera from './NavListaEspera';
 import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
+import { useTheme } from '../../context/ThemeContext';
 
 const Navbar = () => {
+  const { theme } = useTheme();
+
   return (
-    <nav className="navbar navbar-expand-lg sticky-top shadow px-3 rounded-bottom-4">
+    <nav className={`navbar navbar-expand-lg sticky-top shadow px-3 rounded-bottom-4 ${theme}`}>
       <div className="container-fluid d-flex justify-content-between p-0">
         {/* Logo a la izquierda */}
         <Link className="navbar-brand ms-1" id="nav-username" to="/perfil"></Link>
