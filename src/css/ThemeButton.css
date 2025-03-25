@@ -14,18 +14,16 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
     outline: none;
+    background-color: white;
+    color: black;
 }
 
 /* Modo claro */
 .light .theme-toggle {
-    background-color: #1e1e1e;
-    color:  var(--white);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Modo oscuro */
 .dark .theme-toggle {
-    background-color: var(--light-green);
-    color: #f1f1f1;
     box-shadow: 0 4px 6px rgba(255, 255, 255, 0.05);
 }

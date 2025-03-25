@@ -5,8 +5,12 @@
     background-repeat: no-repeat;
 }
 
-.mask {
+.light .mask {
     background-color: rgba(19, 146, 85, 0.6);
+}
+
+.dark .mask {
+    background-color: rgba(8, 82, 46, 0.6);
 }
 
 .header-title {

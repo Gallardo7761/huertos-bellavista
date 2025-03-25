@@ -1,10 +1,12 @@
 import '../css/Header.css';
-
+import { useTheme } from '../context/ThemeContext';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+    const { theme } = useTheme();
+
     return (
-        <header className='text-center bg-img'>
+        <header className={`text-center bg-img ${theme}`}>
             <div className="m-0 p-5 mask">
                 <div className="d-flex justify-content-center align-items-center h-100">
                     <Link to='/' className='text-decoration-none'>

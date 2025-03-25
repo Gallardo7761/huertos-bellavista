@@ -18,7 +18,7 @@ const Navbar = () => {
   const { theme } = useTheme();
 
   return (
-    <nav className={`navbar navbar-expand-lg sticky-top shadow px-3 rounded-bottom-4 ${theme}`}>
+    <nav className={`navbar navbar-expand-lg sticky-top shadow px-3 ${theme}`}>
       <div className="container-fluid d-flex justify-content-between p-0">
         {/* Logo a la izquierda */}
         <Link className="navbar-brand ms-1" id="nav-username" to="/perfil"></Link>
