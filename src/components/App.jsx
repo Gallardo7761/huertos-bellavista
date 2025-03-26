@@ -5,7 +5,7 @@ import Header from './Header'
 import NavBar from './NavBar/NavBar'
 import Footer from './Footer'
 import { Route, Routes, useLocation } from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute'
+import ProtectedRoute from './Auth/ProtectedRoute.jsx'
 
 import Home from '../pages/Home'
 import Socios from '../pages/Socios'

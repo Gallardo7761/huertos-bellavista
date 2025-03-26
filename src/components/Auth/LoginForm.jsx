@@ -1,14 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import '../css/LoginForm.css';
+import '../../css/LoginForm.css';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import PasswordInput from './PasswordInput';
+import PasswordInput from './PasswordInput.jsx';
 
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext.jsx";
 
-import Container from './Container';
-import ContentWrapper from './ContentWrapper';
+import Container from '../Container.jsx';
+import ContentWrapper from '../ContentWrapper.jsx';
 
 const LoginForm = () => {
     const { login, error } = useContext(AuthContext);

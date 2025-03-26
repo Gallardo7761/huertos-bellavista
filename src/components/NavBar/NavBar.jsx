@@ -15,9 +15,9 @@ import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
 import { useTheme } from '../../hooks/useTheme';
 
-import IfAuthenticated from '../IfAuthenticated';
-import IfNotAuthenticated from '../IfNotAuthenticated';
-import IfRole from '../IfRole';
+import IfAuthenticated from '../Auth/IfAuthenticated.jsx';
+import IfNotAuthenticated from '../Auth/IfNotAuthenticated.jsx';
+import IfRole from '../Auth/IfRole.jsx';
 
 const Navbar = () => {
   const { theme } = useTheme();

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../css/PasswordInput.css';
+import '../../css/PasswordInput.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faKey } from '@fortawesome/free-solid-svg-icons';

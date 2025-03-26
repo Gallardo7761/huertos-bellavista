@@ -1,4 +1,4 @@
-import {useAuth} from "../hooks/useAuth";
+import {useAuth} from "../../hooks/useAuth.js";
 
 const IfNotAuthenticated = ({ children }) => {
   const { isAuthenticated } = useAuth();
