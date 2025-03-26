@@ -103,7 +103,7 @@
   
   .dark .navbar {
     background-color: #1e1e1e !important;
-    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.09);
   }
   
   .dark .navbar-brand {

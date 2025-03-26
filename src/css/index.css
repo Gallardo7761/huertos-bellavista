@@ -36,6 +36,7 @@
   --light-green: #3e8f5a;
   --dark-green: #132c18;
   --bg-green: #bad3b9;
+  --secondary-green: #81c784;
   --text-color: var(--dark-green);
   --input-bg: #ffffff;
   --input-border: #ced4da;
@@ -47,6 +48,7 @@
   --light-green: #81c784;
   --dark-green: #121212;
   --bg-green: #121212;
+  --secondary-green: #3e8f5a;
   --text-color: var(--white);
   --input-bg: #1e1e1e;
   --input-border: #555;
@@ -118,6 +120,27 @@ select {
 input::placeholder,
 textarea::placeholder {
   color: var(--placeholder-color);
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {   
+  border-color: var(--secondary-green);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px var(--secondary-green);
+  outline: 0 none;
 }
 
 

@@ -55,7 +55,7 @@
   }
   
   .light .theme-toggle {
-    box-shadow: 0 4px 10px rgba(68, 7, 182, 0.808);
+    box-shadow: 0 0px 10px rgba(68, 7, 182, 0.808);
   }
   
   
@@ -69,6 +69,6 @@
   }
   
   .dark .theme-toggle {
-    box-shadow: 0 4px 10px rgba(206, 180, 36, 0.589);
+    box-shadow: 0 0px 10px rgba(206, 180, 36, 0.589);
   }
   

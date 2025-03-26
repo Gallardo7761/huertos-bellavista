@@ -21,7 +21,7 @@ const PasswordInput = ({ value, onChange, name = "password" }) => {
         onChange={onChange}
       />
       <button
-        className="btn btn-success show-button rounded-start-0 rounded-4"
+        className="btn show-button rounded-start-0 rounded-4"
         type="button"
         onClick={toggleShow}
         aria-label="Mostrar contraseña"

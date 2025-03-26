@@ -45,28 +45,35 @@
     border: 1px solid #555;
 }
 
-
 /* ================================
      LABELS
-  ================================== */
+   ================================== */
+.form-floating > label {
+    font-family: 'Product Sans';
+    font-size: 1.1em;
+}
 
-.card.login-card .form-floating label {
+/* Tema claro */
+.light .form-floating > label {
+    color: var(--text-color);
+}
+
+.light .form-floating > label::after {
     background-color: transparent !important;
-    transition: color 0.3s ease;
 }
 
-.light .form-floating label {
-    color: #333;
+/* Tema oscuro */
+.dark .form-floating > label {
+    color: #fff !important;
 }
 
-.dark .form-floating label {
-    color: #fff;
+.dark .form-floating > label::after {
+    background-color: transparent !important;
 }
-
 
 /* ================================
      BOTÓN
-  ================================== */
+   ================================== */
 
 button.login-button {
     font-family: 'Product Sans';
@@ -86,12 +93,18 @@ button.login-button {
     color: var(--white);
 }
 
+.light .login-button:hover {
+    background-color: var(--secondary-green);
+    color: var(--dark-green);
+}
+
 /* Tema oscuro */
 .dark .login-button {
     background-color: var(--light-green);
     color: var(--dark-green);
 }
 
-.login-button:hover {
-    filter: brightness(1.05);
+.dark .login-button:hover {
+    background-color: var(--secondary-green);
+    color: var(--dark-green);
 }

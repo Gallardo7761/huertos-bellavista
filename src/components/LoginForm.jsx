@@ -5,7 +5,10 @@ import PasswordInput from './PasswordInput';
 
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {AuthContext} from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
+
+import Container from './Container';
+import ContentWrapper from './ContentWrapper';
 
 const LoginForm = () => {
     const { login, error } = useContext(AuthContext);
@@ -36,47 +39,49 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="row m-0 p-0 my-5">
-            <div className="rounded-5 col-md-6 col-lg-5 col-xxl-4 container shadow card p-5 d-flex flex-column gap-4">
-                <h1 className="text-center">Inicio de sesión</h1>
-                <form className="d-flex flex-column gap-5" onSubmit={handleSubmit}>
-                    <div className="m-0 p-0 d-flex flex-column gap-3">
-                        <div className="form-floating">
-                            <input
-                                type="text"
-                                className="form-control rounded-4 focus-ring"
-                                id="floatingInput"
-                                placeholder="DNI o usuario"
-                                name="usuario"
-                                value={formState.usuario}
+        <Container>
+            <ContentWrapper>
+                <div className="rounded-5 col-md-6 col-lg-5 col-xxl-4 container shadow card p-5 d-flex flex-column gap-4">
+                    <h1 className="text-center">Inicio de sesión</h1>
+                    <form className="d-flex flex-column gap-5" onSubmit={handleSubmit}>
+                        <div className="m-0 p-0 d-flex flex-column gap-3">
+                            <div className="form-floating">
+                                <input
+                                    type="text"
+                                    className="form-control rounded-4 focus-ring"
+                                    id="floatingInput"
+                                    placeholder="DNI o usuario"
+                                    name="usuario"
+                                    value={formState.usuario}
+                                    onChange={handleChange}
+                                />
+                                <label htmlFor="floatingInput">
+                                    <FontAwesomeIcon icon={faUser} className="me-2" />
+                                    Usuario
+                                </label>
+                            </div>
+                            <PasswordInput
+                                value={formState.dni}
                                 onChange={handleChange}
+                                name="dni"
                             />
-                            <label htmlFor="floatingInput">
-                                <FontAwesomeIcon icon={faUser} className="me-2" />
-                                Usuario
-                            </label>
                         </div>
-                        <PasswordInput
-                            value={formState.dni}
-                            onChange={handleChange}
-                            name="dni"
-                        />
-                    </div>
 
-                    {error && (
-                        <div className="alert alert-danger text-center py-2">
-                            {error}
+                        {error && (
+                            <div className="alert alert-danger text-center py-2">
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="row m-0 p-0 justify-content-center">
+                            <button type="submit" className="btn login-button">
+                                Iniciar sesión
+                            </button>
                         </div>
-                    )}
-
-                    <div className="row m-0 p-0 justify-content-center">
-                        <button type="submit" className="btn btn-outline-success login-button">
-                            Iniciar sesión
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                    </form>
+                </div>
+            </ContentWrapper>
+        </Container>
     );
 };
 
