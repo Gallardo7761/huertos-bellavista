@@ -35,3 +35,5 @@ export const ConfigProvider = ({ children }) => {
 ConfigProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export {ConfigContext};

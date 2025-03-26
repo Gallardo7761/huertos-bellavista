@@ -1,40 +1,4 @@
 /* ================================
-   HOME - CONTENEDOR GENERAL
-================================== */
-
-.home-container {
-  padding: 2rem;
-  font-family: 'Open Sans';
-  color: #333;
-}
-
-.content-wrapper {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-
-/* ================================
-   TITULOS Y SEPARADORES
-================================== */
-
-.section-title {
-  font-family: 'Product Sans';
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.section-divider {
-  border: none;
-  height: 2px;
-  background: black;
-  margin: 1rem 0 2rem;
-  width: 50px;
-}
-
-
-/* ================================
    ESPACIADO ENTRE SECCIONES
 ================================== */
 

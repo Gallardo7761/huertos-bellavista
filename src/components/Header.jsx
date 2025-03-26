@@ -12,7 +12,6 @@ const Header = () => {
                     <Link to='/' className='text-decoration-none'>
                         <h1 className='header-title m-0 text-white shadowed'>Asociación Huertos La Salud - Bellavista</h1>
                     </Link>
-                    <h4 className='bg-dark rounded-3 m-0 mt-3 p-2 col-6 text-danger'>🚧 Esto es un mockup, próximamente estará disponible la web entera 🚧</h4>
                 </div>
             </div>
         </header>

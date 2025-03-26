@@ -53,3 +53,5 @@ DataProvider.propTypes = {
     params: PropTypes.object,
   }).isRequired,
 };
+
+export { DataContext };

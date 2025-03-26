@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
-import Mapa from '../components/Mapa';
 import Mapa3D from '../components/Mapa3D';
 
 const Home = () => {
   return (
-    <main className="home-container">
+    <main className="custom-container">
       <section className="about-section">
         <div className="content-wrapper">
           <h1 className="section-title">Sobre nosotros</h1>

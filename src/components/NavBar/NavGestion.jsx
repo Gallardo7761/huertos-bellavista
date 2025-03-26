@@ -8,8 +8,7 @@ import {
   faWallet,
   faFileInvoice,
   faUserPlus,
-  faShapes,
-  faEnvelope
+  faShapes
 } from '@fortawesome/free-solid-svg-icons';
 
 const NavGestion = () => {
@@ -56,12 +55,6 @@ const NavGestion = () => {
         <li>
           <Link className="dropdown-item" to="/gestion/solicitudes" title="Solicitudes">
             <FontAwesomeIcon icon={faShapes} className="me-2" />Solicitudes Inver./Colab.
-          </Link>
-        </li>
-        <div className="dropdown-divider"></div>
-        <li>
-          <Link className="dropdown-item disabled" to="/gestion/correoweb" title="Correo Web">
-            <FontAwesomeIcon icon={faEnvelope} className="me-2" />Correo Web
           </Link>
         </li>
       </ul>

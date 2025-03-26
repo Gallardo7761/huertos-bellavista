@@ -21,6 +21,8 @@ import Building from '../pages/Building'
 
 function App() {
 
+  const routesWithFooter = ["/", "/lista-espera"];
+
   return (
     <>
       <ThemeButton />
@@ -41,9 +43,10 @@ function App() {
       </Routes> */}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/lista-espera" element={<ListaEspera />} />
         <Route path="/*" element={<Building />} />
       </Routes>
-      {useLocation().pathname == '/' ? <Footer /> : null}
+      {routesWithFooter.includes(useLocation().pathname) ? <Footer /> : null}
     </>
   )
 }
