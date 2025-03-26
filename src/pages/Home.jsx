@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
 import Mapa3D from '../components/Mapa3D';
+import Container from '../components/Container';
+import ContentWrapper from '../components/ContentWrapper';
 
 const Home = () => {
   return (
-    <main className="custom-container">
+    <Container>
       <section className="about-section">
-        <div className="content-wrapper">
+        <ContentWrapper>
           <h1 className="section-title">Sobre nosotros</h1>
           <hr className="section-divider" />
           <div className="about-content">
@@ -32,11 +34,11 @@ const Home = () => {
               <img className="about-img" src="/images/bg.png" alt="Huerto" />
             </div>
           </div>
-        </div>
+        </ContentWrapper>
       </section>
 
       <section className="gallery-section">
-        <div className="content-wrapper">
+        <ContentWrapper>
           <h1 className="section-title">Un vistazo a los huertos...</h1>
           <hr className="section-divider" />
           <div className="gallery-grid">
@@ -49,17 +51,17 @@ const Home = () => {
               <img className="gallery-img" src="/images/bg.png" alt="Huerto 7" />
             </a>
           </div>
-        </div>
+        </ContentWrapper>
       </section>
 
       <section className="map-section">
-        <div className="content-wrapper">
+        <ContentWrapper>
           <h1 className="section-title">Dónde estamos</h1>
           <hr className="section-divider" />
           <Mapa3D />
-        </div>
+        </ContentWrapper>
       </section>
-    </main>
+    </Container>
   );
 };
 

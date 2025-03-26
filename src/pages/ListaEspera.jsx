@@ -3,6 +3,8 @@ import {useConfig} from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
 import List from '../components/List';
 import DateParser from '../util/parsers/dateParser';
+import Container from '../components/Container';
+import ContentWrapper from '../components/ContentWrapper';
 
 const ListaEspera = () => {
     const { config, configLoading, configError } = useConfig();
@@ -49,13 +51,13 @@ const ListaEsperaContent = () => {
     }));
 
     return (
-        <main className="custom-container">
-            <div className="content-wrapper">
+        <Container>
+            <ContentWrapper>
                 <h1 className='section-title'>Lista de Espera</h1>
                 <hr className="section-divider" />
                 <List datos={mapped} config={config} />
-            </div>
-        </main>
+            </ContentWrapper>
+        </Container>
     );
     
 }

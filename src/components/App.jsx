@@ -5,6 +5,7 @@ import Header from './Header'
 import NavBar from './NavBar/NavBar'
 import Footer from './Footer'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import ProtectedRoute from './ProtectedRoute'
 
 import Home from '../pages/Home'
 import Socios from '../pages/Socios'
@@ -21,7 +22,7 @@ import Building from '../pages/Building'
 
 function App() {
 
-  const routesWithFooter = ["/", "/lista-espera"];
+  const routesWithFooter = ["/", "/lista-espera", "/login"];
 
   return (
     <>
@@ -44,6 +45,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/lista-espera" element={<ListaEspera />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/gestion/socios" element={<ProtectedRoute><Socios /></ProtectedRoute>} />
         <Route path="/*" element={<Building />} />
       </Routes>
       {routesWithFooter.includes(useLocation().pathname) ? <Footer /> : null}

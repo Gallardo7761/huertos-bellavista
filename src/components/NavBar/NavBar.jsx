@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {useAuth} from "../../hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSignIn,
@@ -14,14 +15,23 @@ import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
 import { useTheme } from '../../hooks/useTheme';
 
+import IfAuthenticated from '../IfAuthenticated';
+import IfNotAuthenticated from '../IfNotAuthenticated';
+import IfRole from '../IfRole';
+
 const Navbar = () => {
   const { theme } = useTheme();
+  const { user, logout } = useAuth();
 
   return (
     <nav className={`navbar navbar-expand-lg sticky-top shadow px-3 ${theme}`}>
       <div className="container-fluid d-flex justify-content-between p-0">
         {/* Logo a la izquierda */}
-        <Link className="navbar-brand ms-1" id="nav-username" to="/perfil"></Link>
+        <IfAuthenticated>
+          <Link className="navbar-brand ms-1 fw-bold" to="/perfil">
+            {"@"+user?.usuario}
+          </Link>
+        </IfAuthenticated>
 
         {/* Botón de menú */}
         <button
@@ -42,22 +52,28 @@ const Navbar = () => {
             <NavHome />
             <NavListaEspera />
             <NavHerramientas />
-            <NavGestion />
+            <IfRole roles={["admin", "dev"]}>
+              <NavGestion />
+            </IfRole>
           </ul>
           <hr className="m-0 p-0 mt-2 mb-2" />
 
           {/* Login */}
           <ul className="navbar-nav d-flex flex-md-none mb-2 mb-md-0 m-0 p-2 gap-2">
-            <li className="nav-item" id="nav-login">
-              <Link className="nav-link" to="/login" title="Iniciar sesión">
-                <FontAwesomeIcon icon={faSignIn} className="me-2" />Iniciar sesión
-              </Link>
-            </li>
-            <li className="nav-item" id="nav-logout">
-              <a className="nav-link" href="#" title="Cerrar sesión">
-                <FontAwesomeIcon icon={faSignOut} className="me-2" />Cerrar sesión
-              </a>
-            </li>
+            <IfNotAuthenticated>
+              <li className="nav-item" id="nav-login">
+                <Link className="nav-link" to="/login" title="Iniciar sesión">
+                  <FontAwesomeIcon icon={faSignIn} className="me-2" />Iniciar sesión
+                </Link>
+              </li>
+            </IfNotAuthenticated>
+            <IfAuthenticated>
+              <li className="nav-item" id="nav-logout" onClick={logout}>
+                <a className="nav-link" href="#" title="Cerrar sesión">
+                  <FontAwesomeIcon icon={faSignOut} className="me-2" />Cerrar sesión
+                </a>
+              </li>
+            </IfAuthenticated>
           </ul>
         </div>
       </div>

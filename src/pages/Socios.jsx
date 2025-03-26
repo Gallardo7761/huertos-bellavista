@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import SocioCard from '../components/Socios/SocioCard';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import '../css/Socios.css';
+import Container from '../components/Container';
+import ContentWrapper from '../components/ContentWrapper';
 
 const FAKE_SOCIOS = Array.from({ length: 100 }, (_, i) => ({
   id: i + 1,
@@ -33,16 +35,19 @@ export default function Socios() {
   useInfiniteScroll(loaderRef, loadMore);
 
   return (
-    <div className="socios-container">
-      <h2 className="section-title">Listado de Socios</h2>
-      <div className="cards-grid">
-        {socios.map(socio => (
-          <SocioCard key={socio.id} socio={socio} />
-        ))}
-      </div>
-      <div ref={loaderRef} className="loading-trigger">
-        {loading && <p>Cargando más socios...</p>}
-      </div>
-    </div>
+    <Container>
+      <ContentWrapper>
+      <h1 className='section-title'>Lista de Socios</h1>
+      <hr className="section-divider" />
+        <div className="cards-grid">
+          {socios.map(socio => (
+            <SocioCard key={socio.id} socio={socio} />
+          ))}
+        </div>
+        <div ref={loaderRef} className="loading-trigger">
+          {loading && <p>Cargando más socios...</p>}
+        </div>
+      </ContentWrapper>
+    </Container>
   );
 }
