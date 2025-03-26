@@ -1,24 +1,30 @@
-/* Contenedor principal */
+/* ================================
+   HOME - CONTENEDOR GENERAL
+================================== */
+
 .home-container {
   padding: 2rem;
   font-family: 'Open Sans';
   color: #333;
 }
 
-.section-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  font-family: 'Product Sans';
-}
-
-/* Centrado del contenido */
 .content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Separador estilizado */
+
+/* ================================
+   TITULOS Y SEPARADORES
+================================== */
+
+.section-title {
+  font-family: 'Product Sans';
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
 .section-divider {
   border: none;
   height: 2px;
@@ -27,19 +33,27 @@
   width: 50px;
 }
 
-/* Espaciado entre secciones */
+
+/* ================================
+   ESPACIADO ENTRE SECCIONES
+================================== */
+
 .about-section,
 .gallery-section,
 .map-section {
   margin-bottom: 4rem;
 }
 
-/* Sección "Sobre nosotros" */
+
+/* ================================
+   SECCIÓN - SOBRE NOSOTROS
+================================== */
+
 .about-content {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
   align-items: center;
+  gap: 2rem;
 }
 
 .text-content {
@@ -52,14 +66,17 @@
   flex: 1 1 30%;
 }
 
-/* Imagen sobre nosotros */
 .about-img {
   width: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Galería de imágenes */
+
+/* ================================
+   SECCIÓN - GALERÍA
+================================== */
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -77,7 +94,11 @@
   transform: scale(1.05);
 }
 
-/* Mapa */
+
+/* ================================
+   SECCIÓN - MAPA
+================================== */
+
 .map-wrapper iframe {
   width: 100%;
   height: 60vh;
@@ -86,11 +107,16 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Media Query para pantallas pequeñas */
+
+/* ================================
+   RESPONSIVE - MOBILE
+================================== */
+
 @media (max-width: 768px) {
   .about-content {
     flex-direction: column;
   }
+
   .img-content {
     flex: 1 1 100%;
   }

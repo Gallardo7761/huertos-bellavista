@@ -1,4 +1,6 @@
-/* === CARGA DE FUENTES === */
+/* ================================
+   FUENTES PERSONALIZADAS
+================================== */
 @font-face {
   font-family: "Open Sans";
   src: url('../fonts/OpenSans.ttf');
@@ -24,7 +26,11 @@
   src: url('../fonts/ProductSansBold.ttf');
 }
 
-/* === VARIABLES POR TEMA === */
+
+/* ================================
+   VARIABLES POR TEMA
+================================== */
+
 .light {
   --white: #f8f9fa;
   --light-green: #3e8f5a;
@@ -47,32 +53,33 @@
   --placeholder-color: #999;
 }
 
-/* === ESTILOS BASE === */
-html {
+
+/* ================================
+   ESTILOS BASE / RESET SUAVE
+================================== */
+
+html,
+body {
   font-family: "Open Sans", sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-green);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Fondo y color general del tema */
-html {
-  background-color: var(--bg-green);
-  color: var(--text-color);
-}
-
-/* Body transparente para evitar solapamientos con navbar */
 body {
-  background-color: transparent !important;
-  font-family: "Open Sans", sans-serif;
-  color: var(--text-color);
+  background-color: transparent !important; /* por compatibilidad con navbar fija */
 }
 
-/* Main u otros wrappers (pueden heredar el color del html) */
 main {
   color: var(--text-color);
   background-color: var(--bg-green);
 }
 
-/* === TIPOGRAFÍA GLOBAL === */
+
+/* ================================
+   TIPOGRAFÍA GLOBAL
+================================== */
+
 div,
 label,
 input,
@@ -94,7 +101,11 @@ h6 {
   color: var(--text-color);
 }
 
-/* === INPUTS ADAPTADOS AL TEMA === */
+
+/* ================================
+   INPUTS ADAPTADOS AL TEMA
+================================== */
+
 input,
 textarea,
 select {
