@@ -12,7 +12,7 @@ import NavHome from './NavHome';
 import NavListaEspera from './NavListaEspera';
 import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
-import { useTheme } from '../../context/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 
 const Navbar = () => {
   const { theme } = useTheme();

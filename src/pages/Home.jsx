@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
+import Mapa from '../components/Mapa';
+import Mapa3D from '../components/Mapa3D';
 
 const Home = () => {
   return (
@@ -27,7 +29,7 @@ const Home = () => {
                 <Link to="/alta">solicitud de alta</Link>.
               </p>
             </div>
-            <div className="img-content">
+            <div className="img-content gallery-img">
               <img className="about-img" src="/images/bg.png" alt="Huerto" />
             </div>
           </div>
@@ -53,16 +55,9 @@ const Home = () => {
 
       <section className="map-section">
         <div className="content-wrapper">
-          <h1 className="section-title">Donde estamos</h1>
+          <h1 className="section-title">Dónde estamos</h1>
           <hr className="section-divider" />
-          <div className="map-wrapper">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d852.9089299216993!2d-5.964801462716831!3d37.32821983433692!3m2!1i1024!2i768!4f13.1!5e1!3m2!1ses!2ses!4v1719902018700!5m2!1ses!2ses"
-              title="Mapa de Huertos Bellavista"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
+          <Mapa3D />
         </div>
       </section>
     </main>

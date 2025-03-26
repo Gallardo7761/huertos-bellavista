@@ -1,4 +1,4 @@
-import { useTheme } from "../context/useTheme.js";
+import { useTheme } from "../hooks/useTheme.js";
 import "../css/ThemeButton.css";
 
 export default function ThemeButton() {
