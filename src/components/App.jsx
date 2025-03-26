@@ -22,7 +22,7 @@ import Building from '../pages/Building'
 
 function App() {
 
-  const routesWithFooter = ["/", "/lista-espera", "/login"];
+  const routesWithFooter = ["/", "/lista-espera", "/login", "/gestion/socios"];
 
   return (
     <>
@@ -46,7 +46,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/lista-espera" element={<ListaEspera />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/gestion/socios" element={<ProtectedRoute><Socios /></ProtectedRoute>} />
+        <Route path="/gestion/socios" element={
+          <ProtectedRoute>
+            <Socios />
+          </ProtectedRoute>
+        } />
         <Route path="/*" element={<Building />} />
       </Routes>
       {routesWithFooter.includes(useLocation().pathname) ? <Footer /> : null}

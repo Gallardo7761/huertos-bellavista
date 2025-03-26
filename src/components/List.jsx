@@ -1,13 +1,14 @@
 import ListItem from "./ListItem";
 import '../css/List.css';
+import {ListGroup} from 'react-bootstrap';
 
 const List = ({ datos, config }) => {
   return (
-    <ul className="list-group">
+    <ListGroup>
       {datos.map((item, index) => (
         <ListItem key={index} item={item} config={config} index={index} />
       ))}
-    </ul>
+    </ListGroup>
   );
 };
 

@@ -3,7 +3,8 @@
         "baseUrl": "https://old.huertosbellavista.es/api/v1",
         "endpoints": {
             "lista_espera": "/socios/listaEsperaLimitada",
-            "login": "/login"
+            "login": "/login",
+            "socios": "/socios"
         }
     }
 }

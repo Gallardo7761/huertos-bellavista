@@ -1,0 +1,88 @@
+/* ================================
+   SOCIO CARD - ESTILOS
+================================== */
+
+.socio-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 1rem;
+}
+
+.socio-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+}
+
+/* Colores de fondo personalizados para el header */
+.bg-light-green {
+  background-color: var(--secondary-green) !important;
+}
+
+.card-header.bg-light-red {
+  background-color: #f8d7da !important;
+}
+
+.card-header.bg-light-red > div > div > .card-title {
+  color: var(--bs-danger) !important;
+}
+
+/* Imagen de perfil */
+.socio-card img {
+  object-fit: cover;
+}
+
+/* Notas */
+.socio-card #notas {
+  border: 1px solid #e9ecef;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.socio-card #notas,
+.socio-card .card-text {
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+/* List items */
+.socio-card .list-group-item {
+  font-size: 0.95rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.socio-card .list-group-item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* ================================
+     THEMING
+================================== */
+
+.light .socio-card,
+.light .socio-card .card,
+.light .socio-card .list-group-item {
+  background-color: #ffffff;
+  color: #000000;
+  border-color: #cccccc;
+}
+
+.light .socio-card .list-group {
+  border-radius: 0 0 1rem 1rem !important;
+  border: 1px solid #e9ecef;
+}
+
+.light .socio-card .text-muted {
+  color: #6c757d !important;
+}
+
+.dark .socio-card,
+.dark .socio-card .card,
+.dark .socio-card .list-group-item {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  border-color: #444444;
+}
+
+.dark .socio-card .text-muted {
+  color: #bbbbbb !important;
+}

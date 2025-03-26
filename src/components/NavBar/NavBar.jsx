@@ -13,14 +13,12 @@ import NavHome from './NavHome';
 import NavListaEspera from './NavListaEspera';
 import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
-import { useTheme } from '../../hooks/useTheme';
 
 import IfAuthenticated from '../Auth/IfAuthenticated.jsx';
 import IfNotAuthenticated from '../Auth/IfNotAuthenticated.jsx';
 import IfRole from '../Auth/IfRole.jsx';
 
 const Navbar = () => {
-  const { theme } = useTheme();
   const { user, logout } = useAuth();
   let location = useLocation();
 
@@ -40,7 +38,7 @@ const Navbar = () => {
   
 
   return (
-    <nav className={`navbar navbar-expand-lg sticky-top px-3 ${theme}`}>
+    <nav className={`navbar navbar-expand-lg sticky-top px-3`}>
       <div className="container-fluid d-flex justify-content-between p-0">
         {/* Logo a la izquierda */}
         <IfAuthenticated>

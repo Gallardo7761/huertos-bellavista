@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
-export default function useInfiniteScroll(ref, callback) {
+export default function useInfiniteScroll(ref, callback, hasMore = true) {
   useEffect(() => {
+    if (!hasMore) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) callback();
@@ -15,5 +17,5 @@ export default function useInfiniteScroll(ref, callback) {
     return () => {
       if (el) observer.unobserve(el);
     };
-  }, [ref, callback]);
+  }, [ref, callback, hasMore]);
 }

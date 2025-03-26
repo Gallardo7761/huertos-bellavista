@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Form, FloatingLabel, Button } from 'react-bootstrap';
 import '../../css/PasswordInput.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,28 +11,35 @@ const PasswordInput = ({ value, onChange, name = "password" }) => {
   const toggleShow = () => setShow(prev => !prev);
 
   return (
-    <div className="form-floating d-flex">
-      <input
-        type={show ? "text" : "password"}
-        className="form-control rounded-end-0 rounded-4"
-        id="passwordInput"
-        placeholder="Contraseña"
-        name={name}
-        value={value}
-        onChange={onChange}
-      />
-      <button
-        className="btn show-button rounded-start-0 rounded-4"
-        type="button"
+    <div className="d-flex">
+      <FloatingLabel
+        controlId="passwordInput"
+        label={
+          <>
+            <FontAwesomeIcon icon={faKey} className="me-2" />
+            Contraseña
+          </>
+        }
+      >
+        <Form.Control
+          type={show ? "text" : "password"}
+          placeholder="Contraseña"
+          name={name}
+          value={value}
+          onChange={onChange}
+          className="pe-5 rounded-end-0 rounded-4"
+        />
+      </FloatingLabel>
+
+      <Button
+        variant="link"
+        className="show-button rounded-start-0 rounded-4"
         onClick={toggleShow}
         aria-label="Mostrar contraseña"
+        tabIndex={-1}
       >
         <FontAwesomeIcon icon={show ? faEyeSlash : faEye} />
-      </button>
-      <label htmlFor="passwordInput">
-        <FontAwesomeIcon icon={faKey} className="me-2" />
-        Contraseña
-      </label>
+      </Button>
     </div>
   );
 };

@@ -20,7 +20,13 @@ export const DataProvider = ({ children, config }) => {
     try {
       const queryParams = new URLSearchParams(config.params).toString();
       const url = `${config.baseUrl}?${queryParams}`;
-      const response = await fetch(url);
+      const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            "Token": sessionStorage.getItem("token")
+          },
+        }
+      );
       if (!response.ok) throw new Error("Error al obtener datos");
       const result = await response.json();
       setData(result);
@@ -39,7 +45,8 @@ export const DataProvider = ({ children, config }) => {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Token": sessionStorage.getItem("token")
         },
         body: JSON.stringify(payload)
       });
@@ -63,7 +70,8 @@ export const DataProvider = ({ children, config }) => {
       const response = await fetch(endpoint, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Token": sessionStorage.getItem("token")
         },
         body: JSON.stringify(payload)
       });

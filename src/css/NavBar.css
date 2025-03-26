@@ -90,6 +90,7 @@
   
   .light .dropdown-item:hover {
     color: var(--light-green);
+    background-color: var(--white);
   }
   
   .light hr {

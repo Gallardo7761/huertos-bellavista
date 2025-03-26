@@ -5,7 +5,7 @@ export default function ThemeButton() {
     const { theme, toggleTheme } = useTheme();
 
     return (
-        <button className={`theme-toggle ${theme}`} onClick={toggleTheme}>
+        <button className={`theme-toggle`} onClick={toggleTheme}>
             {theme === "dark" ? "☀️" : "🌛"}
         </button>
     );
