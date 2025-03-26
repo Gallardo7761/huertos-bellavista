@@ -1,10 +1,9 @@
 import '../css/Header.css';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../context/useTheme';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
 
 const Header = () => {
-    const { theme } = useContext(ThemeContext);
+    const { theme } = useTheme();
 
     return (
         <header className={`text-center bg-img ${theme}`}>

@@ -5,6 +5,17 @@
     background-repeat: no-repeat;
 }
 
+.mask {
+    transition: background-color 0.3s ease;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px); /* Safari */
+}
+
+.header-title {
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+
 .light .mask {
     background-color: rgba(19, 146, 85, 0.6);
 }
