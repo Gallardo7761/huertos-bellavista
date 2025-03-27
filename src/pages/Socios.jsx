@@ -27,7 +27,7 @@ const Socios = () => {
 
   const reqConfig = {
     baseUrl: BASE + ENDPOINT,
-    params: {}
+    params: { _sort: "numeroSocio" }
   };
 
   return (
@@ -158,9 +158,9 @@ const SociosContent = ({ config }) => {
   const handleEditSubmit = async (updatedSocio, idSocio) => {
     try {
       const res = await putData(`${config.baseUrl}/${idSocio}`, updatedSocio);
-  
+
       console.log("Socio actualizado:", res);
-  
+
       // Actualiza el socio localmente si está en _socios
       setSocios(prev =>
         prev.map((s) =>
@@ -174,9 +174,9 @@ const SociosContent = ({ config }) => {
 
   const handleDelete = async (idSocio) => {
     const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${idSocio}?`);
-  
+
     if (!confirmed) return;
-  
+
     try {
       await deleteData(`${config.baseUrl}/${idSocio}`);
       console.log("Socio eliminado correctamente");
@@ -197,30 +197,31 @@ const SociosContent = ({ config }) => {
           <h1 className='section-title'>Lista de Socios</h1>
         </div>
         <hr className="section-divider" />
-        <div className="sticky-toolbar">
-          <div className="d-flex gap-2 align-items-center">
+        <div className="sticky-toolbar search-toolbar-wrapper">
+          <div className="search-toolbar">
             <input
               type="text"
-              className="search-bar flex-grow-1 shadow-sm"
+              className="search-input"
               placeholder="Buscar socio..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <AnimatedDropdown
-              variant="warning"
-              icon={<FontAwesomeIcon icon={faFilter} className="fa-xl" />}
-            >
-              <SociosFilter filters={filters} onChange={setFilters} />
-            </AnimatedDropdown>
-            <Button variant="danger" disabled className="circle-btn">
-              <FontAwesomeIcon icon={faFilePdf} className="fa-xl" />
-            </Button>
-            <Button variant="primary" className="circle-btn" onClick={handleCreate}>
-              <FontAwesomeIcon icon={faPlus} className="fa-xl" />
-            </Button>
+            <div className="toolbar-buttons">
+              <AnimatedDropdown
+                variant="transparent"
+                icon={<FontAwesomeIcon icon={faFilter} className='fa-lg' />}
+              >
+                <SociosFilter filters={filters} onChange={setFilters} />
+              </AnimatedDropdown>
+              <Button variant="transparent" disabled>
+                <FontAwesomeIcon icon={faFilePdf} className='fa-lg' />
+              </Button>
+              <Button variant="transparent" onClick={handleCreate}>
+                <FontAwesomeIcon icon={faPlus} className='fa-lg' />
+              </Button>
+            </div>
           </div>
         </div>
-
 
         <div className="cards-grid">
           {creatingSocio && (

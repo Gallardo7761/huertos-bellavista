@@ -2,7 +2,25 @@ import PropTypes from 'prop-types';
 
 const SociosFilter = ({ filters, onChange }) => {
   const handleCheckboxChange = (key) => {
-    onChange({ ...filters, [key]: !filters[key] });
+    if (key === 'todos') {
+      const newValue = !filters.todos;
+      onChange({
+        todos: newValue,
+        listaEspera: newValue,
+        invernadero: newValue,
+        inactivos: newValue,
+        colaboradores: newValue,
+        hortelanos: newValue
+      });
+    } else {
+      const updated = { ...filters, [key]: !filters[key] };
+      const allTrue = Object.entries(updated)
+        .filter(([k]) => k !== 'todos')
+        .every(([, v]) => v === true);
+
+      updated.todos = allTrue;
+      onChange(updated);
+    }
   };
 
   return (
