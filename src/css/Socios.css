@@ -49,6 +49,22 @@
     color: #444;
 }
 
+.sticky-toolbar {
+    position: sticky;
+    top: 60px;
+    /* Ajusta según la altura real del navbar */
+    z-index: 900;
+    padding: 1rem 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Transiciones suaves */
+.sticky-toolbar input,
+.sticky-toolbar .btn {
+    transition: all 0.2s ease;
+}
+
+
 /* ===================
 *  CIRCLE BUTTONS
 * =================== */
@@ -61,7 +77,6 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .circle-btn.dropdown-toggle {
@@ -80,24 +95,20 @@
 /* Tema claro */
 .light .circle-btn {
     background-color: #fff;
-    border: 1px solid #ddd;
     color: #333;
 }
 
 .light .circle-btn:hover {
     background-color: #f0f0f0;
     color: #333;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* Tema oscuro */
 .dark .circle-btn {
     background-color: #333;
-    border: 1px solid #444;
     color: #eee;
 }
 
 .dark .circle-btn:hover {
     background-color: #444;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }

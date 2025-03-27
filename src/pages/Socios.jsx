@@ -22,7 +22,6 @@ const Socios = () => {
 
   if (configLoading) return <p><LoadingIcon /></p>;
 
-  const PAGE_SIZE = config.apiConfig.pageSize;
   const BASE = config.apiConfig.baseUrl;
   const ENDPOINT = config.apiConfig.endpoints.socios;
 
@@ -39,12 +38,14 @@ const Socios = () => {
 }
 
 const SociosContent = () => {
+  // Hooks y estados
   const { data, dataLoading, dataError } = useData();
   const [_socios, setSocios] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef();
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     todos: true,
     listaEspera: false,
@@ -54,10 +55,12 @@ const SociosContent = () => {
     hortelanos: false
   });
 
+  const isSearching = searchTerm.trim() !== "";
+  const isFiltering = !filters.todos;
+  const usingSearchOrFilters = isSearching || isFiltering;
+
   const filteredSocios = useMemo(() => {
-    if (filters.todos) return data;
-  
-    return data.filter((s) => {
+    let result = filters.todos ? data : data.filter((s) => {
       return (
         (filters.listaEspera && s.tipo === 'LISTA_ESPERA') ||
         (filters.invernadero && s.tipo === 'HORTELANO_INVERNADERO') ||
@@ -66,7 +69,20 @@ const SociosContent = () => {
         (filters.inactivos && s.estado === 0)
       );
     });
-  }, [data, filters]);
+
+    if (!searchTerm.trim()) return result;
+
+    const normalized = searchTerm.toLowerCase();
+
+    return result.filter((s) => {
+      return (
+        s.nombre?.toLowerCase().includes(normalized) ||
+        s.dni?.toLowerCase().includes(normalized) ||
+        String(s.numeroSocio).includes(normalized) ||
+        String(s.numeroHuerto).includes(normalized)
+      );
+    });
+  }, [data, filters, searchTerm]);
 
   const loadMore = () => {
     if (loading || !data) return;
@@ -87,8 +103,15 @@ const SociosContent = () => {
     }, 500);
   };
 
-  useInfiniteScroll(loaderRef, loadMore, hasMore);
+  useInfiniteScroll(loaderRef, loadMore, hasMore && !usingSearchOrFilters);
 
+  const handleCreate = () => {
+    const grid = document.querySelector('.cards-grid');
+    grid.scrollTo({ top: 0, behavior: 'smooth' });
+
+  }
+
+  // Checks de datos
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
@@ -97,28 +120,35 @@ const SociosContent = () => {
       <ContentWrapper>
         <div className="d-flex justify-content-between align-items-center m-0 p-0">
           <h1 className='section-title'>Lista de Socios</h1>
-          <div className="d-flex m-0 p-0 gap-2">
+        </div>
+        <hr className="section-divider" />
+        <div className="sticky-toolbar">
+          <div className="d-flex gap-2 align-items-center">
+            <input
+              type="text"
+              className="search-bar flex-grow-1 shadow-sm"
+              placeholder="Buscar socio..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <AnimatedDropdown
+              variant="warning"
               icon={<FontAwesomeIcon icon={faFilter} className="fa-xl" />}
             >
               <SociosFilter filters={filters} onChange={setFilters} />
             </AnimatedDropdown>
-            <Button variant="danger" className='circle-btn'>
-              <FontAwesomeIcon icon={faFilePdf} className="mr-2 fa-xl" />
+            <Button variant="danger" disabled className="circle-btn">
+              <FontAwesomeIcon icon={faFilePdf} className="fa-xl" />
             </Button>
-            <Button variant="primary" className='circle-btn'>
-              <FontAwesomeIcon icon={faPlus} className="mr-2 fa-xl" />
+            <Button variant="primary" className="circle-btn" onClick={handleCreate}>
+              <FontAwesomeIcon icon={faPlus} className="fa-xl" />
             </Button>
           </div>
         </div>
-        <hr className="section-divider" />
-        <input
-          type="text"
-          className="search-bar w-100 mb-5 shadow-sm"
-          placeholder="Buscar socio..."
-        />
+
+
         <div className="cards-grid">
-          {filteredSocios.map(socio => (
+          {(usingSearchOrFilters ? filteredSocios : _socios).map(socio => (
             <SocioCard key={socio.idSocio} socio={socio} />
           ))}
         </div>

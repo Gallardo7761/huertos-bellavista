@@ -58,7 +58,7 @@ const LoginForm = () => {
                             >
                                 <Form.Control
                                     type="text"
-                                    placeholder="Usuario"
+                                    placeholder=""
                                     name="usuario"
                                     value={formState.usuario}
                                     onChange={handleChange}

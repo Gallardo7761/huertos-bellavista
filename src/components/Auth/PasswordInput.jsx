@@ -11,7 +11,7 @@ const PasswordInput = ({ value, onChange, name = "password" }) => {
   const toggleShow = () => setShow(prev => !prev);
 
   return (
-    <div className="d-flex">
+    <div className="position-relative w-100">
       <FloatingLabel
         controlId="passwordInput"
         label={
@@ -23,22 +23,23 @@ const PasswordInput = ({ value, onChange, name = "password" }) => {
       >
         <Form.Control
           type={show ? "text" : "password"}
-          placeholder="Contraseña"
           name={name}
           value={value}
+          placeholder=""
           onChange={onChange}
-          className="pe-5 rounded-end-0 rounded-4"
+          className="rounded-4 pe-5"
         />
       </FloatingLabel>
 
       <Button
         variant="link"
-        className="show-button rounded-start-0 rounded-4"
+        className="show-button position-absolute end-0 top-50 translate-middle-y me-2"
         onClick={toggleShow}
         aria-label="Mostrar contraseña"
         tabIndex={-1}
+        style={{ zIndex: 2 }}
       >
-        <FontAwesomeIcon icon={show ? faEyeSlash : faEye} />
+        <FontAwesomeIcon icon={show ? faEyeSlash : faEye} className='fa-lg' />
       </Button>
     </div>
   );
