@@ -32,14 +32,14 @@ const Socios = () => {
 
   return (
     <DataProvider config={reqConfig}>
-      <SociosContent />
+      <SociosContent config={reqConfig} />
     </DataProvider>
   );
 }
 
-const SociosContent = () => {
+const SociosContent = ({ config }) => {
   // Hooks y estados
-  const { data, dataLoading, dataError } = useData();
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
   const [_socios, setSocios] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -54,35 +54,43 @@ const SociosContent = () => {
     colaboradores: false,
     hortelanos: false
   });
+  const [creatingSocio, setCreatingSocio] = useState(null);
+  const [tempSocio, setTempSocio] = useState(null);
 
   const isSearching = searchTerm.trim() !== "";
   const isFiltering = !filters.todos;
   const usingSearchOrFilters = isSearching || isFiltering;
 
   const filteredSocios = useMemo(() => {
-    let result = filters.todos ? data : data.filter((s) => {
-      return (
+    if (!data) return [];
+
+    let result = [...data];
+
+    // Filtro por tipo (filtros por checkbox)
+    if (!filters.todos) {
+      result = result.filter((s) =>
         (filters.listaEspera && s.tipo === 'LISTA_ESPERA') ||
         (filters.invernadero && s.tipo === 'HORTELANO_INVERNADERO') ||
         (filters.colaboradores && s.tipo === 'COLABORADOR') ||
         (filters.hortelanos && s.tipo === 'HORTELANO') ||
         (filters.inactivos && s.estado === 0)
       );
-    });
+    }
 
-    if (!searchTerm.trim()) return result;
-
-    const normalized = searchTerm.toLowerCase();
-
-    return result.filter((s) => {
-      return (
+    // Búsqueda por texto
+    if (searchTerm.trim()) {
+      const normalized = searchTerm.toLowerCase();
+      result = result.filter((s) =>
         s.nombre?.toLowerCase().includes(normalized) ||
         s.dni?.toLowerCase().includes(normalized) ||
         String(s.numeroSocio).includes(normalized) ||
         String(s.numeroHuerto).includes(normalized)
       );
-    });
+    }
+
+    return result;
   }, [data, filters, searchTerm]);
+
 
   const loadMore = () => {
     if (loading || !data) return;
@@ -107,9 +115,76 @@ const SociosContent = () => {
 
   const handleCreate = () => {
     const grid = document.querySelector('.cards-grid');
-    grid.scrollTo({ top: 0, behavior: 'smooth' });
+    setCreatingSocio(true);
+    let tempSocio = {
+      idSocio: null,
+      nombre: "Nuevo Socio",
+      usuario: "",
+      dni: "",
+      telefono: "",
+      email: "",
+      notas: "",
+      numeroSocio: "",
+      numeroHuerto: "",
+      estado: 1,
+      tipo: "HORTELANO",
+      fechaDeAlta: new Date().toISOString().split("T")[0]
+    };
 
-  }
+    tempSocio.usuario = tempSocio.nombre.split(" ")[0].toLowerCase() + String(tempSocio.numeroSocio);
+
+    setTempSocio(tempSocio);
+    grid.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelCreate = () => {
+    setCreatingSocio(false);
+    setTempSocio(null);
+  };
+
+  const handleCreateSubmit = async (newSocio) => {
+    try {
+      const res = await postData(config.baseUrl, newSocio);
+
+      console.log("Socio creado:", res);
+
+      setCreatingSocio(false);
+      setTempSocio(null);
+    } catch (err) {
+      console.error("Error al crear socio:", err.message);
+    }
+  };
+
+  const handleEditSubmit = async (updatedSocio, idSocio) => {
+    try {
+      const res = await putData(`${config.baseUrl}/${idSocio}`, updatedSocio);
+  
+      console.log("Socio actualizado:", res);
+  
+      // Actualiza el socio localmente si está en _socios
+      setSocios(prev =>
+        prev.map((s) =>
+          s.idSocio === updatedSocio.idSocio ? { ...s, ...updatedSocio } : s
+        )
+      );
+    } catch (err) {
+      console.error("Error al actualizar socio:", err.message);
+    }
+  };
+
+  const handleDelete = async (idSocio) => {
+    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${idSocio}?`);
+  
+    if (!confirmed) return;
+  
+    try {
+      await deleteData(`${config.baseUrl}/${idSocio}`);
+      console.log("Socio eliminado correctamente");
+      setSearchTerm("");
+    } catch (err) {
+      console.error("Error al eliminar socio:", err.message);
+    }
+  };
 
   // Checks de datos
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
@@ -148,10 +223,31 @@ const SociosContent = () => {
 
 
         <div className="cards-grid">
-          {(usingSearchOrFilters ? filteredSocios : _socios).map(socio => (
-            <SocioCard key={socio.idSocio} socio={socio} />
-          ))}
+          {creatingSocio && (
+            <SocioCard
+              socio={tempSocio}
+              isNew
+              onCreate={handleCreateSubmit}
+              onUpdate={handleEditSubmit}
+              onDelete={handleDelete}
+              onCancel={handleCancelCreate}
+            />
+          )}
+
+          {(usingSearchOrFilters ? filteredSocios : _socios)
+            .sort((a, b) => a.numeroSocio - b.numeroSocio)
+            .map((socio) => (
+              <SocioCard
+                key={socio.idSocio}
+                socio={socio}
+                onUpdate={handleEditSubmit}
+                onDelete={handleDelete}
+                onCancel={handleCancelCreate}
+              />
+            ))}
+
         </div>
+
         <div ref={loaderRef} className="loading-trigger">
           {loading && <LoadingIcon />}
         </div>

@@ -3,9 +3,7 @@
   top: 100%;
   right: 0;
   margin-top: 0.5rem;
-  background-color: var(--bs-white);
   border-radius: 0.5rem;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   padding: 0.75rem;
   z-index: 1050;
   min-width: 220px;
@@ -18,5 +16,22 @@
 
 .custom-dropdown-menu .dropdown-divider {
   margin: 0.5rem 0;
+}
+
+.light .custom-dropdown-menu .dropdown-divider {
   border-top: 1px solid #dee2e6;
+}
+
+.dark .custom-dropdown-menu .dropdown-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.light .custom-dropdown-menu {
+  background-color: var(--white);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dark .custom-dropdown-menu {
+  background-color: var(--dark-green);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }

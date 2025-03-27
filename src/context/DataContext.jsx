@@ -93,7 +93,10 @@ export const DataProvider = ({ children, config }) => {
   const deleteData = async (endpoint) => {
     try {
       const response = await fetch(endpoint, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          "Token": sessionStorage.getItem("token")
+        },
       });
       if (!response.ok) throw new Error("Error al hacer DELETE");
       

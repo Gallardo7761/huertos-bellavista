@@ -36,23 +36,35 @@ const parseDate = (date) => {
 
 const MotionCard = _motion.create(Card);
 
-const SocioCard = ({ socio }) => {
+const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel }) => {
+  const createMode = isNew;
   const [error, setError] = useState(null);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(isNew);
   const [formData, setFormData] = useState({
+    idSocio: socio.idSocio || null,
+    nombre: socio.nombre || '',
+    usuario: socio.usuario || '',
+    dni: socio.dni || '',
     telefono: socio.telefono || '',
     email: socio.email || '',
     notas: socio.notas || '',
-    estado: socio.estado
+    numeroSocio: socio.numeroSocio || '',
+    numeroHuerto: socio.numeroHuerto || '',
+    estado: socio.estado,
+    tipo: socio.tipo || "HORTELANO",
+    fechaDeAlta: socio.fechaDeAlta || new Date().toISOString().split("T")[0],
   });
 
   const handleEdit = () => setEditMode(true);
 
   const handleDelete = () => {
-    console.log("Eliminando socio:", socio);
-  }
+    if (typeof onDelete === "function") {
+      onDelete(socio.idSocio);
+    }
+  };
 
   const handleCancel = () => {
+    if (isNew && onCancel) return onCancel(); // borrar si es nueva
     setEditMode(false);
     if (error) setError(null);
     setFormData({
@@ -64,11 +76,6 @@ const SocioCard = ({ socio }) => {
   };
 
   const handleSave = () => {
-    if (!formData.telefono.trim()) {
-      setError("El teléfono no puede estar vacío.");
-      return;
-    }
-
     const phoneRegex = /^[0-9]{9}$/;
     if (!phoneRegex.test(formData.telefono)) {
       setError("El teléfono no es válido.");
@@ -81,10 +88,41 @@ const SocioCard = ({ socio }) => {
       return;
     }
 
-    setError(null);
-    console.log("Guardando cambios:", formData);
-    setEditMode(false);
+    if (!formData.nombre.trim() || !formData.numeroSocio) {
+      setError("El nombre y número de socio son obligatorios.");
+      return;
+    }
 
+    setError(null);
+
+    if (createMode && typeof onCreate === "function") {
+      const fullSocio = {
+        idSocio: null,
+        nombre: formData.nombre,
+        usuario: (
+          formData.nombre.toLowerCase().replace(/\s+/g, '') +
+          formData.numeroSocio
+        ),
+        dni: formData.dni,
+        telefono: formData.telefono,
+        email: formData.email,
+        notas: formData.notas,
+        numeroSocio: formData.numeroSocio,
+        numeroHuerto: formData.numeroHuerto,
+        estado: formData.estado,
+        tipo: socio.tipo || "HORTELANO",
+        fechaDeAlta: socio.fechaDeAlta || new Date().toISOString().split("T")[0],
+      };
+
+      onCreate(fullSocio);
+      return;
+    }
+
+    // 👇 Si no es nuevo, se edita
+    if (typeof onUpdate === "function") {
+      onUpdate(formData, socio.idSocio);
+      setEditMode(false);
+    }
   };
 
   const handleChange = (field, value) => {
@@ -97,7 +135,21 @@ const SocioCard = ({ socio }) => {
         <div className="d-flex align-items-center p-1 m-0">
           <img src={getPFP(socio.tipo)} width="36" className="rounded me-3" alt="PFP" />
           <div>
-            <Card.Title className="m-0">{socio.nombre}</Card.Title>
+
+            <Card.Title className="m-0">
+              {(editMode || createMode) ? (
+                <Form.Control
+                  size="sm"
+                  value={formData.nombre}
+                  onChange={(e) => handleChange('nombre', e.target.value)}
+                  placeholder="Nombre"
+                  style={{ maxWidth: '220px' }}
+                />
+              ) : (
+                socio.nombre
+              )}
+            </Card.Title>
+
             {editMode ? (
               <Form.Select
                 size="sm"
@@ -111,23 +163,26 @@ const SocioCard = ({ socio }) => {
             ) : (
               <Badge bg={getBadgeColor(socio.estado)}>{getEstado(socio.estado)}</Badge>
             )}
+
           </div>
         </div>
 
-        <AnimatedDropdown
-          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
-          className="p-0 border-0"
-        >
-          <div className="dropdown-item d-flex align-items-center" onClick={handleEdit}>
-            <FontAwesomeIcon icon={faEdit} className="me-2" />
-            Editar
-          </div>
-          <hr className="dropdown-divider" />
-          <div className="dropdown-item d-flex align-items-center text-danger" onClick={handleDelete}>
-            <FontAwesomeIcon icon={faTrash} className="me-2" />
-            Eliminar
-          </div>
-        </AnimatedDropdown>
+        {!createMode && (
+          <AnimatedDropdown
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
+            className="p-0 border-0"
+          >
+            <div className="dropdown-item d-flex align-items-center" onClick={handleEdit}>
+              <FontAwesomeIcon icon={faEdit} className="me-2" />
+              Editar
+            </div>
+            <hr className="dropdown-divider" />
+            <div className="dropdown-item d-flex align-items-center text-danger" onClick={handleDelete}>
+              <FontAwesomeIcon icon={faTrash} className="me-2" />
+              Eliminar
+            </div>
+          </AnimatedDropdown>
+        )}
 
       </Card.Header>
 
@@ -144,16 +199,48 @@ const SocioCard = ({ socio }) => {
         <ListGroup variant="flush" className="mt-2">
           <ListGroup.Item className="d-flex justify-content-between align-items-center">
             <span><FontAwesomeIcon icon={faIdCard} className="me-2" />DNI</span>
-            <strong>{socio.dni}</strong>
+            {(editMode || createMode) ? (
+              <Form.Control
+                size="sm"
+                value={formData.dni}
+                onChange={(e) => handleChange('dni', e.target.value)}
+                style={{ maxWidth: '180px' }}
+              />
+            ) : (
+              <strong>{socio.dni}</strong>
+            )}
           </ListGroup.Item>
+
           <ListGroup.Item className="d-flex justify-content-between align-items-center">
             <span><FontAwesomeIcon icon={faUser} className="me-2" />SOCIO Nº</span>
-            <strong>{socio.numeroSocio}</strong>
+            {(editMode || createMode) ? (
+              <Form.Control
+                size="sm"
+                type="number"
+                value={formData.numeroSocio}
+                onChange={(e) => handleChange('numeroSocio', e.target.value)}
+                style={{ maxWidth: '100px' }}
+              />
+            ) : (
+              <strong>{socio.numeroSocio}</strong>
+            )}
           </ListGroup.Item>
+
           <ListGroup.Item className="d-flex justify-content-between align-items-center">
             <span><FontAwesomeIcon icon={faSunPlantWilt} className="me-2" />HUERTO Nº</span>
-            <strong>{socio.numeroHuerto}</strong>
+            {(editMode || createMode) ? (
+              <Form.Control
+                size="sm"
+                type="number"
+                value={formData.numeroHuerto}
+                onChange={(e) => handleChange('numeroHuerto', e.target.value)}
+                style={{ maxWidth: '100px' }}
+              />
+            ) : (
+              <strong>{socio.numeroHuerto}</strong>
+            )}
           </ListGroup.Item>
+
           <ListGroup.Item className="d-flex justify-content-between align-items-center">
             <span><FontAwesomeIcon icon={faPhone} className="me-2" />TLF.</span>
             {editMode ? (
@@ -167,6 +254,7 @@ const SocioCard = ({ socio }) => {
               <span>{parseNull(socio.telefono)}</span>
             )}
           </ListGroup.Item>
+
           <ListGroup.Item className="d-flex justify-content-between align-items-center">
             <span><FontAwesomeIcon icon={faAt} className="me-2" />EMAIL</span>
             {editMode ? (
@@ -180,6 +268,7 @@ const SocioCard = ({ socio }) => {
               <small>{parseNull(socio.email)}</small>
             )}
           </ListGroup.Item>
+
         </ListGroup>
 
         <Card className="mt-3 notas-card">
@@ -212,7 +301,12 @@ const SocioCard = ({ socio }) => {
 };
 
 SocioCard.propTypes = {
-  socio: PropTypes.object.isRequired
+  socio: PropTypes.object.isRequired,
+  isNew: PropTypes.bool,
+  onCancelCreate: PropTypes.func,
+  onCreate: PropTypes.func,
+  onUpdate: PropTypes.func,
+  onDelete: PropTypes.func
 };
 
 export default SocioCard;
