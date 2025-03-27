@@ -5,13 +5,13 @@ import List from '../components/List';
 import DateParser from '../util/parsers/dateParser';
 import Container from '../components/Container';
 import ContentWrapper from '../components/ContentWrapper';
+import LoadingIcon from '../components/LoadingIcon';
+
 
 const ListaEspera = () => {
-    const { config, configLoading, configError } = useConfig();
+    const { config, configLoading } = useConfig();
 
-    if(configLoading) return <p>Cargando configuración...</p>;
-    if(configError) return <p>Error al cargar configuración</p>;
-    if(!config) return <p>Configuración no encontrada</p>;
+    if(configLoading) return <p><LoadingIcon /></p>;
 
     const BASE = config.apiConfig.baseUrl;
     const ENDPOINT = config.apiConfig.endpoints.lista_espera;
@@ -31,9 +31,8 @@ const ListaEspera = () => {
 const ListaEsperaContent = () => {
     const { data, dataLoading, dataError } = useData();
 
-    if(dataLoading) return <p>Cargando datos...</p>;
-    if(dataError) return <p>Error al cargar datos</p>;
-    if(!data) return <p>Datos no encontrados</p>;
+    if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
+    if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
     const config = {
         title: 'nombre',

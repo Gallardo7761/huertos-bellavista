@@ -4,6 +4,8 @@ import useInfiniteScroll from '../hooks/useInfiniteScroll';
 import '../css/Socios.css';
 import Container from '../components/Container';
 import ContentWrapper from '../components/ContentWrapper';
+import LoadingIcon from '../components/LoadingIcon';
+
 import { useData } from '../hooks/useData';
 import { DataProvider } from '../context/DataContext';
 import { useConfig } from '../hooks/useConfig';
@@ -11,12 +13,11 @@ import { useConfig } from '../hooks/useConfig';
 const PAGE_SIZE = 10;
 
 const Socios = () => {
-  const { config, configLoading, configError } = useConfig();
+  const { config, configLoading } = useConfig();
 
-  if (configLoading) return <p>Cargando configuración...</p>;
-  if (configError) return <p>Error al cargar configuración</p>;
-  if (!config) return <p>Configuración no encontrada</p>;
+  if (configLoading) return <p><LoadingIcon /></p>;
 
+  const PAGE_SIZE = config.apiConfig.pageSize;
   const BASE = config.apiConfig.baseUrl;
   const ENDPOINT = config.apiConfig.endpoints.socios;
 
@@ -61,7 +62,7 @@ const SociosContent = () => {
 
   useInfiniteScroll(loaderRef, loadMore, hasMore);
 
-  if (dataLoading) return <p className="text-center my-5">Cargando socios...</p>;
+  if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
   return (
@@ -75,7 +76,7 @@ const SociosContent = () => {
           ))}
         </div>
         <div ref={loaderRef} className="loading-trigger">
-          {loading && <p>Cargando más socios...</p>}
+          {loading && <LoadingIcon />}
         </div>
       </ContentWrapper>
     </Container>

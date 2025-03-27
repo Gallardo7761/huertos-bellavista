@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ListGroup } from "react-bootstrap";
 import '../css/ListItem.css';
 
-const MotionListGroupItem = motion(ListGroup.Item);
+const MotionListGroupItem = motion.create(ListGroup.Item);
 
 const ListItem = ({ item, config, index }) => {
   const {
