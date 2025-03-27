@@ -23,6 +23,8 @@ const AnimatedDropdown = ({ icon, variant = "secondary", className = "", childre
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const closeDropdown = () => setOpen(false);
+
   return (
     <div className="position-relative">
       <Button
@@ -44,7 +46,7 @@ const AnimatedDropdown = ({ icon, variant = "secondary", className = "", childre
             transition={{ duration: 0.2 }}
             className="custom-dropdown-menu"
           >
-            {children}
+            {typeof children === "function" ? children({ closeDropdown }) : children}
           </_motion.div>
         )}
       </AnimatePresence>

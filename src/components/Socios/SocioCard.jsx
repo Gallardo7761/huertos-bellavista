@@ -169,19 +169,24 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
         {!createMode && (
           <AnimatedDropdown
-            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
-            className="p-0 border-0"
-          >
-            <div className="dropdown-item d-flex align-items-center" onClick={handleEdit}>
-              <FontAwesomeIcon icon={faEdit} className="me-2" />
-              Editar
-            </div>
-            <hr className="dropdown-divider" />
-            <div className="dropdown-item d-flex align-items-center text-danger" onClick={handleDelete}>
-              <FontAwesomeIcon icon={faTrash} className="me-2" />
-              Eliminar
-            </div>
-          </AnimatedDropdown>
+          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
+          className="p-0 border-0"
+        >
+          {({ closeDropdown }) => (
+            <>
+              <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
+                <FontAwesomeIcon icon={faEdit} className="me-2" />
+                Editar
+              </div>
+              <hr className="dropdown-divider" />
+              <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
+                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                Eliminar
+              </div>
+            </>
+          )}
+        </AnimatedDropdown>
+        
         )}
 
       </Card.Header>
