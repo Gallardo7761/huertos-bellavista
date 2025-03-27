@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Card, ListGroup, Badge, Dropdown, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt, faEllipsisVertical, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { motion as _motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import '../../css/SocioCard.css';
+import AnimatedDropdown from '../../components/AnimatedDropdown';
 
 const getFechas = (socio) => {
   let html = `<strong>ALTA:</strong> ${parseDate(socio.fechaDeAlta)}`;
@@ -50,10 +51,10 @@ const SocioCard = ({ socio }) => {
   const handleDelete = () => {
     console.log("Eliminando socio:", socio);
   }
-  
+
   const handleCancel = () => {
     setEditMode(false);
-    if(error) setError(null);
+    if (error) setError(null);
     setFormData({
       telefono: socio.telefono || '',
       email: socio.email || '',
@@ -112,16 +113,22 @@ const SocioCard = ({ socio }) => {
             )}
           </div>
         </div>
-        <Dropdown align="end">
-          <Dropdown.Toggle variant="link" bsPrefix="btn" className="text-dark p-0 border-0">
-            <FontAwesomeIcon icon={faEllipsisVertical} />
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={handleEdit}>Editar</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={handleDelete} className="text-danger">Eliminar</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+
+        <AnimatedDropdown
+          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
+          className="p-0 border-0"
+        >
+          <div className="dropdown-item d-flex align-items-center" onClick={handleEdit}>
+            <FontAwesomeIcon icon={faEdit} className="me-2" />
+            Editar
+          </div>
+          <hr className="dropdown-divider" />
+          <div className="dropdown-item d-flex align-items-center text-danger" onClick={handleDelete}>
+            <FontAwesomeIcon icon={faTrash} className="me-2" />
+            Eliminar
+          </div>
+        </AnimatedDropdown>
+
       </Card.Header>
 
       <Card.Body>

@@ -1,0 +1,22 @@
+.custom-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background-color: var(--bs-white);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem;
+  z-index: 1050;
+  min-width: 220px;
+}
+
+.custom-dropdown-menu .dropdown-item {
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+.custom-dropdown-menu .dropdown-divider {
+  margin: 0.5rem 0;
+  border-top: 1px solid #dee2e6;
+}

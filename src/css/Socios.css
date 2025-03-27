@@ -1,6 +1,6 @@
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 1.5rem;
 }
 
@@ -47,4 +47,57 @@
 
 .dark .search-bar:focus::placeholder {
     color: #444;
+}
+
+/* ===================
+*  CIRCLE BUTTONS
+* =================== */
+.circle-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.circle-btn.dropdown-toggle {
+    width: 48px;
+    height: 48px;
+}
+
+.circle-btn.dropdown-toggle::after {
+    display: none;
+}
+
+.circle-btn .fa-xl {
+    margin: 0;
+}
+
+/* Tema claro */
+.light .circle-btn {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+.light .circle-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Tema oscuro */
+.dark .circle-btn {
+    background-color: #333;
+    border: 1px solid #444;
+    color: #eee;
+}
+
+.dark .circle-btn:hover {
+    background-color: #444;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }

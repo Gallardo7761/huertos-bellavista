@@ -77,6 +77,12 @@ main {
   background-color: var(--bg-green);
 }
 
+div {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 
 /* ================================
    TIPOGRAFÍA GLOBAL
@@ -181,6 +187,6 @@ input[type="color"]:focus,
 }
 
 .content-wrapper {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
 }
