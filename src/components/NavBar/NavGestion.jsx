@@ -1,65 +1,34 @@
 import React from 'react';
+import { NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faGear,
-  faUsers,
-  faMoneyBill,
-  faWallet,
-  faFileInvoice,
-  faUserPlus,
-  faShapes
+  faGear, faUsers, faMoneyBill, faWallet, faFileInvoice,
+  faUserPlus, faShapes
 } from '@fortawesome/free-solid-svg-icons';
 
-const NavGestion = () => {
-  return (
-    <li className="nav-item dropdown" id="nav-manage">
-      <a
-        className="nav-link dropdown-toggle"
-        href="#"
-        id="dropdownGestion"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        title="Gestión"
-      >
-        <FontAwesomeIcon icon={faGear} className="me-2" />Gestión
-      </a>
-      <ul className="dropdown-menu" aria-labelledby="dropdownGestion">
-        <li>
-          <Link className="dropdown-item" to="/gestion/socios" title="Socios">
-            <FontAwesomeIcon icon={faUsers} className="me-2" />Socios
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to="/gestion/ingresos" title="Ingresos">
-            <FontAwesomeIcon icon={faMoneyBill} className="me-2" />Ingresos
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to="/gestion/gastos" title="Gastos">
-            <FontAwesomeIcon icon={faWallet} className="me-2" />Gastos
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to="/gestion/balance" title="Balance">
-            <FontAwesomeIcon icon={faFileInvoice} className="me-2" />Balance
-          </Link>
-        </li>
-        <div className="dropdown-divider"></div>
-        <li>
-          <Link className="dropdown-item" to="/gestion/altas" title="Altas">
-            <FontAwesomeIcon icon={faUserPlus} className="me-2" />Solicitudes de alta
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to="/gestion/solicitudes" title="Solicitudes">
-            <FontAwesomeIcon icon={faShapes} className="me-2" />Solicitudes Inver./Colab.
-          </Link>
-        </li>
-      </ul>
-    </li>
-  );
-};
+const NavGestion = () => (
+  <NavDropdown title={<><FontAwesomeIcon icon={faGear} className="me-2" />Gestión</>} id="nav-manage">
+    <NavDropdown.Item as={Link} to="/gestion/socios">
+      <FontAwesomeIcon icon={faUsers} className="me-2" />Socios
+    </NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/gestion/ingresos">
+      <FontAwesomeIcon icon={faMoneyBill} className="me-2" />Ingresos
+    </NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/gestion/gastos">
+      <FontAwesomeIcon icon={faWallet} className="me-2" />Gastos
+    </NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/gestion/balance">
+      <FontAwesomeIcon icon={faFileInvoice} className="me-2" />Balance
+    </NavDropdown.Item>
+    <NavDropdown.Divider />
+    <NavDropdown.Item as={Link} to="/gestion/altas">
+      <FontAwesomeIcon icon={faUserPlus} className="me-2" />Solicitudes de alta
+    </NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/gestion/solicitudes">
+      <FontAwesomeIcon icon={faShapes} className="me-2" />Solicitudes Inver./Colab.
+    </NavDropdown.Item>
+  </NavDropdown>
+);
 
 export default NavGestion;

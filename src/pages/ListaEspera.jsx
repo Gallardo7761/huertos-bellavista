@@ -3,7 +3,7 @@ import {useConfig} from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
 import List from '../components/List';
 import DateParser from '../util/parsers/dateParser';
-import Container from '../components/Container';
+import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
 import LoadingIcon from '../components/LoadingIcon';
 
@@ -50,13 +50,13 @@ const ListaEsperaContent = () => {
     }));
 
     return (
-        <Container>
+        <CustomContainer>
             <ContentWrapper>
                 <h1 className='section-title'>Lista de Espera</h1>
                 <hr className="section-divider" />
                 <List datos={mapped} config={config} />
             </ContentWrapper>
-        </Container>
+        </CustomContainer>
     );
     
 }

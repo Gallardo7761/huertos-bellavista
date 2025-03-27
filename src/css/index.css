@@ -111,15 +111,15 @@ h6 {
 input,
 textarea,
 select {
-  background-color: var(--input-bg);
-  color: var(--text-color);
-  border-color: var(--input-border);
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--input-border) !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: var(--placeholder-color);
+  color: var(--placeholder-color) !important;
 }
 
 textarea:focus,
@@ -138,9 +138,9 @@ input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
 .uneditable-input:focus {   
-  border-color: var(--secondary-green);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px var(--secondary-green);
-  outline: 0 none;
+  border-color: var(--secondary-green) !important;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px var(--secondary-green) !important;
+  outline: 0 none !important;
 }
 
 

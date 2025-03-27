@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Container = ({ children }) => {
+const CustomContainer = ({ children }) => {
     return (
         <main className="custom-container">
             {children}
@@ -8,8 +8,8 @@ const Container = ({ children }) => {
     );
 }
 
-Container.propTypes = {
+CustomContainer.propTypes = {
     children: PropTypes.node.isRequired,
 }
 
-export default Container;
+export default CustomContainer;

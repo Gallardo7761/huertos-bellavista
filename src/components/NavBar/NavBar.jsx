@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {useAuth} from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSignIn,
@@ -18,81 +18,63 @@ import IfAuthenticated from '../Auth/IfAuthenticated.jsx';
 import IfNotAuthenticated from '../Auth/IfNotAuthenticated.jsx';
 import IfRole from '../Auth/IfRole.jsx';
 
-const Navbar = () => {
+import { Navbar, Nav, Container } from 'react-bootstrap';
+
+const NavBar = () => {
   const { user, logout } = useAuth();
-  let location = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    const collapse = document.getElementById("collapse");
-  
-    if (collapse && collapse.classList.contains("show")) {
+    const collapse = document.querySelector(".navbar-collapse");
+    if (collapse?.classList.contains("show")) {
       collapse.classList.remove("show");
-      collapse.classList.add("collapsing");
-  
-      setTimeout(() => {
-        collapse.classList.remove("collapsing");
-        collapse.classList.add("collapse");
-      }, 300);
     }
   }, [location.pathname]);
-  
 
   return (
-    <nav className={`navbar navbar-expand-lg sticky-top px-3`}>
-      <div className="container-fluid d-flex justify-content-between p-0">
-        {/* Logo a la izquierda */}
+    <Navbar expand="lg" sticky="top">
+      <Container fluid>
+        {/* Usuario (izquierda) */}
         <IfAuthenticated>
-          <Link className="navbar-brand ms-1 fw-bold" to="/perfil">
-            {"@"+user?.usuario}
-          </Link>
+          <Navbar.Brand as={Link} to="/perfil" className="fw-bold">
+            @{user?.usuario}
+          </Navbar.Brand>
         </IfAuthenticated>
 
-        {/* Botón de menú */}
-        <button
-          className="navbar-toggler collapsed custom-hamburger"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collapse"
-          aria-controls="collapse"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        {/* Botón hamburguesa */}
+        <Navbar.Toggle aria-controls="main-navbar" className="custom-hamburger" />
 
-        {/* Menú */}
-        <div className="navbar-collapse collapse" id="collapse">
-          <ul className="navbar-nav me-auto mb-2 mb-md-0 m-0 p-2 gap-2">
+        {/* Contenido del navbar */}
+        <Navbar.Collapse id="main-navbar">
+          <Nav className="me-auto gap-2">
             <NavHome />
             <NavListaEspera />
             <NavHerramientas />
             <IfRole roles={["admin", "dev"]}>
               <NavGestion />
             </IfRole>
-          </ul>
-          <hr className="m-0 p-0 mt-2 mb-2" />
+          </Nav>
 
-          {/* Login */}
-          <ul className="navbar-nav d-flex flex-md-none mb-2 mb-md-0 m-0 p-2 gap-2">
+          {/* Login / Logout */}
+          <Nav className="d-flex flex-md-row flex-column gap-2 ms-auto">
             <IfNotAuthenticated>
-              <li className="nav-item" id="nav-login">
-                <Link className="nav-link" to="/login" title="Iniciar sesión">
-                  <FontAwesomeIcon icon={faSignIn} className="me-2" />Iniciar sesión
-                </Link>
-              </li>
+              <Nav.Link as={Link} to="/login" title="Iniciar sesión">
+                <FontAwesomeIcon icon={faSignIn} className="me-2" />
+                Iniciar sesión
+              </Nav.Link>
             </IfNotAuthenticated>
+
             <IfAuthenticated>
-              <li className="nav-item" id="nav-logout" onClick={logout}>
-                <a className="nav-link" href="#" title="Cerrar sesión">
-                  <FontAwesomeIcon icon={faSignOut} className="me-2" />Cerrar sesión
-                </a>
-              </li>
+              <Nav.Link onClick={logout} title="Cerrar sesión">
+                <FontAwesomeIcon icon={faSignOut} className="me-2" />
+                Cerrar sesión
+              </Nav.Link>
             </IfAuthenticated>
-          </ul>
-        </div>
-      </div>
-    </nav>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default NavBar;

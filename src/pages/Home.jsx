@@ -2,12 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
 import Mapa3D from '../components/Mapa3D';
-import Container from '../components/Container';
+import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
 
 const Home = () => {
   return (
-    <Container>
+    <CustomContainer>
       <section className="about-section">
         <ContentWrapper>
           <h1 className="section-title">Sobre nosotros</h1>
@@ -61,7 +61,7 @@ const Home = () => {
           <Mapa3D />
         </ContentWrapper>
       </section>
-    </Container>
+    </CustomContainer>
   );
 };
 

@@ -1,10 +1,10 @@
 /* ================================
-   SOCIO CARD - ESTILOS
+   SOCIO CARD - BASE
 ================================== */
 
 .socio-card {
+  border-radius: 1rem !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 1rem;
 }
 
 .socio-card:hover {
@@ -12,42 +12,69 @@
   box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
 }
 
-/* Colores de fondo personalizados para el header */
-.bg-light-green {
-  background-color: var(--secondary-green) !important;
+.socio-card img {
+  object-fit: cover;
+}
+
+/* ================================
+   CARD HEADER
+================================== */
+
+.socio-card .card-header{
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
 }
 
 .card-header.bg-light-red {
   background-color: #f8d7da !important;
 }
 
-.card-header.bg-light-red > div > div > .card-title {
+.card-header.bg-light-red .card-title {
   color: var(--bs-danger) !important;
 }
 
-/* Imagen de perfil */
-.socio-card img {
-  object-fit: cover;
+.bg-light-green {
+  background-color: var(--secondary-green) !important;
 }
 
-/* Notas */
-.socio-card #notas {
-  border: 1px solid #e9ecef;
-  border-radius: 0 0 1rem 1rem;
+/* Botón del card-header (estilo Google) */
+
+.socio-card .card-header button {
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
 }
 
-.socio-card #notas,
-.socio-card .card-text {
-  font-style: italic;
+.socio-card .card-header button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ================================
+   LISTA y NOTAS CARD (estilo)
+================================== */
+
+.socio-card .list-group,
+.socio-card .notas-card {
+  border-radius: 1rem;
   font-size: 0.95rem;
+  font-style: italic;
+  border: 1px solid transparent; /* Theming lo gestiona */
 }
 
-/* List items */
 .socio-card .list-group-item {
   font-size: 0.95rem;
   padding: 0.75rem 1rem;
-  transition: background-color 0.2s ease;
+  border: none;
   border-left: 4px solid transparent;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
 }
 
 .socio-card .list-group-item:hover {
@@ -55,7 +82,7 @@
 }
 
 /* ================================
-     THEMING
+   THEMING - LIGHT MODE
 ================================== */
 
 .light .socio-card,
@@ -66,14 +93,28 @@
   border-color: #cccccc;
 }
 
+.light .socio-card .list-group,
+.light .socio-card .notas-card {
+  border-color: #e9ecef;
+  background-color: #ffffff;
+}
+
 .light .socio-card .list-group {
-  border-radius: 0 0 1rem 1rem !important;
-  border: 1px solid #e9ecef;
+  border-radius: 1rem !important;
+  border-top: none;
 }
 
 .light .socio-card .text-muted {
   color: #6c757d !important;
 }
+
+.light .socio-card .card-header button {
+  color: #000000;
+}
+
+/* ================================
+   THEMING - DARK MODE
+================================== */
 
 .dark .socio-card,
 .dark .socio-card .card,
@@ -83,6 +124,16 @@
   border-color: #444444;
 }
 
+.dark .socio-card .list-group,
+.dark .socio-card .notas-card {
+  border-color: #444444;
+  background-color: #2a2a2a;
+}
+
 .dark .socio-card .text-muted {
   color: #bbbbbb !important;
+}
+
+.dark .socio-card .card-header button {
+  color: #ffffff;
 }

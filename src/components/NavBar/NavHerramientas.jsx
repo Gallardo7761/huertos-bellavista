@@ -1,41 +1,21 @@
 import React from 'react';
+import { NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTools, faBullhorn, faFile, faConciergeBell } from '@fortawesome/free-solid-svg-icons';
 
-const NavHerramientas = () => {
-  return (
-    <li className="nav-item dropdown" id="nav-herramientas">
-      <a
-        className="nav-link dropdown-toggle"
-        href="#"
-        id="dropdownHerramientas"
-        role="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-        title="Herramientas"
-      >
-        <FontAwesomeIcon icon={faTools} className="me-2" />Herramientas
-      </a>
-      <ul className="dropdown-menu" aria-labelledby="dropdownHerramientas">
-        <li>
-          <Link className="dropdown-item" to="/anuncios" title="Anuncios">
-            <FontAwesomeIcon icon={faBullhorn} className="me-2" />Anuncios
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to="/documentacion" title="Documentación">
-            <FontAwesomeIcon icon={faFile} className="me-2" />Documentación
-          </Link>
-        </li>
-        <li>
-          <Link className="dropdown-item" to="/solicitud" title="Solicitud">
-            <FontAwesomeIcon icon={faConciergeBell} className="me-2" />Enviar una solicitud
-          </Link>
-        </li>
-      </ul>
-    </li>
-  );
-};
+const NavHerramientas = () => (
+  <NavDropdown title={<><FontAwesomeIcon icon={faTools} className="me-2" />Herramientas</>} id="nav-herramientas">
+    <NavDropdown.Item as={Link} to="/anuncios">
+      <FontAwesomeIcon icon={faBullhorn} className="me-2" />Anuncios
+    </NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/documentacion">
+      <FontAwesomeIcon icon={faFile} className="me-2" />Documentación
+    </NavDropdown.Item>
+    <NavDropdown.Item as={Link} to="/solicitud">
+      <FontAwesomeIcon icon={faConciergeBell} className="me-2" />Enviar una solicitud
+    </NavDropdown.Item>
+  </NavDropdown>
+);
 
 export default NavHerramientas;
