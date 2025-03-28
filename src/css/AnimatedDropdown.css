@@ -2,16 +2,15 @@
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 0;
-  border-radius: 0;
-  padding: 0.75rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
   z-index: 1050;
   min-width: 220px;
-  transform: translateY(0.5rem);
+  transform: none;
 }
 
 .custom-dropdown-menu .dropdown-item {
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.25rem;
   cursor: pointer;
 }
 

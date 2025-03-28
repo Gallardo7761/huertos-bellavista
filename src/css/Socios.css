@@ -14,10 +14,10 @@
   * =================== */
 .search-toolbar-wrapper {
     position: sticky;
-    top: 60px;
+    top: 64px;
     z-index: 900;
     padding: 0.5rem 0;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .search-toolbar {
@@ -45,6 +45,7 @@
 .search-toolbar input.search-input {
     all: unset;
     flex-grow: 1;
+    height: 32px;
     font-size: 1.1rem;
     font-family: "Open Sans";
     padding-right: 1rem;
@@ -91,6 +92,18 @@
 
 .toolbar-buttons .btn:hover {
     background-color: rgba(0, 0, 0, 0.1);
+}
+
+.light .toolbar-buttons .btn {
+    color: #111111aa;
+}
+
+.light .toolbar-buttons .btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.darlk .toolbar-buttons .btn {
+    color: #ffffffaa;
 }
 
 .dark .toolbar-buttons .btn:hover {

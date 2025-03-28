@@ -209,15 +209,15 @@ const SociosContent = ({ config }) => {
             <div className="toolbar-buttons">
               <AnimatedDropdown
                 variant="transparent"
-                icon={<FontAwesomeIcon icon={faFilter} className='fa-lg' />}
+                icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}
               >
                 <SociosFilter filters={filters} onChange={setFilters} />
               </AnimatedDropdown>
               <Button variant="transparent" disabled>
-                <FontAwesomeIcon icon={faFilePdf} className='fa-lg' />
+                <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
               </Button>
               <Button variant="transparent" onClick={handleCreate}>
-                <FontAwesomeIcon icon={faPlus} className='fa-lg' />
+                <FontAwesomeIcon icon={faPlus} className='fa-md' />
               </Button>
             </div>
           </div>

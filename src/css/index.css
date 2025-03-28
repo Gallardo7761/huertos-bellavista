@@ -64,7 +64,7 @@
 
 html,
 body {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans";
   color: var(--text-color);
   background-color: var(--bg-green);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -97,7 +97,7 @@ p,
 span,
 a,
 button {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Open Sans";
   color: var(--text-color);
 }
 
@@ -107,7 +107,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Product Sans", sans-serif;
+  font-family: "Product Sans";
   color: var(--text-color);
 }
 
@@ -158,7 +158,7 @@ input[type="color"]:focus,
 
 .section-title {
   font-family: 'Product Sans';
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }

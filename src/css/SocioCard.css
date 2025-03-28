@@ -97,6 +97,7 @@
 .light .socio-card .notas-card {
   border-color: #e9ecef;
   background-color: #ffffff;
+  border-top: none;
 }
 
 .light .socio-card .list-group {
@@ -127,6 +128,7 @@
 .dark .socio-card .list-group,
 .dark .socio-card .notas-card {
   border-color: #444444;
+  border-top: none;
   background-color: #2a2a2a;
 }
 

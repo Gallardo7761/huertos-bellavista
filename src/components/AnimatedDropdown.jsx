@@ -4,8 +4,8 @@ import { AnimatePresence, motion as _motion } from 'framer-motion';
 import '../css/AnimatedDropdown.css';
 
 const AnimatedDropdown = ({
-  trigger,        // custom trigger (JSX o función)
-  icon,           // si no hay trigger, usa botón con icono
+  trigger,        
+  icon,      
   variant = "secondary",
   className = "",
   show,
@@ -48,7 +48,6 @@ const AnimatedDropdown = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isControlled, onToggle]);
 
-  // Render del trigger (custom o botón)
   const triggerElement = trigger
     ? (typeof trigger === "function"
       ? trigger({ onClick: toggle, ref: triggerRef })
@@ -66,7 +65,7 @@ const AnimatedDropdown = ({
 
   return (
     <div
-      className="position-relative"
+      className="position-relative d-inline-block"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -76,10 +75,10 @@ const AnimatedDropdown = ({
         {actualOpen && (
           <_motion.div
             ref={dropdownRef}
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 8, scale: 1 }}  // ← aquí y: 8 (equivale a 0.5rem)
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
             className="custom-dropdown-menu"
           >
             {typeof children === "function" ? children({ closeDropdown }) : children}
@@ -87,6 +86,7 @@ const AnimatedDropdown = ({
         )}
       </AnimatePresence>
     </div>
+
   );
 };
 

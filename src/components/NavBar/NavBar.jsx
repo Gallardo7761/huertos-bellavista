@@ -52,7 +52,7 @@ const NavBar = () => {
             </IfRole>
           </Nav>
 
-          <ThemeButton className='me-2' />
+          <ThemeButton className='me-3' />
 
         </Navbar.Collapse>
 
