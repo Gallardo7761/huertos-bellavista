@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGear, faUsers, faMoneyBill, faWallet, faFileInvoice,
@@ -11,33 +11,37 @@ const NavGestion = () => {
   const [showing, setShowing] = useState(false);
 
   return (
-    <NavDropdown
-      title={<><FontAwesomeIcon icon={faGear} className="me-2" />Gestión</>}
+    <AnimatedDropdown
       show={showing}
       onMouseEnter={() => setShowing(true)}
       onMouseLeave={() => setShowing(false)}
       onToggle={(isOpen) => setShowing(isOpen)}
+      trigger={
+        <Link className="nav-link dropdown-toggle" role="button">
+          <FontAwesomeIcon icon={faGear} className="me-2" />Gestión
+        </Link>
+      }
     >
-      <NavDropdown.Item as={Link} to="/gestion/socios">
+      <Link to="/gestion/socios" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faUsers} className="me-2" />Socios
-      </NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/gestion/ingresos">
+      </Link>
+      <Link to="/gestion/ingresos" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faMoneyBill} className="me-2" />Ingresos
-      </NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/gestion/gastos">
+      </Link>
+      <Link to="/gestion/gastos" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faWallet} className="me-2" />Gastos
-      </NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/gestion/balance">
+      </Link>
+      <Link to="/gestion/balance" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faFileInvoice} className="me-2" />Balance
-      </NavDropdown.Item>
-      <NavDropdown.Divider />
-      <NavDropdown.Item as={Link} to="/gestion/altas">
+      </Link>
+      <hr className="dropdown-divider" />
+      <Link to="/gestion/altas" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faUserPlus} className="me-2" />Solicitudes de alta
-      </NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/gestion/solicitudes">
+      </Link>
+      <Link to="/gestion/solicitudes" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faShapes} className="me-2" />Solicitudes Inver./Colab.
-      </NavDropdown.Item>
-    </NavDropdown>
+      </Link>
+    </AnimatedDropdown>
   );
 };
 

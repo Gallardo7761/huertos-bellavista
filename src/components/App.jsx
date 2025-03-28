@@ -26,7 +26,6 @@ function App() {
 
   return (
     <>
-      <ThemeButton />
       <Header />
       <NavBar />
       {/**<Routes>

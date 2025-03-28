@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { NavDropdown } from 'react-bootstrap';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faList, faEye, faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,21 +8,24 @@ const NavListaEspera = () => {
   const [showing, setShowing] = useState(false);
 
   return (
-    <NavDropdown
-      title={<><FontAwesomeIcon icon={faList} className="me-2" />Lista de espera</>}
-      id="nav-lista-espera"
+    <AnimatedDropdown
       show={showing}
       onMouseEnter={() => setShowing(true)}
       onMouseLeave={() => setShowing(false)}
       onToggle={(isOpen) => setShowing(isOpen)}
+      trigger={
+        <Link className="nav-link dropdown-toggle" role="button">
+          <FontAwesomeIcon icon={faList} className="me-2" />Lista de espera
+        </Link>
+      }
     >
-      <NavDropdown.Item as={Link} to="/lista-espera">
+      <Link to="/lista-espera" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faEye} className="me-2" />Ver la lista
-      </NavDropdown.Item>
-      <NavDropdown.Item as={Link} to="/alta">
+      </Link>
+      <Link to="/alta" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faPlus} className="me-2" />Solicitar huerto
-      </NavDropdown.Item>
-    </NavDropdown>
+      </Link>
+    </AnimatedDropdown>
   );
 };
 

@@ -2,11 +2,12 @@
   position: absolute;
   top: 100%;
   right: 0;
-  margin-top: 0.5rem;
-  border-radius: 0.5rem;
+  margin-top: 0;
+  border-radius: 0;
   padding: 0.75rem;
   z-index: 1050;
   min-width: 220px;
+  transform: translateY(0.5rem);
 }
 
 .custom-dropdown-menu .dropdown-item {
@@ -28,10 +29,12 @@
 
 .light .custom-dropdown-menu {
   background-color: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .dark .custom-dropdown-menu {
   background-color: var(--dark-green);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
