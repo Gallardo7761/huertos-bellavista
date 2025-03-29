@@ -3,27 +3,27 @@
 ================================== */
 @font-face {
   font-family: "Open Sans";
-  src: url('../fonts/OpenSans.ttf');
+  src: url('/fonts/OpenSans.ttf');
 }
 
 @font-face {
   font-family: "Product Sans";
-  src: url('../fonts/ProductSansRegular.ttf');
+  src: url('/fonts/ProductSansRegular.ttf');
 }
 
 @font-face {
   font-family: "Product Sans Italic";
-  src: url('../fonts/ProductSansItalic.ttf');
+  src: url('/fonts/ProductSansItalic.ttf');
 }
 
 @font-face {
   font-family: "Product Sans Italic Bold";
-  src: url('../fonts/ProductSansBoldItalic.ttf');
+  src: url('/fonts/ProductSansBoldItalic.ttf');
 }
 
 @font-face {
   font-family: "Product Sans Bold";
-  src: url('../fonts/ProductSansBold.ttf');
+  src: url('/fonts/ProductSansBold.ttf');
 }
 
 

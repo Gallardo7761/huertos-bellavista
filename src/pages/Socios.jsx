@@ -14,6 +14,7 @@ import { useConfig } from '../hooks/useConfig';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faFilePdf, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { generarPDFSocios } from '../util/generarPdfSocios';
 
 const PAGE_SIZE = 10;
 
@@ -48,11 +49,11 @@ const SociosContent = ({ config }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     todos: true,
-    listaEspera: false,
-    invernadero: false,
-    inactivos: false,
-    colaboradores: false,
-    hortelanos: false
+    listaEspera: true,
+    invernadero: true,
+    inactivos: true,
+    colaboradores: true,
+    hortelanos: true
   });
   const [creatingSocio, setCreatingSocio] = useState(null);
   const [tempSocio, setTempSocio] = useState(null);
@@ -213,7 +214,7 @@ const SociosContent = ({ config }) => {
               >
                 <SociosFilter filters={filters} onChange={setFilters} />
               </AnimatedDropdown>
-              <Button variant="transparent" disabled>
+              <Button variant="transparent" onClick={() => generarPDFSocios(filteredSocios)}>
                 <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
               </Button>
               <Button variant="transparent" onClick={handleCreate}>
