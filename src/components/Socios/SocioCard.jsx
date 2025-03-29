@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card, ListGroup, Badge, Dropdown, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt, faEllipsisVertical, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt, faEllipsisVertical, faEdit, faTrash, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 import { motion as _motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import '../../css/SocioCard.css';
@@ -171,12 +171,17 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           <AnimatedDropdown
           icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
           className="p-0 border-0"
+          attachTo="trigger"
         >
           {({ closeDropdown }) => (
             <>
               <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
                 <FontAwesomeIcon icon={faEdit} className="me-2" />
                 Editar
+              </div>
+              <div className="dropdown-item d-flex align-items-center" onClick={() => { closeDropdown(); }}>
+                <FontAwesomeIcon icon={faMoneyBill} className="me-2" />
+                Ver ingresos
               </div>
               <hr className="dropdown-divider" />
               <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>

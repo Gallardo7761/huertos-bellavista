@@ -4,15 +4,16 @@ import { AnimatePresence, motion as _motion } from 'framer-motion';
 import '../css/AnimatedDropdown.css';
 
 const AnimatedDropdown = ({
-  trigger,        
-  icon,      
+  trigger,
+  icon,
   variant = "secondary",
   className = "",
   show,
   onToggle,
   onMouseEnter,
   onMouseLeave,
-  children
+  children,
+  attachTo = "wrapper",
 }) => {
   const isControlled = show !== undefined;
   const [open, setOpen] = useState(false);
@@ -63,6 +64,8 @@ const AnimatedDropdown = ({
       </Button>
     );
 
+
+  if (attachTo === "wrapper") {
     return (
       <div
         className="dropdown-wrapper"
@@ -72,7 +75,7 @@ const AnimatedDropdown = ({
         style={{ display: "inline-block" }}
       >
         {triggerElement}
-    
+
         <AnimatePresence>
           {actualOpen && (
             <_motion.div
@@ -89,7 +92,34 @@ const AnimatedDropdown = ({
         </AnimatePresence>
       </div>
     );
-    
+  } else if (attachTo === "trigger") {
+    return (
+      <div
+        className="position-relative d-inline-block"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        ref={triggerRef}
+      >
+        {triggerElement}
+
+        <AnimatePresence>
+          {actualOpen && (
+            <_motion.div
+              ref={dropdownRef}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.15 }}
+              className="custom-dropdown-menu"
+            >
+              {typeof children === "function" ? children({ closeDropdown }) : children}
+            </_motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
 };
 
 export default AnimatedDropdown;
