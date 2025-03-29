@@ -44,9 +44,30 @@ const ListaEsperaContent = () => {
         return new Date(a.fechaDeAlta) - new Date(b.fechaDeAlta);
     });
 
-    const mapped = data.map(item => ({
+    const setAsteriscos = (nombre) => {
+        let palabras = nombre.split(" ");
+        for (let i = 0; i < palabras.length; i++) {
+            if (palabras[i].length > 3) {
+                palabras[i] = palabras[i].substring(0, 3) + "*".repeat(palabras[i].length - 3);
+            } else if(palabras[i].length > 0) {
+                palabras[i] = palabras[i][0] + "*".repeat(palabras[i].length - 1);
+            }
+        }
+        nombre = palabras.join(" ");
+        if (nombre.length > 16) {
+            nombre = nombre.substring(0, 16) + "...";
+        }
+        return nombre;
+    }
+
+    const mapped = data
+    .map(item => ({
         ...item,
         fechaDeAlta: DateParser.sqlToString(item.fechaDeAlta),
+    }))
+    .map(item => ({
+        ...item,
+        nombre: setAsteriscos(item.nombre),
     }));
 
     return (
