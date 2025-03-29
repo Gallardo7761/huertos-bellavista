@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ListGroup } from "react-bootstrap";
 import '../css/ListItem.css';
 
-const MotionListGroupItem = motion.create(ListGroup.Item);
+const MotionListGroupItem = motion(ListGroup.Item);
 
 const ListItem = ({ item, config, index }) => {
   const {
@@ -15,12 +15,12 @@ const ListItem = ({ item, config, index }) => {
 
   return (
     <MotionListGroupItem
-      className="custom-list-item d-flex align-items-center justify-content-between"
+      className="custom-list-item d-flex justify-content-between rounded-4 align-items-center"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center gap-3">
         {showIndex && (
           <div className="list-item-index">
             {index + 1}
@@ -35,10 +35,12 @@ const ListItem = ({ item, config, index }) => {
           />
         )}
 
-        <div>
-          {title && item[title] && <h5 className="fw-bold m-0 p-0">{item[title]}</h5>}
+        <div className="d-flex flex-column">
+          {title && item[title] && (
+            <h5 className="fw-bold m-0">{item[title]}</h5>
+          )}
           {subtitle && item[subtitle] && (
-            <h4 className="subtitle m-0 p-0">{item[subtitle]}</h4>
+            <div className="subtitle m-0">{item[subtitle]}</div>
           )}
         </div>
       </div>

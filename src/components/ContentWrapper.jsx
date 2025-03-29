@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 const ContentWrapper = ({ children }) => {
     return (
-        <div className="content-wrapper">
+        <div className="container-xl">
             {children}
         </div>
     );

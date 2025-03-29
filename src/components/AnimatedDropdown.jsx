@@ -12,8 +12,7 @@ const AnimatedDropdown = ({
   onToggle,
   onMouseEnter,
   onMouseLeave,
-  children,
-  attachTo = "wrapper",
+  children
 }) => {
   const isControlled = show !== undefined;
   const [open, setOpen] = useState(false);
@@ -26,11 +25,6 @@ const AnimatedDropdown = ({
     const newState = !actualOpen;
     if (!isControlled) setOpen(newState);
     onToggle?.(newState);
-  };
-
-  const closeDropdown = () => {
-    if (!isControlled) setOpen(false);
-    onToggle?.(false);
   };
 
   useEffect(() => {
@@ -64,62 +58,34 @@ const AnimatedDropdown = ({
       </Button>
     );
 
+  const dropdownClasses = `dropdown-menu show shadow rounded-0 end-0 mt-2 px-2 py-2 ${className}`;
 
-  if (attachTo === "wrapper") {
-    return (
-      <div
-        className="dropdown-wrapper"
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        ref={triggerRef}
-        style={{ display: "inline-block" }}
-      >
-        {triggerElement}
+  return (
+    <div
+      className="position-relative d-inline-block"
+      onClick={toggle}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      ref={triggerRef}
+    >
+      {triggerElement}
 
-        <AnimatePresence>
-          {actualOpen && (
-            <_motion.div
-              ref={dropdownRef}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.15 }}
-              className="custom-dropdown-menu fixed-on-navbar"
-            >
-              {typeof children === "function" ? children({ closeDropdown }) : children}
-            </_motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  } else if (attachTo === "trigger") {
-    return (
-      <div
-        className="position-relative d-inline-block"
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        ref={triggerRef}
-      >
-        {triggerElement}
-
-        <AnimatePresence>
-          {actualOpen && (
-            <_motion.div
-              ref={dropdownRef}
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.15 }}
-              className="custom-dropdown-menu"
-            >
-              {typeof children === "function" ? children({ closeDropdown }) : children}
-            </_motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  }
-
+      <AnimatePresence>
+        {actualOpen && (
+          <_motion.div
+            ref={dropdownRef}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className={dropdownClasses}
+          >
+            {typeof children === "function" ? children({ closeDropdown: () => toggle(false) }) : children}
+          </_motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
 
 export default AnimatedDropdown;

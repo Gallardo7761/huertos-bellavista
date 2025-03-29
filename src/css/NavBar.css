@@ -1,5 +1,5 @@
 /* ================================
-   NAVBAR - ESTILO BASE
+   NAVBAR - VISUAL + THEMING ONLY
 ================================== */
 
 .navbar {
@@ -7,30 +7,8 @@
   z-index: 1000;
 }
 
-.navbar-toggler:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-a.nav-link {
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: larger;
-  font-family: "Product Sans";
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.nav-item>a.nav-link,
-.dropdown-item {
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: larger;
-  font-family: "Product Sans";
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
 button.custom-hamburger.navbar-toggler.collapsed {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
   transition: all 0.1s ease-in-out;
 }
 
@@ -38,31 +16,24 @@ button.custom-hamburger.navbar-toggler {
   margin-bottom: 1rem;
   transition: all 0.1s ease-in-out;
 }
- 
-/* ================================
-     DROPDOWN MENÚ
-  ================================== */
 
-.dropdown-menu {
-  border: none;
-  border-radius: 8px;
-  margin-top: 8px;
-  padding: 0.5rem 0;
-  animation: fadeIn 0.2s ease-in-out;
-}
-
+a.nav-link,
+.nav-item > a.nav-link,
 .dropdown-item {
-  font-weight: 400;
+  font-family: "Product Sans";
+  font-size: larger;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 hr {
   transition: border-top 0.2s ease;
 }
 
-
 /* ================================
      LIGHT THEME
-  ================================== */
+================================== */
 
 .light .navbar {
   background-color: var(--white) !important;
@@ -109,10 +80,9 @@ hr {
   border-top: 1px solid #dee2e6;
 }
 
-
 /* ================================
      DARK THEME
-  ================================== */
+================================== */
 
 .dark .navbar {
   background-color: #1e1e1e !important;
@@ -160,10 +130,9 @@ hr {
   border-top: 1px solid #444;
 }
 
-
 /* ================================
      ANIMACIONES
-  ================================== */
+================================== */
 
 @keyframes fadeIn {
   from {

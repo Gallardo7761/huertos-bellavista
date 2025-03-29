@@ -43,8 +43,9 @@ const LoginForm = () => {
     return (
         <CustomContainer>
             <ContentWrapper>
-                <div className="rounded-5 col-md-6 col-lg-5 col-xxl-4 container shadow card p-5 d-flex flex-column gap-4 login-card">
+                <div className="login-card card shadow p-5 rounded-5 mx-auto col-12 col-md-8 col-lg-6 col-xl-5 d-flex flex-column gap-4">
                     <h1 className="text-center">Inicio de sesión</h1>
+
                     <Form className="d-flex flex-column gap-5" onSubmit={handleSubmit}>
                         <div className="d-flex flex-column gap-3">
                             <FloatingLabel
@@ -79,17 +80,16 @@ const LoginForm = () => {
                             </Alert>
                         )}
 
-                        <Row className="justify-content-center m-0 p-0">
-                            <Col xs={12} className='p-0 m-0'>
-                                <Button type="submit" className="login-button">
-                                    Iniciar sesión
-                                </Button>
-                            </Col>
-                        </Row>
+                        <div className="text-center">
+                            <Button type="submit" className="w-50 padding-4 rounded-4 border-0 shadow-sm login-button">
+                                Iniciar sesión
+                            </Button>
+                        </div>
                     </Form>
                 </div>
             </ContentWrapper>
         </CustomContainer>
+
     );
 };
 

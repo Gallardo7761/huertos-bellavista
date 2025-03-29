@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { Card, ListGroup, Badge, Dropdown, Button, Form } from 'react-bootstrap';
+import {
+  Card, ListGroup, Badge, Button, Form
+} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt, faEllipsisVertical, faEdit, faTrash, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import {
+  faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt,
+  faEllipsisVertical, faEdit, faTrash, faMoneyBill
+} from '@fortawesome/free-solid-svg-icons';
 import { motion as _motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import '../../css/SocioCard.css';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
+import '../../css/SocioCard.css';
 
 const getFechas = (socio) => {
   let html = `<strong>ALTA:</strong> ${parseDate(socio.fechaDeAlta)}`;
@@ -56,53 +61,26 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   });
 
   const handleEdit = () => setEditMode(true);
-
-  const handleDelete = () => {
-    if (typeof onDelete === "function") {
-      onDelete(socio.idSocio);
-    }
-  };
-
+  const handleDelete = () => typeof onDelete === "function" && onDelete(socio.idSocio);
   const handleCancel = () => {
-    if (isNew && onCancel) return onCancel(); // borrar si es nueva
+    if (isNew && onCancel) return onCancel();
     setEditMode(false);
     if (error) setError(null);
-    setFormData({
-      telefono: socio.telefono || '',
-      email: socio.email || '',
-      notas: socio.notas || '',
-      estado: socio.estado
-    });
+    setFormData({ telefono: socio.telefono || '', email: socio.email || '', notas: socio.notas || '', estado: socio.estado });
   };
 
   const handleSave = () => {
     const phoneRegex = /^[0-9]{9}$/;
-    if (!phoneRegex.test(formData.telefono)) {
-      setError("El teléfono no es válido.");
-      return;
-    }
-
+    if (!phoneRegex.test(formData.telefono)) return setError("El teléfono no es válido.");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      setError("El email no es válido.");
-      return;
-    }
-
-    if (!formData.nombre.trim() || !formData.numeroSocio) {
-      setError("El nombre y número de socio son obligatorios.");
-      return;
-    }
-
+    if (formData.email && !emailRegex.test(formData.email)) return setError("El email no es válido.");
+    if (!formData.nombre.trim() || !formData.numeroSocio) return setError("El nombre y número de socio son obligatorios.");
     setError(null);
-
     if (createMode && typeof onCreate === "function") {
       const fullSocio = {
         idSocio: null,
         nombre: formData.nombre,
-        usuario: (
-          formData.nombre.toLowerCase().replace(/\s+/g, '') +
-          formData.numeroSocio
-        ),
+        usuario: formData.nombre.toLowerCase().replace(/\s+/g, '') + formData.numeroSocio,
         dni: formData.dni,
         telefono: formData.telefono,
         email: formData.email,
@@ -113,186 +91,95 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
         tipo: socio.tipo || "HORTELANO",
         fechaDeAlta: socio.fechaDeAlta || new Date().toISOString().split("T")[0],
       };
-
-      onCreate(fullSocio);
-      return;
+      return onCreate(fullSocio);
     }
-
-    // 👇 Si no es nuevo, se edita
     if (typeof onUpdate === "function") {
       onUpdate(formData, socio.idSocio);
       setEditMode(false);
     }
   };
 
-  const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
   return (
-    <MotionCard className="socio-card shadow-sm border-0 h-100">
-      <Card.Header className={`d-flex align-items-center justify-content-between ${getHeaderColor(socio.estado)}`}>
+    <MotionCard className="socio-card shadow-sm rounded-4 border-0 h-100">
+      <Card.Header className={`d-flex align-items-center rounded-4 rounded-bottom-0 justify-content-between ${getHeaderColor(socio.estado)}`}>
         <div className="d-flex align-items-center p-1 m-0">
           <img src={getPFP(socio.tipo)} width="36" className="rounded me-3" alt="PFP" />
           <div>
-
             <Card.Title className="m-0">
               {(editMode || createMode) ? (
-                <Form.Control
-                  size="sm"
-                  value={formData.nombre}
-                  onChange={(e) => handleChange('nombre', e.target.value)}
-                  placeholder="Nombre"
-                  style={{ maxWidth: '220px' }}
-                />
-              ) : (
-                socio.nombre
-              )}
+                <Form.Control size="sm" value={formData.nombre} onChange={(e) => handleChange('nombre', e.target.value)} placeholder="Nombre" style={{ maxWidth: '220px' }} />
+              ) : socio.nombre}
             </Card.Title>
-
             {editMode ? (
-              <Form.Select
-                size="sm"
-                value={formData.estado}
-                onChange={(e) => handleChange('estado', parseInt(e.target.value))}
-                style={{ maxWidth: '8rem' }}
-              >
+              <Form.Select size="sm" value={formData.estado} onChange={(e) => handleChange('estado', parseInt(e.target.value))} style={{ maxWidth: '8rem' }}>
                 <option value={1}>ACTIVO</option>
                 <option value={0}>INACTIVO</option>
               </Form.Select>
             ) : (
               <Badge bg={getBadgeColor(socio.estado)}>{getEstado(socio.estado)}</Badge>
             )}
-
           </div>
         </div>
 
         {!createMode && (
-          <AnimatedDropdown
-          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}
-          className="p-0 border-0"
-          attachTo="trigger"
-        >
-          {({ closeDropdown }) => (
-            <>
-              <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
-                <FontAwesomeIcon icon={faEdit} className="me-2" />
-                Editar
-              </div>
-              <div className="dropdown-item d-flex align-items-center" onClick={() => { closeDropdown(); }}>
-                <FontAwesomeIcon icon={faMoneyBill} className="me-2" />
-                Ver ingresos
-              </div>
-              <hr className="dropdown-divider" />
-              <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
-                <FontAwesomeIcon icon={faTrash} className="me-2" />
-                Eliminar
-              </div>
-            </>
-          )}
-        </AnimatedDropdown>
-        
+          <AnimatedDropdown icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>
+            {({ closeDropdown }) => (
+              <>
+                <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
+                  <FontAwesomeIcon icon={faEdit} className="me-2" />Editar
+                </div>
+                <div className="dropdown-item d-flex align-items-center" onClick={closeDropdown}>
+                  <FontAwesomeIcon icon={faMoneyBill} className="me-2" />Ver ingresos
+                </div>
+                <hr className="dropdown-divider" />
+                <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
+                  <FontAwesomeIcon icon={faTrash} className="me-2" />Eliminar
+                </div>
+              </>
+            )}
+          </AnimatedDropdown>
         )}
-
       </Card.Header>
 
       <Card.Body>
-        {error && (
-          <div className="alert alert-danger py-1 px-2 small" role="alert">
-            {error}
-          </div>
-        )}
+        {error && <div className="alert alert-danger py-1 px-2 small" role="alert">{error}</div>}
+
         <Card.Text as="div">
           <small dangerouslySetInnerHTML={{ __html: getFechas(socio) }} />
         </Card.Text>
 
-        <ListGroup variant="flush" className="mt-2">
-          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-            <span><FontAwesomeIcon icon={faIdCard} className="me-2" />DNI</span>
-            {(editMode || createMode) ? (
-              <Form.Control
-                size="sm"
-                value={formData.dni}
-                onChange={(e) => handleChange('dni', e.target.value)}
-                style={{ maxWidth: '180px' }}
-              />
-            ) : (
-              <strong>{socio.dni}</strong>
-            )}
-          </ListGroup.Item>
-
-          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-            <span><FontAwesomeIcon icon={faUser} className="me-2" />SOCIO Nº</span>
-            {(editMode || createMode) ? (
-              <Form.Control
-                size="sm"
-                type="number"
-                value={formData.numeroSocio}
-                onChange={(e) => handleChange('numeroSocio', e.target.value)}
-                style={{ maxWidth: '100px' }}
-              />
-            ) : (
-              <strong>{socio.numeroSocio}</strong>
-            )}
-          </ListGroup.Item>
-
-          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-            <span><FontAwesomeIcon icon={faSunPlantWilt} className="me-2" />HUERTO Nº</span>
-            {(editMode || createMode) ? (
-              <Form.Control
-                size="sm"
-                type="number"
-                value={formData.numeroHuerto}
-                onChange={(e) => handleChange('numeroHuerto', e.target.value)}
-                style={{ maxWidth: '100px' }}
-              />
-            ) : (
-              <strong>{socio.numeroHuerto}</strong>
-            )}
-          </ListGroup.Item>
-
-          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-            <span><FontAwesomeIcon icon={faPhone} className="me-2" />TLF.</span>
-            {editMode ? (
-              <Form.Control
-                size="sm"
-                value={formData.telefono}
-                onChange={(e) => handleChange('telefono', e.target.value)}
-                style={{ maxWidth: '200px' }}
-              />
-            ) : (
-              <span>{parseNull(socio.telefono)}</span>
-            )}
-          </ListGroup.Item>
-
-          <ListGroup.Item className="d-flex justify-content-between align-items-center">
-            <span><FontAwesomeIcon icon={faAt} className="me-2" />EMAIL</span>
-            {editMode ? (
-              <Form.Control
-                size="sm"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                style={{ maxWidth: '250px' }}
-              />
-            ) : (
-              <small>{parseNull(socio.email)}</small>
-            )}
-          </ListGroup.Item>
-
+        <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
+          {[{
+            label: 'DNI', icon: faIdCard, value: formData.dni, field: 'dni', type: 'text', maxWidth: '180px'
+          }, {
+            label: 'SOCIO Nº', icon: faUser, value: formData.numeroSocio, field: 'numeroSocio', type: 'number', maxWidth: '100px'
+          }, {
+            label: 'HUERTO Nº', icon: faSunPlantWilt, value: formData.numeroHuerto, field: 'numeroHuerto', type: 'number', maxWidth: '100px'
+          }, {
+            label: 'TLF.', icon: faPhone, value: formData.telefono, field: 'telefono', type: 'text', maxWidth: '200px'
+          }, {
+            label: 'EMAIL', icon: faAt, value: formData.email, field: 'email', type: 'text', maxWidth: '250px'
+          }].map(({ label, icon, value, field, type, maxWidth }) => (
+            <ListGroup.Item key={field} className="d-flex justify-content-between align-items-center">
+              <span><FontAwesomeIcon icon={icon} className="me-2" />{label}</span>
+              {(editMode || createMode) ? (
+                <Form.Control size="sm" type={type} value={value} onChange={(e) => handleChange(field, e.target.value)} style={{ maxWidth }} />
+              ) : (
+                <strong>{parseNull(socio[field])}</strong>
+              )}
+            </ListGroup.Item>
+          ))}
         </ListGroup>
 
-        <Card className="mt-3 notas-card">
+        <Card className="mt-3 border-1 rounded-3 shadow-sm">
           <Card.Body>
             <Card.Subtitle className="mb-2 text-muted">
               <FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS
             </Card.Subtitle>
             {editMode ? (
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={formData.notas}
-                onChange={(e) => handleChange('notas', e.target.value)}
-              />
+              <Form.Control as="textarea" rows={3} value={formData.notas} onChange={(e) => handleChange('notas', e.target.value)} />
             ) : (
               <Card.Text>{parseNull(socio.notas)}</Card.Text>
             )}

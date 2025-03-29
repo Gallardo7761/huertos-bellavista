@@ -38,10 +38,8 @@ const NavBar = () => {
   return (
     <Navbar expand="lg" sticky="top">
       <Container fluid>
-
         <Navbar.Toggle aria-controls="main-navbar" className="custom-hamburger" />
 
-        {/* Collapse content (móvil) */}
         <Navbar.Collapse id="main-navbar">
           <Nav className="me-auto gap-2">
             <NavHome />
@@ -50,20 +48,16 @@ const NavBar = () => {
             <IfRole roles={["admin", "dev"]}>
               <NavGestion />
             </IfRole>
-
-            {/* SOLO visible en móvil */}
             <div className="d-lg-none mt-2 ms-2">
               <ThemeButton />
             </div>
           </Nav>
         </Navbar.Collapse>
 
-        {/* SOLO visible en escritorio */}
         <div className="d-none d-lg-block me-3">
           <ThemeButton />
         </div>
 
-        {/* Login / Logout */}
         <Nav className="d-flex flex-md-row flex-column gap-2 ms-auto align-items-center">
           <IfAuthenticated>
             <AnimatedDropdown
@@ -82,7 +76,7 @@ const NavBar = () => {
                 Mi perfil
               </Link>
               <hr className="dropdown-divider" />
-              <Link className="dropdown-item nav-link" onClick={logout}>
+              <Link to="#" className="dropdown-item nav-link" onClick={logout}>
                 <FontAwesomeIcon icon={faSignOut} className="me-2" />
                 Cerrar sesión
               </Link>
@@ -90,7 +84,7 @@ const NavBar = () => {
           </IfAuthenticated>
 
           <IfNotAuthenticated>
-            <Nav.Link as={Link} to="/login" title="Iniciar sesión" className='me-2'>
+            <Nav.Link as={Link} to="/login" title="Iniciar sesión" className="me-2">
               <FontAwesomeIcon icon={faSignIn} className="me-2" />
               Iniciar sesión
             </Nav.Link>
@@ -98,7 +92,6 @@ const NavBar = () => {
         </Nav>
       </Container>
     </Navbar>
-
   );
 };
 

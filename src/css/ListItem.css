@@ -1,22 +1,14 @@
-/* ================================
-   LIST ITEM
-================================== */
-
-.list-group-item.custom-list-item {
-    border-radius: 15px !important;
+.custom-list-item {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: none;
-    margin-bottom: 10px;
-    padding: 15px 20px;
+    border: none !important;
 }
 
-/* Hover común */
-.list-group-item.custom-list-item:hover {
+.custom-list-item:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Tema claro */
-.light .list-group-item.custom-list-item {
+.light .custom-list-item {
     background-color: #ffffff;
     color: #212529;
 }
@@ -26,7 +18,7 @@
 }
 
 /* Tema oscuro */
-.dark .list-group-item.custom-list-item {
+.dark .custom-list-item {
     background-color: #2a2a2a;
     color: #f1f1f1;
 }
@@ -50,6 +42,5 @@
     font-weight: bold;
     width: 2rem;
     text-align: center;
-    margin-right: 30px;
     color: var(--light-green);
 }

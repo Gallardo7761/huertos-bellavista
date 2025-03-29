@@ -1,10 +1,9 @@
 import ListItem from "./ListItem";
-import '../css/List.css';
 import {ListGroup} from 'react-bootstrap';
 
 const List = ({ datos, config }) => {
   return (
-    <ListGroup>
+    <ListGroup className="gap-2">
       {datos.map((item, index) => (
         <ListItem key={index} item={item} config={config} index={index} />
       ))}

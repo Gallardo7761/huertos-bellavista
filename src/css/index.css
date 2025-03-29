@@ -79,12 +79,6 @@ main {
   background-color: var(--bg-green);
 }
 
-div {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 
 /* ================================
    TIPOGRAFÍA GLOBAL
@@ -176,19 +170,4 @@ input[type="color"]:focus,
 
 .dark .section-divider {
   background-color: var(--white);
-}
-
-/* ================================
-   CONTENEDOR GENERAL Y WRAPPER
-================================== */
-
-.custom-container {
-  padding: 2rem;
-  font-family: 'Open Sans';
-  color: #333;
-}
-
-.content-wrapper {
-  max-width: 1500px;
-  margin: 0 auto;
 }
