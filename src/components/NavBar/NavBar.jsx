@@ -38,10 +38,10 @@ const NavBar = () => {
   return (
     <Navbar expand="lg" sticky="top">
       <Container fluid>
-        {/* Botón hamburguesa */}
+
         <Navbar.Toggle aria-controls="main-navbar" className="custom-hamburger" />
 
-        {/* Contenido del navbar */}
+        {/* Collapse content (móvil) */}
         <Navbar.Collapse id="main-navbar">
           <Nav className="me-auto gap-2">
             <NavHome />
@@ -50,15 +50,21 @@ const NavBar = () => {
             <IfRole roles={["admin", "dev"]}>
               <NavGestion />
             </IfRole>
+
+            {/* SOLO visible en móvil */}
+            <div className="d-lg-none mt-2 ms-2">
+              <ThemeButton />
+            </div>
           </Nav>
-
-          <ThemeButton className='me-3' />
-
         </Navbar.Collapse>
+
+        {/* SOLO visible en escritorio */}
+        <div className="d-none d-lg-block me-3">
+          <ThemeButton />
+        </div>
 
         {/* Login / Logout */}
         <Nav className="d-flex flex-md-row flex-column gap-2 ms-auto align-items-center">
-          {/* Usuario (izquierda) */}
           <IfAuthenticated>
             <AnimatedDropdown
               show={showingUserDropdown}
@@ -81,7 +87,6 @@ const NavBar = () => {
                 Cerrar sesión
               </Link>
             </AnimatedDropdown>
-
           </IfAuthenticated>
 
           <IfNotAuthenticated>
@@ -91,9 +96,9 @@ const NavBar = () => {
             </Nav.Link>
           </IfNotAuthenticated>
         </Nav>
-
       </Container>
     </Navbar>
+
   );
 };
 

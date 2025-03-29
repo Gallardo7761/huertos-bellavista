@@ -6,17 +6,37 @@ import { useConfig } from "../hooks/useConfig";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => JSON.parse(sessionStorage.getItem("user")));
-  const [token, setToken] = useState(() => sessionStorage.getItem("token"));
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common.Authorization;
-    }
-  }, [token]);
+    const requestInterceptor = axios.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+  
+    return () => {
+      axios.interceptors.request.eject(requestInterceptor);
+    };
+  }, []);
+  
+  useEffect(() => {
+    const syncLogout = (event) => {
+      if (event.key === "token" && event.newValue === null) {
+        setUser(null);
+        setToken(null);
+      }
+    };
+    window.addEventListener("storage", syncLogout);
+    return () => window.removeEventListener("storage", syncLogout);
+  }, []);  
 
   const { config } = useConfig();
   if (!config) return null;
@@ -34,8 +54,8 @@ export const AuthProvider = ({ children }) => {
 
       const { sessionToken, user } = response.data;
 
-      sessionStorage.setItem("token", sessionToken);
-      sessionStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", sessionToken);
+      localStorage.setItem("user", JSON.stringify(user));
 
       setUser(user);
       setToken(sessionToken);
@@ -46,8 +66,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     setToken(null);
   };

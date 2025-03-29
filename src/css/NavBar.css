@@ -38,17 +38,6 @@ button.custom-hamburger.navbar-toggler {
   margin-bottom: 1rem;
   transition: all 0.1s ease-in-out;
 }
-
-#main-navbar > button.theme-toggle {
-  margin: 0 1rem !important;
-  transition: all 0.1s ease-in-out;
-}
-
-#main-navbar.show > button.theme-toggle {
-  margin-top: 1rem;
-  margin-left: 0.5rem;
-  transition: all 0.1s ease-in-out;
-}
  
 /* ================================
      DROPDOWN MENÚ

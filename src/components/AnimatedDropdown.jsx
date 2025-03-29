@@ -63,31 +63,33 @@ const AnimatedDropdown = ({
       </Button>
     );
 
-  return (
-    <div
-      className="position-relative d-inline-block"
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      {triggerElement}
-
-      <AnimatePresence>
-        {actualOpen && (
-          <_motion.div
-            ref={dropdownRef}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.15 }}
-            className="custom-dropdown-menu"
-          >
-            {typeof children === "function" ? children({ closeDropdown }) : children}
-          </_motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-
-  );
+    return (
+      <div
+        className="dropdown-wrapper"
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        ref={triggerRef}
+        style={{ display: "inline-block" }}
+      >
+        {triggerElement}
+    
+        <AnimatePresence>
+          {actualOpen && (
+            <_motion.div
+              ref={dropdownRef}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.15 }}
+              className="custom-dropdown-menu fixed-on-navbar"
+            >
+              {typeof children === "function" ? children({ closeDropdown }) : children}
+            </_motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+    
 };
 
 export default AnimatedDropdown;
