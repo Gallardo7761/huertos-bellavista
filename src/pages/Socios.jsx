@@ -11,10 +11,11 @@ import SociosFilter from '../components/Socios/SociosFilter';
 import { useData } from '../hooks/useData';
 import { DataProvider } from '../context/DataContext';
 import { useConfig } from '../hooks/useConfig';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faFilePdf, faFilter } from '@fortawesome/free-solid-svg-icons';
-import { generarPDFSocios } from '../util/generarPdfSocios';
+import { faPlus, faFilePdf, faFilter, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { SociosPDF } from '../components/Socios/SociosPDF';
+import { PDFViewer } from '@react-pdf/renderer';
 
 const PAGE_SIZE = 10;
 
@@ -39,7 +40,6 @@ const Socios = () => {
 }
 
 const SociosContent = ({ config }) => {
-  // Hooks y estados
   const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
   const [_socios, setSocios] = useState([]);
   const [page, setPage] = useState(0);
@@ -57,6 +57,7 @@ const SociosContent = ({ config }) => {
   });
   const [creatingSocio, setCreatingSocio] = useState(null);
   const [tempSocio, setTempSocio] = useState(null);
+  const [showPDFModal, setShowPDFModal] = useState(false);
 
   const isSearching = searchTerm.trim() !== "";
   const isFiltering = !filters.todos;
@@ -67,7 +68,6 @@ const SociosContent = ({ config }) => {
 
     let result = [...data];
 
-    // Filtro por tipo (filtros por checkbox)
     if (!filters.todos) {
       result = result.filter((s) =>
         (filters.listaEspera && s.tipo === 'LISTA_ESPERA') ||
@@ -78,7 +78,6 @@ const SociosContent = ({ config }) => {
       );
     }
 
-    // Búsqueda por texto
     if (searchTerm.trim()) {
       const normalized = searchTerm.toLowerCase();
       result = result.filter((s) =>
@@ -162,7 +161,6 @@ const SociosContent = ({ config }) => {
 
       console.log("Socio actualizado:", res);
 
-      // Actualiza el socio localmente si está en _socios
       setSocios(prev =>
         prev.map((s) =>
           s.idSocio === updatedSocio.idSocio ? { ...s, ...updatedSocio } : s
@@ -186,6 +184,9 @@ const SociosContent = ({ config }) => {
       console.error("Error al eliminar socio:", err.message);
     }
   };
+
+  const showPDFPopup = () => setShowPDFModal(true);
+  const closePDFPopup = () => setShowPDFModal(false);
 
   // Checks de datos
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
@@ -214,7 +215,7 @@ const SociosContent = ({ config }) => {
               >
                 <SociosFilter filters={filters} onChange={setFilters} />
               </AnimatedDropdown>
-              <Button variant="transparent" onClick={() => generarPDFSocios(filteredSocios)}>
+              <Button variant="transparent" onClick={showPDFPopup}>
                 <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
               </Button>
               <Button variant="transparent" onClick={handleCreate}>
@@ -254,6 +255,27 @@ const SociosContent = ({ config }) => {
           {loading && <LoadingIcon />}
         </div>
       </ContentWrapper>
+
+      <Modal
+        show={showPDFModal}
+        onHide={closePDFPopup}
+        size="xl"
+        centered
+      >
+        <Modal.Header className='justify-content-between'>
+          <Modal.Title>Vista previa del PDF</Modal.Title>
+          <Button variant='transparent' onClick={closePDFPopup}>
+            <FontAwesomeIcon icon={faXmark} className='close-button fa-xl' />
+          </Button>
+        </Modal.Header>
+        <Modal.Body style={{ height: '80vh' }}>
+          <div style={{ width: '100%', height: '100%' }}>
+            <PDFViewer width="100%" height="100%">
+              <SociosPDF socios={filteredSocios} />
+            </PDFViewer>
+          </div>
+        </Modal.Body>
+      </Modal>
     </CustomContainer>
   );
 };

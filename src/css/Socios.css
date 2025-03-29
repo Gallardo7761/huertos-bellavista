@@ -108,10 +108,46 @@
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.darlk .toolbar-buttons .btn {
+.dark .toolbar-buttons .btn {
     color: #ffffffaa;
 }
 
 .dark .toolbar-buttons .btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.light .modal-content {
+    background-color: #fff;
+}
+
+.light .modal-content .modal-header {
+    border-bottom: 1px solid #ccc;
+}
+
+.light .modal-content .modal-body {
+    background-color: #fff;
+}
+
+.dark .modal-content {
+    background-color: #222;
+}
+
+.dark .modal-content .modal-header {
+    border-bottom: 1px solid #444;
+}
+
+.dark .modal-content .modal-body {
+    background-color: #222;
+}
+
+.close-button {
+    background-color: transparent !important;
+}
+
+.light .close-button {
+    color: #000;
+}
+
+.dark .close-button {
+    color: #fff;
 }

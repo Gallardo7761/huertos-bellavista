@@ -37,9 +37,9 @@ export const generarPDFSocios = (socios) => {
     body,
     margin: { top: 83, bottom: 10, left: 10, right: 10 },
     didDrawPage: () => {
-      doc.addImage("/images/logohuerto_pdf.png", "PNG", 10, 10, 111, 63);
+      doc.addImage("/images/logo.png", "PNG", 10, 10, 64, 64);
       doc.setFontSize(32);
-      doc.text("Listado de Socios", 141, 50);
+      doc.text("Listado de Socios", 94, 50);
       doc.setFontSize(14);
       doc.text("Asociación Huertos La Salud - Bellavista", 541, 30);
       doc.text("Calle Cronos S/N, Bellavista, Sevilla, 41014", 541, 45);
