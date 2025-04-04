@@ -5,7 +5,7 @@
             "auth_logic": 8080,
             "auth_data": 8081,
             "huertos_logic": 8120,
-            "huetos_data": 8121
+            "huertos_data": 8121
         },
         "endpoints": {
             "auth": {

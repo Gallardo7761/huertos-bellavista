@@ -25,14 +25,14 @@ const Socios = () => {
   if (configLoading) return <p><LoadingIcon /></p>;
 
   const HOST = config.apiConfig.baseUrl;
-  const PORT = config.apiConfig.port;
+  const PORT = config.apiConfig.ports.huertos_data;
   const BASE = `${HOST}${PORT ? `:${PORT}` : ''}/`;
   const ENDPOINT = config.apiConfig.endpoints.users.all;
 
   const reqConfig = {
     baseUrl: BASE + ENDPOINT,
-    params: { 
-      _sort: "member_numer", 
+    params: {
+      _sort: "metadata.member_number",
       _order: "asc"
     }
   };
@@ -42,7 +42,7 @@ const Socios = () => {
       <SociosContent config={reqConfig} />
     </DataProvider>
   );
-}
+};
 
 const SociosContent = ({ config }) => {
   const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
@@ -75,27 +75,26 @@ const SociosContent = ({ config }) => {
 
     if (!filters.todos) {
       result = result.filter((s) =>
-        (filters.listaEspera && s.tipo === 'LISTA_ESPERA') ||
-        (filters.invernadero && s.tipo === 'HORTELANO_INVERNADERO') ||
-        (filters.colaboradores && s.tipo === 'COLABORADOR') ||
-        (filters.hortelanos && s.tipo === 'HORTELANO') ||
-        (filters.inactivos && s.estado === 0)
+        (filters.listaEspera && s.metadata?.type === 0) ||
+        (filters.hortelanos && s.metadata?.type === 1) ||
+        (filters.invernadero && s.metadata?.type === 2) ||
+        (filters.colaboradores && s.metadata?.type === 3) ||
+        (filters.inactivos && s.metadata?.status === 0)
       );
     }
 
     if (searchTerm.trim()) {
       const normalized = searchTerm.toLowerCase();
       result = result.filter((s) =>
-        s.nombre?.toLowerCase().includes(normalized) ||
-        s.dni?.toLowerCase().includes(normalized) ||
-        String(s.numeroSocio).includes(normalized) ||
-        String(s.numeroHuerto).includes(normalized)
+        s.user?.display_name?.toLowerCase().includes(normalized) ||
+        s.metadata?.dni?.toLowerCase().includes(normalized) ||
+        String(s.metadata?.member_number).includes(normalized) ||
+        String(s.metadata?.plot_number).includes(normalized)
       );
     }
 
     return result;
   }, [data, filters, searchTerm]);
-
 
   const loadMore = () => {
     if (loading || !data) return;
@@ -121,22 +120,30 @@ const SociosContent = ({ config }) => {
   const handleCreate = () => {
     const grid = document.querySelector('.cards-grid');
     setCreatingSocio(true);
-    let tempSocio = {
-      idSocio: null,
-      nombre: "Nuevo Socio",
-      usuario: "",
-      dni: "",
-      telefono: "",
-      email: "",
-      notas: "",
-      numeroSocio: "",
-      numeroHuerto: "",
-      estado: 1,
-      tipo: "HORTELANO",
-      fechaDeAlta: new Date().toISOString().split("T")[0]
-    };
 
-    tempSocio.usuario = tempSocio.nombre.split(" ")[0].toLowerCase() + String(tempSocio.numeroSocio);
+    const now = Date.now();
+
+    let tempSocio = {
+      user: {
+        user_id: null,
+        user_name: "nuevo" + now,
+        email: "",
+        display_name: "Nuevo Socio",
+        role: 0,
+        global_status: 1
+      },
+      metadata: {
+        user_id: null,
+        member_number: "",
+        plot_number: "",
+        dni: "",
+        phone: "",
+        notes: "",
+        status: 1,
+        type: 1,
+        role: 0
+      }
+    };
 
     setTempSocio(tempSocio);
     grid.scrollTo({ top: 0, behavior: 'smooth' });
@@ -150,9 +157,7 @@ const SociosContent = ({ config }) => {
   const handleCreateSubmit = async (newSocio) => {
     try {
       const res = await postData(config.baseUrl, newSocio);
-
       console.log("Socio creado:", res);
-
       setCreatingSocio(false);
       setTempSocio(null);
     } catch (err) {
@@ -160,15 +165,13 @@ const SociosContent = ({ config }) => {
     }
   };
 
-  const handleEditSubmit = async (updatedSocio, idSocio) => {
+  const handleEditSubmit = async (updatedSocio, userId) => {
     try {
-      const res = await putData(`${config.baseUrl}/${idSocio}`, updatedSocio);
-
+      const res = await putData(`${config.baseUrl}/${userId}`, updatedSocio);
       console.log("Socio actualizado:", res);
-
       setSocios(prev =>
         prev.map((s) =>
-          s.idSocio === updatedSocio.idSocio ? { ...s, ...updatedSocio } : s
+          s.user.user_id === updatedSocio.user.user_id ? { ...s, ...updatedSocio } : s
         )
       );
     } catch (err) {
@@ -176,13 +179,12 @@ const SociosContent = ({ config }) => {
     }
   };
 
-  const handleDelete = async (idSocio) => {
-    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${idSocio}?`);
-
+  const handleDelete = async (userId) => {
+    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${userId}?`);
     if (!confirmed) return;
 
     try {
-      await deleteData(`${config.baseUrl}/${idSocio}`);
+      await deleteData(`${config.baseUrl}/${userId}`);
       console.log("Socio eliminado correctamente");
       setSearchTerm("");
     } catch (err) {
@@ -242,17 +244,16 @@ const SociosContent = ({ config }) => {
           )}
 
           {(usingSearchOrFilters ? filteredSocios : _socios)
-            .sort((a, b) => a.numeroSocio - b.numeroSocio)
+            .sort((a, b) => a.metadata?.member_number - b.metadata?.member_number)
             .map((socio) => (
               <SocioCard
-                key={socio.idSocio}
+                key={socio.user.user_id}
                 socio={socio}
                 onUpdate={handleEditSubmit}
                 onDelete={handleDelete}
                 onCancel={handleCancelCreate}
               />
             ))}
-
         </div>
 
         <div ref={loaderRef} className="loading-trigger">
@@ -260,12 +261,7 @@ const SociosContent = ({ config }) => {
         </div>
       </ContentWrapper>
 
-      <Modal
-        show={showPDFModal}
-        onHide={closePDFPopup}
-        size="xl"
-        centered
-      >
+      <Modal show={showPDFModal} onHide={closePDFPopup} size="xl" centered>
         <Modal.Header className='justify-content-between'>
           <Modal.Title>Vista previa del PDF</Modal.Title>
           <Button variant='transparent' onClick={closePDFPopup}>
@@ -273,11 +269,9 @@ const SociosContent = ({ config }) => {
           </Button>
         </Modal.Header>
         <Modal.Body style={{ height: '80vh' }}>
-          <div style={{ width: '100%', height: '100%' }}>
-            <PDFViewer width="100%" height="100%">
-              <SociosPDF socios={filteredSocios} />
-            </PDFViewer>
-          </div>
+          <PDFViewer width="100%" height="100%">
+            <SociosPDF socios={filteredSocios} />
+          </PDFViewer>
         </Modal.Body>
       </Modal>
     </CustomContainer>

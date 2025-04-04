@@ -13,11 +13,10 @@ import AnimatedDropdown from '../../components/AnimatedDropdown';
 import '../../css/SocioCard.css';
 
 const getFechas = (socio) => {
-  let html = `<strong>ALTA:</strong> ${parseDate(socio.fechaDeAlta)}`;
-  if (socio.fechaDeEntrega) html += `, <strong>ENTREGA:</strong> ${parseDate(socio.fechaDeEntrega)}`;
-  if (socio.fechaDeBaja) html += `, <strong>BAJA:</strong> ${parseDate(socio.fechaDeBaja)}`;
-  return html;
+  const alta = socio.metadata?.created_at?.split('T')[0] || '';
+  return `<strong>ALTA:</strong> ${parseDate(alta)}`;
 };
+
 const getBadgeColor = (estado) => estado === 1 ? 'success' : 'danger';
 const getHeaderColor = (estado) => estado === 1 ? 'bg-light-green' : 'bg-light-red';
 const getEstado = (estado) => estado === 1 ? 'ACTIVO' : 'INACTIVO';
@@ -25,16 +24,17 @@ const parseNull = (attr) => attr === null || attr === '' ? 'NO' : attr;
 const getPFP = (tipo) => {
   const base = '/images/icons/';
   const map = {
-    HORTELANO: 'farmer.png',
-    HORTELANO_INVERNADERO: 'green_house.png',
-    LISTA_ESPERA: 'list.png',
-    COLABORADOR: 'join.png',
-    SUBVENCIONES: 'subvencion4.png',
-    DESARROLLADOR: 'programmer.png'
+    1: 'farmer.png', // HORTELANO
+    2: 'green_house.png', // INVERNADERO
+    0: 'list.png', // LISTA_ESPERA
+    3: 'join.png', // COLABORADOR
+    4: 'subvencion4.png',
+    5: 'programmer.png'
   };
   return base + (map[tipo] || 'farmer.png');
 };
 const parseDate = (date) => {
+  if (!date) return 'NO';
   const [y, m, d] = date.split('-');
   return `${d}/${m}/${y}`;
 };
@@ -45,80 +45,83 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   const createMode = isNew;
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(isNew);
+
   const [formData, setFormData] = useState({
-    idSocio: socio.idSocio || null,
-    nombre: socio.nombre || '',
-    usuario: socio.usuario || '',
-    dni: socio.dni || '',
-    telefono: socio.telefono || '',
-    email: socio.email || '',
-    notas: socio.notas || '',
-    numeroSocio: socio.numeroSocio || '',
-    numeroHuerto: socio.numeroHuerto || '',
-    estado: socio.estado,
-    tipo: socio.tipo || "HORTELANO",
-    fechaDeAlta: socio.fechaDeAlta || new Date().toISOString().split("T")[0],
+    display_name: socio.user?.display_name || '',
+    user_name: socio.user?.user_name || '',
+    email: socio.user?.email || '',
+    dni: socio.metadata?.dni || '',
+    phone: socio.metadata?.phone || '',
+    member_number: socio.metadata?.member_number || '',
+    plot_number: socio.metadata?.plot_number || '',
+    notes: socio.metadata?.notes || '',
+    status: socio.metadata?.status ?? 1,
+    type: socio.metadata?.type ?? 1
   });
 
   const handleEdit = () => setEditMode(true);
-  const handleDelete = () => typeof onDelete === "function" && onDelete(socio.idSocio);
+  const handleDelete = () => typeof onDelete === "function" && onDelete(socio.user?.user_id);
   const handleCancel = () => {
     if (isNew && onCancel) return onCancel();
     setEditMode(false);
-    if (error) setError(null);
-    setFormData({ telefono: socio.telefono || '', email: socio.email || '', notas: socio.notas || '', estado: socio.estado });
+    setError(null);
   };
 
   const handleSave = () => {
     const phoneRegex = /^[0-9]{9}$/;
-    if (!phoneRegex.test(formData.telefono)) return setError("El teléfono no es válido.");
+    if (!phoneRegex.test(formData.phone)) return setError("El teléfono no es válido.");
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) return setError("El email no es válido.");
-    if (!formData.nombre.trim() || !formData.numeroSocio) return setError("El nombre y número de socio son obligatorios.");
+    if (!formData.display_name.trim() || !formData.member_number) return setError("El nombre y número de socio son obligatorios.");
     setError(null);
-    if (createMode && typeof onCreate === "function") {
-      const fullSocio = {
-        idSocio: null,
-        nombre: formData.nombre,
-        usuario: formData.nombre.toLowerCase().replace(/\s+/g, '') + formData.numeroSocio,
-        dni: formData.dni,
-        telefono: formData.telefono,
+
+    const updatedSocio = {
+      user: {
+        user_id: socio.user?.user_id || null,
+        display_name: formData.display_name,
+        user_name: formData.user_name,
         email: formData.email,
-        notas: formData.notas,
-        numeroSocio: formData.numeroSocio,
-        numeroHuerto: formData.numeroHuerto,
-        estado: formData.estado,
-        tipo: socio.tipo || "HORTELANO",
-        fechaDeAlta: socio.fechaDeAlta || new Date().toISOString().split("T")[0],
-      };
-      return onCreate(fullSocio);
-    }
-    if (typeof onUpdate === "function") {
-      onUpdate(formData, socio.idSocio);
-      setEditMode(false);
-    }
+        role: socio.user?.role ?? 0,
+        global_status: socio.user?.global_status ?? 1
+      },
+      metadata: {
+        user_id: socio.user?.user_id || null,
+        member_number: formData.member_number,
+        plot_number: formData.plot_number,
+        dni: formData.dni,
+        phone: formData.phone,
+        notes: formData.notes,
+        status: formData.status,
+        type: formData.type,
+        role: socio.metadata?.role ?? 0
+      }
+    };
+
+    if (createMode && typeof onCreate === "function") return onCreate(updatedSocio);
+    if (typeof onUpdate === "function") onUpdate(updatedSocio, socio.user?.user_id);
+    setEditMode(false);
   };
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
   return (
     <MotionCard className="socio-card shadow-sm rounded-4 border-0 h-100">
-      <Card.Header className={`d-flex align-items-center rounded-4 rounded-bottom-0 justify-content-between ${getHeaderColor(socio.estado)}`}>
+      <Card.Header className={`d-flex align-items-center rounded-4 rounded-bottom-0 justify-content-between ${getHeaderColor(formData.status)}`}>
         <div className="d-flex align-items-center p-1 m-0">
-          <img src={getPFP(socio.tipo)} width="36" className="rounded me-3" alt="PFP" />
+          <img src={getPFP(formData.type)} width="36" className="rounded me-3" alt="PFP" />
           <div>
             <Card.Title className="m-0">
-              {(editMode || createMode) ? (
-                <Form.Control size="sm" value={formData.nombre} onChange={(e) => handleChange('nombre', e.target.value)} placeholder="Nombre" style={{ maxWidth: '220px' }} />
-              ) : socio.nombre}
+              {editMode ? (
+                <Form.Control size="sm" value={formData.display_name} onChange={(e) => handleChange('display_name', e.target.value)} style={{ maxWidth: '220px' }} />
+              ) : formData.display_name}
             </Card.Title>
             {editMode ? (
-              <Form.Select size="sm" value={formData.estado} onChange={(e) => handleChange('estado', parseInt(e.target.value))} style={{ maxWidth: '8rem' }}>
+              <Form.Select size="sm" value={formData.status} onChange={(e) => handleChange('status', parseInt(e.target.value))} style={{ maxWidth: '8rem' }}>
                 <option value={1}>ACTIVO</option>
                 <option value={0}>INACTIVO</option>
               </Form.Select>
             ) : (
-              <Badge bg={getBadgeColor(socio.estado)}>{getEstado(socio.estado)}</Badge>
+              <Badge bg={getBadgeColor(formData.status)}>{getEstado(formData.status)}</Badge>
             )}
           </div>
         </div>
@@ -154,20 +157,20 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           {[{
             label: 'DNI', icon: faIdCard, value: formData.dni, field: 'dni', type: 'text', maxWidth: '180px'
           }, {
-            label: 'SOCIO Nº', icon: faUser, value: formData.numeroSocio, field: 'numeroSocio', type: 'number', maxWidth: '100px'
+            label: 'SOCIO Nº', icon: faUser, value: formData.member_number, field: 'member_number', type: 'number', maxWidth: '100px'
           }, {
-            label: 'HUERTO Nº', icon: faSunPlantWilt, value: formData.numeroHuerto, field: 'numeroHuerto', type: 'number', maxWidth: '100px'
+            label: 'HUERTO Nº', icon: faSunPlantWilt, value: formData.plot_number, field: 'plot_number', type: 'number', maxWidth: '100px'
           }, {
-            label: 'TLF.', icon: faPhone, value: formData.telefono, field: 'telefono', type: 'text', maxWidth: '200px'
+            label: 'TLF.', icon: faPhone, value: formData.phone, field: 'phone', type: 'text', maxWidth: '200px'
           }, {
             label: 'EMAIL', icon: faAt, value: formData.email, field: 'email', type: 'text', maxWidth: '250px'
           }].map(({ label, icon, value, field, type, maxWidth }) => (
             <ListGroup.Item key={field} className="d-flex justify-content-between align-items-center">
               <span><FontAwesomeIcon icon={icon} className="me-2" />{label}</span>
-              {(editMode || createMode) ? (
+              {editMode ? (
                 <Form.Control size="sm" type={type} value={value} onChange={(e) => handleChange(field, e.target.value)} style={{ maxWidth }} />
               ) : (
-                <strong>{parseNull(socio[field])}</strong>
+                <strong>{parseNull(value)}</strong>
               )}
             </ListGroup.Item>
           ))}
@@ -179,9 +182,9 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
               <FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS
             </Card.Subtitle>
             {editMode ? (
-              <Form.Control as="textarea" rows={3} value={formData.notas} onChange={(e) => handleChange('notas', e.target.value)} />
+              <Form.Control as="textarea" rows={3} value={formData.notes} onChange={(e) => handleChange('notes', e.target.value)} />
             ) : (
-              <Card.Text>{parseNull(socio.notas)}</Card.Text>
+              <Card.Text>{parseNull(formData.notes)}</Card.Text>
             )}
           </Card.Body>
         </Card>
@@ -200,7 +203,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 SocioCard.propTypes = {
   socio: PropTypes.object.isRequired,
   isNew: PropTypes.bool,
-  onCancelCreate: PropTypes.func,
+  onCancel: PropTypes.func,
   onCreate: PropTypes.func,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func
