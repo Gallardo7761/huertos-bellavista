@@ -1,8 +1,8 @@
-import {useAuth} from "../../hooks/useAuth.js";
+import { useAuth } from "../../hooks/useAuth.js";
 
 const IfAuthenticated = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : null;
+  const { authStatus } = useAuth();
+  return authStatus === "authenticated" ? children : null;
 };
 
 export default IfAuthenticated;

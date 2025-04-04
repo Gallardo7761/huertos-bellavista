@@ -23,6 +23,8 @@ import IfRole from '../Auth/IfRole.jsx';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import AnimatedDropdown from '../AnimatedDropdown.jsx';
 
+import { CONSTANTS } from '../../util/constants.js';
+
 const NavBar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -45,7 +47,7 @@ const NavBar = () => {
             <NavHome />
             <NavListaEspera />
             <NavHerramientas />
-            <IfRole roles={["admin", "dev"]}>
+            <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
               <NavGestion />
             </IfRole>
             <div className="d-lg-none mt-2 ms-2">
@@ -67,7 +69,7 @@ const NavBar = () => {
               onToggle={(isOpen) => setShowingUserDropdown(isOpen)}
               trigger={
                 <Link className="nav-link dropdown-toggle fw-bold">
-                  @{user?.usuario}
+                  @{user?.user_name}
                 </Link>
               }
             >
@@ -84,7 +86,7 @@ const NavBar = () => {
           </IfAuthenticated>
 
           <IfNotAuthenticated>
-            <Nav.Link as={Link} to="/login" title="Iniciar sesión" className="me-2">
+            <Nav.Link as={Link} to="/login" title="Iniciar sesión">
               <FontAwesomeIcon icon={faSignIn} className="me-2" />
               Iniciar sesión
             </Nav.Link>

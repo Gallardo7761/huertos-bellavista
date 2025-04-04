@@ -24,12 +24,17 @@ const Socios = () => {
 
   if (configLoading) return <p><LoadingIcon /></p>;
 
-  const BASE = config.apiConfig.baseUrl;
-  const ENDPOINT = config.apiConfig.endpoints.socios;
+  const HOST = config.apiConfig.baseUrl;
+  const PORT = config.apiConfig.port;
+  const BASE = `${HOST}${PORT ? `:${PORT}` : ''}/`;
+  const ENDPOINT = config.apiConfig.endpoints.users.all;
 
   const reqConfig = {
     baseUrl: BASE + ENDPOINT,
-    params: { _sort: "numeroSocio" }
+    params: { 
+      _sort: "member_numer", 
+      _order: "asc"
+    }
   };
 
   return (
@@ -188,7 +193,6 @@ const SociosContent = ({ config }) => {
   const showPDFPopup = () => setShowPDFModal(true);
   const closePDFPopup = () => setShowPDFModal(false);
 
-  // Checks de datos
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 

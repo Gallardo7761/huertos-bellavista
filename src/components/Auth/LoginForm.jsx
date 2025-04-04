@@ -17,8 +17,8 @@ const LoginForm = () => {
     const navigate = useNavigate();
 
     const [formState, setFormState] = useState({
-        usuario: "",
-        dni: ""
+        emailOrUserName: "",
+        password: ""
     });
 
     const handleChange = (e) => {
@@ -28,12 +28,21 @@ const LoginForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        formData.append("usuario", formState.usuario);
-        formData.append("dni", formState.dni.toUpperCase());
-
+    
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.emailOrUserName);
+        const loginBody = {
+            password: formState.password,
+            keepLoggedIn: false
+        };
+    
+        if (isEmail) {
+            loginBody.email = formState.emailOrUserName;
+        } else {
+            loginBody.userName = formState.emailOrUserName;
+        }
+    
         try {
-            await login(formData);
+            await login(loginBody);
             navigate("/");
         } catch (err) {
             console.error("Error de login:", err.message);
@@ -53,24 +62,24 @@ const LoginForm = () => {
                                 label={
                                     <>
                                         <FontAwesomeIcon icon={faUser} className="me-2" />
-                                        Usuario
+                                        Usuario o Email
                                     </>
                                 }
                             >
                                 <Form.Control
                                     type="text"
                                     placeholder=""
-                                    name="usuario"
-                                    value={formState.usuario}
+                                    name="emailOrUserName"
+                                    value={formState.emailOrUserName}
                                     onChange={handleChange}
                                     className="rounded-4"
                                 />
                             </FloatingLabel>
 
                             <PasswordInput
-                                value={formState.dni}
+                                value={formState.password}
                                 onChange={handleChange}
-                                name="dni"
+                                name="password"
                             />
                         </div>
 
@@ -89,8 +98,8 @@ const LoginForm = () => {
                 </div>
             </ContentWrapper>
         </CustomContainer>
-
     );
 };
+
 
 export default LoginForm;

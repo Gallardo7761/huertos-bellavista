@@ -6,7 +6,7 @@ import cleanPlugin from 'vite-plugin-clean';
 export default defineConfig({
   plugins: [react(), cleanPlugin()],
   server: {
-    host: "192.168.1.202",
+    host: "localhost",
     port: 3000,
   },
   build: {
@@ -26,6 +26,8 @@ export default defineConfig({
             '@fortawesome/free-brands-svg-icons',
             '@fortawesome/react-fontawesome'
           ],
+          reactPdf: ['@react-pdf/renderer'],
+          
           motion: ['framer-motion'],
           axios: ['axios'],
         }

@@ -1,7 +1,15 @@
 const Ingresos = () => {
-    return(
+    return (
         <>
-               
+
+        </>
+    );
+}
+
+const IngresosContent = () => {
+    return (
+        <>
+
         </>
     );
 }
