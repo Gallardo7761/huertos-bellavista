@@ -1,3 +1,4 @@
+// Socios.jsx adaptado al nuevo modelo plano de datos
 import { useState, useMemo, useRef } from 'react';
 import SocioCard from '../components/Socios/SocioCard';
 import useInfiniteScroll from '../hooks/useInfiniteScroll';
@@ -25,14 +26,13 @@ const Socios = () => {
   if (configLoading) return <p><LoadingIcon /></p>;
 
   const HOST = config.apiConfig.baseUrl;
-  const PORT = config.apiConfig.ports.huertos_data;
-  const BASE = `${HOST}${PORT ? `:${PORT}` : ''}/`;
-  const ENDPOINT = config.apiConfig.endpoints.users.all;
+  const BASE = `${HOST}`;
+  const ENDPOINT = config.apiConfig.endpoints.members.all;
 
   const reqConfig = {
     baseUrl: BASE + ENDPOINT,
     params: {
-      _sort: "metadata.member_number",
+      _sort: "member_number",
       _order: "asc"
     }
   };
@@ -75,21 +75,21 @@ const SociosContent = ({ config }) => {
 
     if (!filters.todos) {
       result = result.filter((s) =>
-        (filters.listaEspera && s.metadata?.type === 0) ||
-        (filters.hortelanos && s.metadata?.type === 1) ||
-        (filters.invernadero && s.metadata?.type === 2) ||
-        (filters.colaboradores && s.metadata?.type === 3) ||
-        (filters.inactivos && s.metadata?.status === 0)
+        (filters.listaEspera && s.type === 0) ||
+        (filters.hortelanos && s.type === 1) ||
+        (filters.invernadero && s.type === 2) ||
+        (filters.colaboradores && s.type === 3) ||
+        (filters.inactivos && s.status === 0)
       );
     }
 
     if (searchTerm.trim()) {
       const normalized = searchTerm.toLowerCase();
       result = result.filter((s) =>
-        s.user?.display_name?.toLowerCase().includes(normalized) ||
-        s.metadata?.dni?.toLowerCase().includes(normalized) ||
-        String(s.metadata?.member_number).includes(normalized) ||
-        String(s.metadata?.plot_number).includes(normalized)
+        s.display_name?.toLowerCase().includes(normalized) ||
+        s.dni?.toLowerCase().includes(normalized) ||
+        String(s.member_number).includes(normalized) ||
+        String(s.plot_number).includes(normalized)
       );
     }
 
@@ -124,25 +124,19 @@ const SociosContent = ({ config }) => {
     const now = Date.now();
 
     let tempSocio = {
-      user: {
-        user_id: null,
-        user_name: "nuevo" + now,
-        email: "",
-        display_name: "Nuevo Socio",
-        role: 0,
-        global_status: 1
-      },
-      metadata: {
-        user_id: null,
-        member_number: "",
-        plot_number: "",
-        dni: "",
-        phone: "",
-        notes: "",
-        status: 1,
-        type: 1,
-        role: 0
-      }
+      user_id: null,
+      user_name: "nuevo" + now,
+      email: "",
+      display_name: "Nuevo Socio",
+      role: 0,
+      global_status: 1,
+      member_number: "",
+      plot_number: "",
+      dni: "",
+      phone: "",
+      notes: "",
+      status: 1,
+      type: 1
     };
 
     setTempSocio(tempSocio);
@@ -171,7 +165,7 @@ const SociosContent = ({ config }) => {
       console.log("Socio actualizado:", res);
       setSocios(prev =>
         prev.map((s) =>
-          s.user.user_id === updatedSocio.user.user_id ? { ...s, ...updatedSocio } : s
+          s.user_id === updatedSocio.user_id ? { ...s, ...updatedSocio } : s
         )
       );
     } catch (err) {
@@ -244,10 +238,10 @@ const SociosContent = ({ config }) => {
           )}
 
           {(usingSearchOrFilters ? filteredSocios : _socios)
-            .sort((a, b) => a.metadata?.member_number - b.metadata?.member_number)
+            .sort((a, b) => a.member_number - b.member_number)
             .map((socio) => (
               <SocioCard
-                key={socio.user.user_id}
+                key={socio.user_id}
                 socio={socio}
                 onUpdate={handleEditSubmit}
                 onDelete={handleDelete}

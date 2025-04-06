@@ -1,3 +1,4 @@
+// SocioCard.jsx adaptado al nuevo modelo plano de datos
 import { useState } from 'react';
 import {
   Card, ListGroup, Badge, Button, Form
@@ -13,7 +14,7 @@ import AnimatedDropdown from '../../components/AnimatedDropdown';
 import '../../css/SocioCard.css';
 
 const getFechas = (socio) => {
-  const alta = socio.metadata?.created_at?.split('T')[0] || '';
+  const alta = socio.created_at?.split('T')[0] || '';
   return `<strong>ALTA:</strong> ${parseDate(alta)}`;
 };
 
@@ -24,10 +25,10 @@ const parseNull = (attr) => attr === null || attr === '' ? 'NO' : attr;
 const getPFP = (tipo) => {
   const base = '/images/icons/';
   const map = {
-    1: 'farmer.png', // HORTELANO
-    2: 'green_house.png', // INVERNADERO
-    0: 'list.png', // LISTA_ESPERA
-    3: 'join.png', // COLABORADOR
+    1: 'farmer.png',
+    2: 'green_house.png',
+    0: 'list.png',
+    3: 'join.png',
     4: 'subvencion4.png',
     5: 'programmer.png'
   };
@@ -47,20 +48,20 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   const [editMode, setEditMode] = useState(isNew);
 
   const [formData, setFormData] = useState({
-    display_name: socio.user?.display_name || '',
-    user_name: socio.user?.user_name || '',
-    email: socio.user?.email || '',
-    dni: socio.metadata?.dni || '',
-    phone: socio.metadata?.phone || '',
-    member_number: socio.metadata?.member_number || '',
-    plot_number: socio.metadata?.plot_number || '',
-    notes: socio.metadata?.notes || '',
-    status: socio.metadata?.status ?? 1,
-    type: socio.metadata?.type ?? 1
+    display_name: socio.display_name || '',
+    user_name: socio.user_name || '',
+    email: socio.email || '',
+    dni: socio.dni || '',
+    phone: socio.phone || 0,
+    member_number: socio.member_number,
+    plot_number: socio.plot_number || 0,
+    notes: socio.notes || '',
+    status: socio.status ?? 1,
+    type: socio.type ?? 1
   });
 
   const handleEdit = () => setEditMode(true);
-  const handleDelete = () => typeof onDelete === "function" && onDelete(socio.user?.user_id);
+  const handleDelete = () => typeof onDelete === "function" && onDelete(socio.user_id);
   const handleCancel = () => {
     if (isNew && onCancel) return onCancel();
     setEditMode(false);
@@ -76,29 +77,12 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     setError(null);
 
     const updatedSocio = {
-      user: {
-        user_id: socio.user?.user_id || null,
-        display_name: formData.display_name,
-        user_name: formData.user_name,
-        email: formData.email,
-        role: socio.user?.role ?? 0,
-        global_status: socio.user?.global_status ?? 1
-      },
-      metadata: {
-        user_id: socio.user?.user_id || null,
-        member_number: formData.member_number,
-        plot_number: formData.plot_number,
-        dni: formData.dni,
-        phone: formData.phone,
-        notes: formData.notes,
-        status: formData.status,
-        type: formData.type,
-        role: socio.metadata?.role ?? 0
-      }
+      ...socio,
+      ...formData
     };
 
     if (createMode && typeof onCreate === "function") return onCreate(updatedSocio);
-    if (typeof onUpdate === "function") onUpdate(updatedSocio, socio.user?.user_id);
+    if (typeof onUpdate === "function") onUpdate(updatedSocio, socio.user_id);
     setEditMode(false);
   };
 
@@ -127,7 +111,9 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
         </div>
 
         {!createMode && (
-          <AnimatedDropdown icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>
+          <AnimatedDropdown
+          className='end-0'
+          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>

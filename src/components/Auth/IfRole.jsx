@@ -5,10 +5,8 @@ const IfRole = ({ roles, children }) => {
 
   if (authStatus !== "authenticated") return null;
 
-  const userRole = user?.metadata?.role;
-
-  console.log(user?.metadata?.role);
-
+  const userRole = user?.role;
+  
   return roles.includes(userRole) ? children : null;
 };
 

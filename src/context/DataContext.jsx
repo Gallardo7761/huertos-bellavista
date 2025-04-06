@@ -21,15 +21,16 @@ export const DataProvider = ({ children, config }) => {
       const queryParams = new URLSearchParams(config.params).toString();
       const url = `${config.baseUrl}?${queryParams}`;
       const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-            "Token": sessionStorage.getItem("token")
-          },
-        }
-      );
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+        },
+      });
+
       if (!response.ok) throw new Error("Error al obtener datos");
+
       const result = await response.json();
-      setData(result);
+      setData(result.data); // ✅ Cambio aquí
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,7 +47,7 @@ export const DataProvider = ({ children, config }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Token": sessionStorage.getItem("token")
+          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
         body: JSON.stringify(payload)
       });
@@ -54,7 +55,7 @@ export const DataProvider = ({ children, config }) => {
 
       const result = await response.json();
       await fetchData();
-      return result;
+      return result.data; // ✅ Cambio aquí
 
     } catch (err) {
       setError(err.message);
@@ -71,7 +72,7 @@ export const DataProvider = ({ children, config }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Token": sessionStorage.getItem("token")
+          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
         body: JSON.stringify(payload)
       });
@@ -79,7 +80,7 @@ export const DataProvider = ({ children, config }) => {
 
       const result = await response.json();
       await fetchData();
-      return result;
+      return result.data; // ✅ Cambio aquí
 
     } catch (err) {
       setError(err.message);
@@ -95,14 +96,14 @@ export const DataProvider = ({ children, config }) => {
       const response = await fetch(endpoint, {
         method: "DELETE",
         headers: {
-          "Token": sessionStorage.getItem("token")
+          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         },
       });
       if (!response.ok) throw new Error("Error al hacer DELETE");
       
       const result = await response.json();
       await fetchData();
-      return result;
+      return result.data; // ✅ Cambio aquí
       
     } catch (err) {
       setError(err.message);

@@ -63,6 +63,7 @@ const NavBar = () => {
         <Nav className="d-flex flex-md-row flex-column gap-2 ms-auto align-items-center">
           <IfAuthenticated>
             <AnimatedDropdown
+              className='end-0'
               show={showingUserDropdown}
               onMouseEnter={() => setShowingUserDropdown(true)}
               onMouseLeave={() => setShowingUserDropdown(false)}

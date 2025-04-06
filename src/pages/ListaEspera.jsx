@@ -14,7 +14,7 @@ const ListaEspera = () => {
     if(configLoading) return <p><LoadingIcon /></p>;
 
     const BASE = config.apiConfig.baseUrl;
-    const ENDPOINT = config.apiConfig.endpoints.lista_espera;
+    const ENDPOINT = config.apiConfig.endpoints.members.limitedWaitlist;
 
     const reqConfig = {
         baseUrl: BASE+ENDPOINT,
@@ -35,39 +35,19 @@ const ListaEsperaContent = () => {
     if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
     const config = {
-        title: 'nombre',
-        subtitle: 'fechaDeAlta',
+        title: 'display_name',
+        subtitle: 'created_at',
         showIndex: true
     }
 
-    data.sort((a, b) => {
-        return new Date(a.fechaDeAlta) - new Date(b.fechaDeAlta);
+    data.list.sort((a, b) => {
+        return new Date(a.created_at) - new Date(b.created_at);
     });
 
-    const setAsteriscos = (nombre) => {
-        let palabras = nombre.split(" ");
-        for (let i = 0; i < palabras.length; i++) {
-            if (palabras[i].length > 3) {
-                palabras[i] = palabras[i].substring(0, 3) + "*".repeat(palabras[i].length - 3);
-            } else if(palabras[i].length > 0) {
-                palabras[i] = palabras[i][0] + "*".repeat(palabras[i].length - 1);
-            }
-        }
-        nombre = palabras.join(" ");
-        if (nombre.length > 16) {
-            nombre = nombre.substring(0, 16) + "...";
-        }
-        return nombre;
-    }
-
-    const mapped = data
+    const mapped = data.list
     .map(item => ({
         ...item,
-        fechaDeAlta: DateParser.sqlToString(item.fechaDeAlta),
-    }))
-    .map(item => ({
-        ...item,
-        nombre: setAsteriscos(item.nombre),
+        created_at: DateParser.timestampToString(item.created_at),
     }));
 
     return (

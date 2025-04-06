@@ -1,51 +1,52 @@
 {
     "apiConfig": {
-        "baseUrl": "http://localhost",
+        "baseUrl": "https://api.huertosbellavista.es",
         "ports": {
-            "auth_logic": 8080,
-            "auth_data": 8081,
-            "huertos_logic": 8120,
-            "huertos_data": 8121
+            "auth_logic": 10000,
+            "auth_data": 10001,
+            "huertos_logic": 10004,
+            "huertos_data": 10005
         },
         "endpoints": {
             "auth": {
-                "login": "/api/huertos/v1/login",
+                "login": "/v1/login",
                 "validateToken": "/auth/v1/validate-token",
-                "changePassword": "/api/huertos/v1/change-password"
+                "changePassword": "/auth/v1/change-password"
             },
-            "users": {
-                "all": "/api/huertos/v1/users",
-                "byId": "/api/huertos/v1/users/:user_id",
-                "byMemberNumber": "/api/huertos/v1/users/member/:member_number",
-                "byPlotNumber": "/api/huertos/v1/users/plot/:plot_number",
-                "byDni": "/api/huertos/v1/users/dni/:dni",
-                "payments": "/api/huertos/v1/users/:member_number/incomes",
-                "hasPaid": "/api/huertos/v1/users/:member_number/haspaid",
-                "waitlist": "/api/huertos/v1/users/waitlist",
-                "lastMemberNumber": "/api/huertos/v1/users/member/last"
+            "members": {
+                "all": "/raw/v1/members",
+                "byId": "/raw/v1/members/:user_id",
+                "byMemberNumber": "/v1/members/number/:member_number",
+                "byPlotNumber": "/v1/members/plot/:plot_number",
+                "byDni": "/v1/members/dni/:dni",
+                "payments": "/v1/members/number/:member_number/incomes",
+                "hasPaid": "/v1/members/number/:member_number/has-paid",
+                "waitlist": "/v1/members/waitlist",
+                "limitedWaitlist": "/v1/members/waitlist/limited",
+                "lastMemberNumber": "/v1/members/latest-number"
             },
             "incomes": {
-                "all": "/api/huertos/v1/incomes",
-                "byId": "/api/huertos/v1/incomes/:income_id"
+                "all": "/raw/v1/incomes",
+                "byId": "/raw/v1/incomes/:income_id"
             },
             "expenses": {
-                "all": "/api/huertos/v1/expenses",
-                "byId": "/api/huertos/v1/expenses/:expense_id"
+                "all": "/raw/v1/expenses",
+                "byId": "/raw/v1/expenses/:expense_id"
             },
             "balance": {
-                "all": "/api/huertos/v1/balance"
+                "all": "/raw/v1/balance"
             },
             "announces": {
-                "all": "/api/huertos/v1/announces",
-                "byId": "/api/huertos/v1/announces/:announce_id"
+                "all": "/raw/v1/announces",
+                "byId": "/raw/v1/announces/:announce_id"
             },
             "requests": {
-                "all": "/api/huertos/v1/requests",
-                "byId": "/api/huertos/v1/requests/:request_id"
+                "all": "/raw/v1/requests",
+                "byId": "/raw/v1/requests/:request_id"
             },
             "pre_users": {
-                "all": "/api/huertos/v1/pre_users",
-                "byId": "/api/huertos/v1/pre_users/:pre_user_id"
+                "all": "/raw/v1/pre_users",
+                "byId": "/raw/v1/pre_users/:pre_user_id"
             }
         }
     }
