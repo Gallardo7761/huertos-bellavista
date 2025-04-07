@@ -107,16 +107,16 @@ export const SociosPDF = ({ socios }) => (
             { borderBottomRightRadius: idx === socios.length - 1 ? 10 : 0 },
           ]}
         >
-          <Text style={[styles.cell, { flex: 0.2 }]}>{socio.metadata?.member_number}</Text>
-          <Text style={[styles.cell, { flex: 0.2 }]}>{socio.metadata?.plot_number}</Text>
-          <Text style={[styles.cell, { flex: 3 }]}>{socio.user?.display_name}</Text>
-          <Text style={[styles.cell, { flex: 1 }]}>{socio.metadata?.dni}</Text>
-          <Text style={[styles.cell, { flex: 1 }]}>{socio.metadata?.phone}</Text>
-          <Text style={[styles.cell, { flex: 3 }]}>{socio.user?.email || ''}</Text>
-          <Text style={[styles.cell, { flex: 1 }]}>{parseDate(socio.metadata?.created_at?.split('T')[0] || '')}</Text>
+          <Text style={[styles.cell, { flex: 0.2 }]}>{socio?.member_number}</Text>
+          <Text style={[styles.cell, { flex: 0.2 }]}>{socio?.plot_number}</Text>
+          <Text style={[styles.cell, { flex: 3 }]}>{socio?.display_name}</Text>
+          <Text style={[styles.cell, { flex: 1 }]}>{socio?.dni}</Text>
+          <Text style={[styles.cell, { flex: 1 }]}>{socio?.phone}</Text>
+          <Text style={[styles.cell, { flex: 3 }]}>{socio?.email || ''}</Text>
+          <Text style={[styles.cell, { flex: 1 }]}>{parseDate(socio?.created_at?.split('T')[0] || '')}</Text>
           <Text style={[styles.cell, { flex: 1 }]}>
             {(() => {
-              switch (socio.metadata?.type) {
+              switch (socio?.type) {
                 case 0: return 'L. Espera';
                 case 1: return 'Hortelano';
                 case 2: return 'Invernadero';
