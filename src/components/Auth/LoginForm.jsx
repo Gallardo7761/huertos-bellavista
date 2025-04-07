@@ -4,7 +4,7 @@ import { Form, Button, Alert, FloatingLabel, Row, Col } from 'react-bootstrap';
 import PasswordInput from './PasswordInput.jsx';
 
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext.jsx";
 
 import CustomContainer from '../CustomContainer.jsx';
@@ -18,7 +18,8 @@ const LoginForm = () => {
 
     const [formState, setFormState] = useState({
         emailOrUserName: "",
-        password: ""
+        password: "",
+        keepLoggedIn: false
     });
 
     const handleChange = (e) => {
@@ -30,9 +31,10 @@ const LoginForm = () => {
         e.preventDefault();
     
         const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.emailOrUserName);
+
         const loginBody = {
             password: formState.password,
-            keepLoggedIn: false
+            keepLoggedIn: Boolean(formState.keepLoggedIn),
         };
     
         if (isEmail) {
@@ -81,6 +83,20 @@ const LoginForm = () => {
                                 onChange={handleChange}
                                 name="password"
                             />
+
+                            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+                                <Form.Check
+                                    type="checkbox"
+                                    name="keepLoggedIn"
+                                    label="Mantener sesión iniciada"
+                                    className="text-secondary"
+                                    value={formState.keepLoggedIn}
+                                    onChange={(e) => { formState.keepLoggedIn = e.target.checked; setFormState({ ...formState }) }}
+                                />
+                                <Link disabled to="#" className="text-secondary">
+                                    Olvidé mi contraseña
+                                </Link>
+                            </div>
                         </div>
 
                         {error && (
@@ -90,7 +106,7 @@ const LoginForm = () => {
                         )}
 
                         <div className="text-center">
-                            <Button type="submit" className="w-50 padding-4 rounded-4 border-0 shadow-sm login-button">
+                            <Button type="submit" className="w-75 padding-4 rounded-4 border-0 shadow-sm login-button">
                                 Iniciar sesión
                             </Button>
                         </div>

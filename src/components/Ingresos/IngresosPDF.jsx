@@ -87,9 +87,8 @@ export const IngresosPDF = ({ ingresos }) => (
       </View>
 
       <View style={styles.tableHeader}>
-        <Text style={[styles.headerCell, { flex: 1 }]}>ID</Text>
         <Text style={[styles.headerCell, { flex: 1 }]}>Socio Nº</Text>
-        <Text style={[styles.headerCell, { flex: 3 }]}>Concepto</Text>
+        <Text style={[styles.headerCell, { flex: 4 }]}>Concepto</Text>
         <Text style={[styles.headerCell, { flex: 1 }]}>Importe</Text>
         <Text style={[styles.headerCell, { flex: 1 }]}>Tipo</Text>
         <Text style={[styles.headerCell, { flex: 1 }]}>Frecuencia</Text>
@@ -106,7 +105,6 @@ export const IngresosPDF = ({ ingresos }) => (
             { borderBottomRightRadius: idx === ingresos.length - 1 ? 10 : 0 },
           ]}
         >
-          <Text style={[styles.cell, { flex: 1 }]}>{ing.income_id}</Text>
           <Text style={[styles.cell, { flex: 1 }]}>{ing.member_number}</Text>
           <Text style={[styles.cell, { flex: 3 }]}>{ing.concept}</Text>
           <Text style={[styles.cell, { flex: 1 }]}>{ing.amount.toFixed(2)} €</Text>

@@ -27,10 +27,12 @@ const Ingresos = () => {
 
     const HOST = config.apiConfig.baseUrl;
     const BASE = `${HOST}`;
-    const ENDPOINT = config.apiConfig.endpoints.incomes.allWithNames;
+    const ENDPOINT_VIEW = config.apiConfig.endpoints.incomes.allWithNames;
+    const ENDPOINT_RAW = config.apiConfig.endpoints.incomes.all;
 
     const reqConfig = {
-        baseUrl: BASE + ENDPOINT,
+        baseUrl: BASE + ENDPOINT_VIEW,
+        rawUrl: BASE + ENDPOINT_RAW,
         params: {
             _sort: 'created_at',
             _order: 'desc'
@@ -57,7 +59,11 @@ const IngresosContent = ({ config }) => {
         setFilters,
         loaderRef,
         loading,
-        isUsingFilters
+        isUsingFilters,
+        creatingItem: creatingIngreso,
+        setCreatingItem: setCreatingIngreso,
+        tempItem: tempIngreso,
+        setTempItem: setTempIngreso
     } = usePaginatedList({
         data,
         pageSize: PAGE_SIZE,
@@ -84,22 +90,18 @@ const IngresosContent = ({ config }) => {
             const typeFilters = [banco, caja].filter(Boolean).length;
             const freqFilters = [semestral, anual].filter(Boolean).length;
 
-            // Si hay al menos un tipo y una frecuencia seleccionados: combinar
             if (typeFilters > 0 && freqFilters > 0) {
                 return typeMatch && freqMatch;
             }
 
-            // Si solo hay tipos seleccionados
             if (typeFilters > 0 && freqFilters === 0) {
                 return typeMatch;
             }
 
-            // Si solo hay frecuencias seleccionadas
             if (freqFilters > 0 && typeFilters === 0) {
                 return freqMatch;
             }
 
-            // Si no hay nada marcado (raro, pero posible)
             return false;
         },
         searchFn: (ingreso, term) => {
@@ -117,6 +119,58 @@ const IngresosContent = ({ config }) => {
     if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
     if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
+    const handleCreate = () => {
+        const grid = document.querySelector('.cards-grid');
+        setCreatingIngreso(true);
+        setTempIngreso({
+            income_id: null,
+            member_number: 0,
+            concept: "",
+            amount: 0.0,
+            frequency: CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
+            type: CONSTANTS.PAYMENT_TYPE_BANK
+        });
+        grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const handleCreateSubmit = async (newIngreso) => {
+        try {
+            const res = await postData(config.rawUrl, newIngreso);
+            console.log("Ingreso creado:", res);
+            setCreatingIngreso(false);
+            setTempIngreso(null);
+        } catch (err) {
+            console.error("Error creando ingreso:", err);
+        }
+    }
+
+    const handleEditSubmit = async (updatedIngreso) => {
+        try {
+            const res = await putData(`${config.rawUrl}/${updatedIngreso.income_id}`, updatedIngreso);
+            console.log("Ingreso actualizado:", res);
+        } catch (err) {
+            console.error("Error actualizando ingreso:", err);
+        }
+    }
+
+    const handleDelete = async (ingresoId) => {
+        const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el ingreso con ID ${ingresoId}?`);
+        if (!confirmed) return;
+
+        try {
+            await deleteData(`${config.rawUrl}/${ingresoId}`);
+            console.log("Ingreso eliminado correctamente");
+            setSearchTerm(""); // por si estaba buscando ese
+        } catch (err) {
+            console.error("Error eliminando ingreso:", err);
+        }
+    }
+
+    const handleCancelCreate = () => {
+        setCreatingIngreso(false);
+        setTempIngreso(null);
+    }
+
     return (
         <CustomContainer>
             <ContentWrapper>
@@ -130,6 +184,7 @@ const IngresosContent = ({ config }) => {
                     searchTerm={searchTerm}
                     onSearchChange={setSearchTerm}
                     filtersComponent={<IngresosFilter filters={filters} onChange={setFilters} />}
+                    onCreate={handleCreate}
                     onPDF={showPDFPopup}
                 />
 
@@ -137,8 +192,25 @@ const IngresosContent = ({ config }) => {
                     items={isUsingFilters ? filtered : paginated}
                     loaderRef={loaderRef}
                     loading={loading}
+                    creatingItem={creatingIngreso}
+                    renderCreatingCard={() => (
+                        <IngresoCard
+                            income={tempIngreso}
+                            isNew
+                            onCreate={handleCreateSubmit}
+                            onUpdate={handleEditSubmit}
+                            onDelete={handleDelete}
+                            onCancel={handleCancelCreate}
+                        />
+                    )}
                     renderCard={(income) => (
-                        <IngresoCard key={income.income_id} income={income} />
+                        <IngresoCard 
+                            key={income.income_id}
+                            income={income} 
+                            onUpdate={handleEditSubmit}
+                            onDelete={handleDelete}
+                            onCancel={handleCancelCreate}
+                        />
                     )}
                 />
             </ContentWrapper>
