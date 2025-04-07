@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 
 const DataContext = createContext();
 
@@ -10,55 +11,43 @@ export const DataProvider = ({ children, config }) => {
 
   const prevConfigKey = useRef(null);
 
+  const getAuthHeaders = () => ({
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${localStorage.getItem("token")}`
+  });
+
   // =====================
   // GET
   // =====================
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
-  
+
     try {
-      const queryParams = new URLSearchParams(config.params).toString();
-      const url = `${config.baseUrl}?${queryParams}`;
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
+      const response = await axios.get(config.baseUrl, {
+        headers: getAuthHeaders(),
+        params: config.params,
       });
-
-      if (!response.ok) throw new Error("Error al obtener datos");
-
-      const result = await response.json();
-      setData(result.data); // ✅ Cambio aquí
+      setData(response.data.data); // ✅ Cambio aquí
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
     }
-  }, [config]);  
+  }, [config]);
 
   // =====================
   // POST
   // =====================
   const postData = async (endpoint, payload) => {
     try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify(payload)
+      const response = await axios.post(endpoint, payload, {
+        headers: getAuthHeaders(),
       });
-      if (!response.ok) throw new Error("Error al hacer POST");
-
-      const result = await response.json();
       await fetchData();
-      return result.data; // ✅ Cambio aquí
-
+      return response.data.data; // ✅ Cambio aquí
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
       throw err;
     }
   };
@@ -68,22 +57,13 @@ export const DataProvider = ({ children, config }) => {
   // =====================
   const putData = async (endpoint, payload) => {
     try {
-      const response = await fetch(endpoint, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify(payload)
+      const response = await axios.put(endpoint, payload, {
+        headers: getAuthHeaders(),
       });
-      if (!response.ok) throw new Error("Error al hacer PUT");
-
-      const result = await response.json();
       await fetchData();
-      return result.data; // ✅ Cambio aquí
-
+      return response.data.data; // ✅ Cambio aquí
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
       throw err;
     }
   };
@@ -93,20 +73,13 @@ export const DataProvider = ({ children, config }) => {
   // =====================
   const deleteData = async (endpoint) => {
     try {
-      const response = await fetch(endpoint, {
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
+      const response = await axios.delete(endpoint, {
+        headers: getAuthHeaders(),
       });
-      if (!response.ok) throw new Error("Error al hacer DELETE");
-      
-      const result = await response.json();
       await fetchData();
-      return result.data; // ✅ Cambio aquí
-      
+      return response.data.data; // ✅ Cambio aquí
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
       throw err;
     }
   };
@@ -115,9 +88,9 @@ export const DataProvider = ({ children, config }) => {
     const configKey = JSON.stringify(config);
     if (prevConfigKey.current === configKey) return;
     prevConfigKey.current = configKey;
-  
+
     fetchData();
-  }, [config, fetchData]);  
+  }, [config, fetchData]);
 
   return (
     <DataContext.Provider
