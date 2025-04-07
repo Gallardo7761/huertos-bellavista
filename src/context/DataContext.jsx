@@ -23,7 +23,7 @@ export const DataProvider = ({ children, config }) => {
       const response = await fetch(url, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
       });
 
@@ -47,7 +47,7 @@ export const DataProvider = ({ children, config }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(payload)
       });
@@ -72,7 +72,7 @@ export const DataProvider = ({ children, config }) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(payload)
       });
@@ -96,7 +96,7 @@ export const DataProvider = ({ children, config }) => {
       const response = await fetch(endpoint, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
       });
       if (!response.ok) throw new Error("Error al hacer DELETE");

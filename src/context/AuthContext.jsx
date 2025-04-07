@@ -14,14 +14,7 @@ export const AuthProvider = ({ children }) => {
     return stored || null;
   });
 
-  const [token, setToken] = useState(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      axios.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
-    }
-    return storedToken;
-  });
-  
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [authStatus, setAuthStatus] = useState("checking");
   const [error, setError] = useState(null);
 
@@ -31,23 +24,8 @@ export const AuthProvider = ({ children }) => {
   const LOGIN_URL = `${BASE_URL}${LOGIN_ENDPOINT}`;
   const VALIDATE_TOKEN_URL = `${BASE_URL}${VALIDATE_TOKEN_ENDPOINT}`;
 
-  // 🔐 Setear el header global cuando cambia el token
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common.Authorization;
-    }
-  }, [token]);
-
-  // Validamos token al montar
   useEffect(() => {
     const checkAuth = async () => {
-      if (!token || !config) {
-        setAuthStatus("unauthenticated");
-        return;
-      }
-
       try {
         const response = await axios.get(VALIDATE_TOKEN_URL, {
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -78,6 +56,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(member));
       localStorage.setItem("tokenTime", tokenTime);
 
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setToken(token);
       setUser(member);
       setAuthStatus("authenticated");
@@ -88,6 +67,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    delete axios.defaults.headers.common["Authorization"];
     localStorage.clear();
     setUser(null);
     setToken(null);
