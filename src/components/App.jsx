@@ -29,7 +29,6 @@ function App() {
       {/**<Routes>
         <Route path="/" element={<Home />} />
         <Route path="/gestion/socios" element={<Socios />} />
-        <Route path="/gestion/ingresos" element={<Ingresos />} />
         <Route path="/gestion/gastos" element={<Gastos />} />
         <Route path="/gestion/balance" element={<Balance />} />
         <Route path="/login" element={<Login />} />
@@ -46,6 +45,11 @@ function App() {
         <Route path="/gestion/socios" element={
           <ProtectedRoute>
             <Socios />
+          </ProtectedRoute>
+        } />
+        <Route path="/gestion/ingresos" element={
+          <ProtectedRoute>
+            <Ingresos />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Building />} />
