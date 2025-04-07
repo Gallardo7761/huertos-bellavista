@@ -7,6 +7,7 @@ export const usePaginatedList = ({
   enablePagination = true,
   filterFn = () => true,
   searchFn = () => true,
+  initialFilters = {}
 }) => {
   const [page, setPage] = useState(0);
   const [paginated, setPaginated] = useState([]);
@@ -15,7 +16,7 @@ export const usePaginatedList = ({
   const loaderRef = useRef();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState(initialFilters);
   const [creatingItem, setCreatingItem] = useState(false);
   const [tempItem, setTempItem] = useState(null);
 

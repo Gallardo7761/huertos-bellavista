@@ -1,0 +1,95 @@
+/* ================================
+   INGRESO CARD - BASE
+================================== */
+
+.ingreso-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .ingreso-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+  }
+  
+  .ingreso-card img {
+    object-fit: cover;
+  }
+  
+  /* ================================
+     CARD HEADER
+  ================================== */
+  
+  .card-header.bg-light-red {
+    background-color: #f8d7da !important;
+  }
+  
+  .card-header.bg-light-red .card-title {
+    color: var(--bs-danger) !important;
+  }
+  
+  .bg-light-green {
+    background-color: var(--secondary-green) !important;
+  }
+  
+  .ingreso-card .card-header button {
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+  
+  .ingreso-card .card-header button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* ================================
+     THEMING - LIGHT MODE
+  ================================== */
+  
+  .light .ingreso-card,
+  .light .ingreso-card .card {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #cccccc;
+  }
+  
+  .light .ingreso-card .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .light .ingreso-card .card-header button {
+    color: #000000;
+  }
+
+  .light .text-muted {
+    color: #6c757d !important;
+  }
+  
+  /* ================================
+     THEMING - DARK MODE
+  ================================== */
+  
+  .dark .ingreso-card,
+  .dark .ingreso-card .card {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: #444444 !important;
+  }
+  
+  .dark .ingreso-card .text-muted {
+    color: #bbbbbb !important;
+  }
+  
+  .dark .ingreso-card .card-header button {
+    color: #ffffff;
+  }
+  
+  .dark .text-muted {
+    color: #bbbbbb !important;
+  }

@@ -40,11 +40,11 @@ const ListaEsperaContent = () => {
         showIndex: true
     }
 
-    data.list.sort((a, b) => {
+    data.sort((a, b) => {
         return new Date(a.created_at) - new Date(b.created_at);
     });
 
-    const mapped = data.list
+    const mapped = data
     .map(item => ({
         ...item,
         created_at: DateParser.timestampToString(item.created_at),

@@ -14,7 +14,7 @@ const PaginatedCardGrid = ({
 
       {items.map((item, i) => renderCard(item, i))}
 
-      <div ref={loaderRef} className="loading-trigger">
+      <div ref={loaderRef} className="loading-trigger d-flex justify-content-center align-items-center">
         {loading && <LoadingIcon />}
       </div>
     </div>
