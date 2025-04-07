@@ -1,61 +1,57 @@
 // AuthContext adaptado al nuevo modelo con data.token y data.member
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
 import { useConfig } from "../hooks/useConfig";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const { config } = useConfig();
+
   const [user, setUser] = useState(() => {
-    const stored = JSON.parse(sessionStorage.getItem("user"));
+    const stored = JSON.parse(localStorage.getItem("user"));
     return stored || null;
   });
-  const [token, setToken] = useState(() => sessionStorage.getItem("token"));
-  const [authStatus, setAuthStatus] = useState("checking"); // 'checking' | 'authenticated' | 'unauthenticated'
+
+  const [token, setToken] = useState(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      axios.defaults.headers.common.Authorization = `Bearer ${storedToken}`;
+    }
+    return storedToken;
+  });
+  
+  const [authStatus, setAuthStatus] = useState("checking");
   const [error, setError] = useState(null);
 
-  const login = async (formData) => {
-    setError(null);
-    try {
-      const response = await axios.post(`${BASE}${LOGIN_ENDPOINT}`, formData, {
-        headers: { "Content-Type": "application/json" },
-      });
+  const BASE_URL = config?.apiConfig.baseUrl;
+  const LOGIN_ENDPOINT = config?.apiConfig.endpoints.auth.login;
+  const VALIDATE_TOKEN_ENDPOINT = config?.apiConfig.endpoints.auth.validateToken;
+  const LOGIN_URL = `${BASE_URL}${LOGIN_ENDPOINT}`;
+  const VALIDATE_TOKEN_URL = `${BASE_URL}${VALIDATE_TOKEN_ENDPOINT}`;
 
-      const { token, member, tokenTime } = response.data.data;
-
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("user", JSON.stringify(member));
-      sessionStorage.setItem("tokenTime", tokenTime);
-
-      setToken(token);
-      setUser(member);
-      setAuthStatus("authenticated");
-    } catch (err) {
-      setError(err.response?.data?.message || "Error de login");
-      throw err;
+  // 🔐 Setear el header global cuando cambia el token
+  useEffect(() => {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common.Authorization;
     }
-  };
+  }, [token]);
 
-  const logout = () => {
-    sessionStorage.clear();
-    delete axios.defaults.headers.common.Authorization;
-    setUser(null);
-    setToken(null);
-    setAuthStatus("unauthenticated");
-  };
-
+  // Validamos token al montar
   useEffect(() => {
     const checkAuth = async () => {
-      if (!token) {
+      if (!token || !config) {
         setAuthStatus("unauthenticated");
         return;
       }
 
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       try {
-        const response = await axios.get(`${BASE}${VALIDATE_TOKEN_ENDPOINT}`);
+        const response = await axios.get(VALIDATE_TOKEN_URL, {
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        });
         if (response.status === 200) {
           setAuthStatus("authenticated");
         } else {
@@ -67,14 +63,36 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [token, config, VALIDATE_TOKEN_URL]);
 
-  if (!config) return null;
+  const login = async (formData) => {
+    setError(null);
+    try {
+      const response = await axios.post(LOGIN_URL, formData, {
+        headers: { "Content-Type": "application/json" },
+      });
 
-  const BASE = config.apiConfig.baseUrl;
-  const LOGIN_ENDPOINT = config.apiConfig.endpoints.auth.login;
-  const VALIDATE_TOKEN_ENDPOINT = config.apiConfig.endpoints.auth.validateToken;
+      const { token, member, tokenTime } = response.data.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(member));
+      localStorage.setItem("tokenTime", tokenTime);
+
+      setToken(token);
+      setUser(member);
+      setAuthStatus("authenticated");
+    } catch (err) {
+      setError(err.response?.data?.message || "Error de login");
+      throw err;
+    }
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+    setToken(null);
+    setAuthStatus("unauthenticated");
+  };
 
   return (
     <AuthContext.Provider value={{ user, token, authStatus, login, logout, error }}>
