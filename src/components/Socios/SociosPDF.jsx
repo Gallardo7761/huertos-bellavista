@@ -82,7 +82,7 @@ export const SociosPDF = ({ socios }) => (
         <Image src={"/images/logo.png"} style={styles.logo} />
         <View style={styles.headerText}>
           <Text style={styles.header}>Listado de socios</Text>
-          <Text style={styles.subHeader}>Asociación Huertos La Salud - Bellavista</Text>
+          <Text style={styles.subHeader}>Asociación Huertos La Salud - Bellavista • Generado el {new Date().toLocaleDateString()} a las {new Date().toLocaleTimeString()}</Text>
         </View>
       </View>
 

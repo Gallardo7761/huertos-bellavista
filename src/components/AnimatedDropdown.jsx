@@ -58,7 +58,7 @@ const AnimatedDropdown = ({
       </Button>
     );
 
-  const dropdownClasses = `dropdown-menu show shadow rounded-0 px-2 py-2 ${className}`;
+  const dropdownClasses = `dropdown-menu show shadow rounded-4 px-2 py-2 ${className}`;
 
   return (
     <div

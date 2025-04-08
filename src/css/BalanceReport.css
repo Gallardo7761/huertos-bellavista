@@ -1,0 +1,79 @@
+.balance-report {
+  border-radius: 1.75rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease;
+}
+
+.light .balance-report {
+  background-color: #fdfdfd;
+  color: #111;
+  border: 1px solid #ddd;
+}
+
+.dark .balance-report {
+  background-color: #1c1c1c;
+  color: #e0e0e0;
+  border: 1px solid #333;
+}
+
+.report-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--bs-primary);
+}
+
+.balance-box {
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 1.25rem;
+}
+
+.dark .balance-box {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.balance-box p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.balance-value {
+  font-weight: 600;
+  color: var(--bs-primary);
+}
+
+.balance-timestamp {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.print-btn {
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.light .print-btn {
+  background-color: #e9ecef;
+  color: #222;
+  border: 1px solid #ccc;
+}
+
+.light .print-btn:hover {
+  background-color: #d4d4d4;
+}
+
+.dark .print-btn {
+  background-color: #2e2e2e;
+  color: #f0f0f0;
+  border: 1px solid #444;
+}
+
+.dark .print-btn:hover {
+  background-color: #393939;
+}

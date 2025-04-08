@@ -27,16 +27,10 @@ function App() {
       <Header />
       <NavBar />
       {/**<Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/gestion/socios" element={<Socios />} />
-        <Route path="/gestion/gastos" element={<Gastos />} />
-        <Route path="/gestion/balance" element={<Balance />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/solicitar-huerto" element={<SolicitarHuerto />} />
         <Route path="/solicitudes-alta" element={<SolicitudesAlta />} />
         <Route path="/solicitudes-invernadero-colaborador" element={<SolicitudesInverColab />} />
         <Route path="/anuncios" element={<Anuncios />} />
-        <Route path="/lista-espera" element={<ListaEspera />} />
       </Routes> */}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -50,6 +44,16 @@ function App() {
         <Route path="/gestion/ingresos" element={
           <ProtectedRoute>
             <Ingresos />
+          </ProtectedRoute>
+        } />
+        <Route path="/gestion/gastos" element={
+          <ProtectedRoute>
+            <Gastos />
+          </ProtectedRoute>
+        } />
+        <Route path="/gestion/balance" element={
+          <ProtectedRoute>
+            <Balance />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Building />} />

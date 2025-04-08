@@ -73,44 +73,43 @@ const parseDate = (iso) => {
 };
 
 const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? 'Banco' : 'Caja';
-const getFreqLabel = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? 'Semestral' : 'Anual';
 
-export const IngresosPDF = ({ ingresos }) => (
+export const GastosPDF = ({ gastos }) => (
   <Document>
     <Page size="A4" orientation="landscape" style={styles.page}>
       <View style={styles.headerContainer}>
         <Image src="/images/logo.png" style={styles.logo} />
         <View style={styles.headerText}>
-          <Text style={styles.header}>Listado de ingresos</Text>
+          <Text style={styles.header}>Listado de Gastos</Text>
           <Text style={styles.subHeader}>Asociación Huertos La Salud - Bellavista • Generado el {new Date().toLocaleDateString()} a las {new Date().toLocaleTimeString()}</Text>
         </View>
       </View>
 
       <View style={styles.tableHeader}>
-        <Text style={[styles.headerCell, { flex: 1 }]}>Socio Nº</Text>
-        <Text style={[styles.headerCell, { flex: 4 }]}>Concepto</Text>
-        <Text style={[styles.headerCell, { flex: 1 }]}>Importe</Text>
-        <Text style={[styles.headerCell, { flex: 1 }]}>Tipo</Text>
-        <Text style={[styles.headerCell, { flex: 1 }]}>Frecuencia</Text>
         <Text style={[styles.headerCell, { flex: 2 }]}>Fecha</Text>
+        <Text style={[styles.headerCell, { flex: 4 }]}>Concepto</Text>
+        <Text style={[styles.headerCell, { flex: 2 }]}>Importe</Text>
+        <Text style={[styles.headerCell, { flex: 3 }]}>Proveedor</Text>
+        <Text style={[styles.headerCell, { flex: 2 }]}>Factura</Text>
+        <Text style={[styles.headerCell, { flex: 1 }]}>Tipo</Text>
       </View>
 
-      {ingresos.map((ing, idx) => (
+      {gastos.map((gasto, idx) => (
         <View
           key={idx}
           style={[
             styles.row,
             { backgroundColor: idx % 2 === 0 ? '#ECF0F1' : '#FDFEFE' },
-            { borderBottomLeftRadius: idx === ingresos.length - 1 ? 10 : 0 },
-            { borderBottomRightRadius: idx === ingresos.length - 1 ? 10 : 0 },
+            { borderBottomLeftRadius: idx === gastos.length - 1 ? 10 : 0 },
+            { borderBottomRightRadius: idx === gastos.length - 1 ? 10 : 0 },
           ]}
         >
-          <Text style={[styles.cell, { flex: 1 }]}>{ing.member_number}</Text>
-          <Text style={[styles.cell, { flex: 3 }]}>{ing.concept}</Text>
-          <Text style={[styles.cell, { flex: 1 }]}>{ing.amount.toFixed(2)} €</Text>
-          <Text style={[styles.cell, { flex: 1 }]}>{getTypeLabel(ing.type)}</Text>
-          <Text style={[styles.cell, { flex: 1 }]}>{getFreqLabel(ing.frequency)}</Text>
-          <Text style={[styles.cell, { flex: 2 }]}>{parseDate(ing.created_at)}</Text>
+          <Text style={[styles.cell, { flex: 2 }]}>{parseDate(gasto.created_at)}</Text>
+          <Text style={[styles.cell, { flex: 4 }]}>{gasto.concept}</Text>
+          <Text style={[styles.cell, { flex: 2 }]}>{gasto.amount.toFixed(2)} €</Text>
+          <Text style={[styles.cell, { flex: 3 }]}>{gasto.supplier}</Text>
+          <Text style={[styles.cell, { flex: 2 }]}>{gasto.invoice}</Text>
+          <Text style={[styles.cell, { flex: 1 }]}>{getTypeLabel(gasto.type)}</Text>
         </View>
       ))}
     </Page>
