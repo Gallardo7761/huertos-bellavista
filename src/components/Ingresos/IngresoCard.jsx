@@ -86,7 +86,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
               <Form.Control size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
             ) : formData.concept}
           </span>
-          <small className="text-muted">
+          <small>
             <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
             {formatDate(formData.created_at)}
           </small>

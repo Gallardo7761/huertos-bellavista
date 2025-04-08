@@ -59,16 +59,8 @@
     border-color: #cccccc;
   }
   
-  .light .ingreso-card .text-muted {
-    color: #6c757d !important;
-  }
-  
   .light .ingreso-card .card-header button {
     color: #000000;
-  }
-
-  .light .text-muted {
-    color: #6c757d !important;
   }
   
   /* ================================
@@ -82,14 +74,6 @@
     border-color: #444444 !important;
   }
   
-  .dark .ingreso-card .text-muted {
-    color: #bbbbbb !important;
-  }
-  
   .dark .ingreso-card .card-header button {
     color: #ffffff;
-  }
-  
-  .dark .text-muted {
-    color: #bbbbbb !important;
   }
