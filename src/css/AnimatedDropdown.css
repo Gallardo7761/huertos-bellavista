@@ -15,3 +15,7 @@
   background-color: var(--dark-green);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
+
+.disabled.text-muted {
+  color: #979fa5 !important;
+}

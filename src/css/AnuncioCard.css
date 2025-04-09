@@ -1,0 +1,94 @@
+.anuncio-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .anuncio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+  }
+  
+  .anuncio-card .icon-btn {
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+  
+  .anuncio-card .icon-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .anuncio-card .leer-mas-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* =====================================
+     THEMING - LIGHT MODE
+  ===================================== */
+  .light .anuncio-card {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #cccccc;
+  }
+  
+  .light .anuncio-card .card-header {
+    background-color: #f8f9fa;
+  }
+  
+  .light .anuncio-card .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .light .anuncio-card .priority-low .priority-footer {
+    background-color: #e6ffe6;
+    color: #28a745;
+  }
+  
+  .light .anuncio-card .priority-medium .priority-footer {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .light .anuncio-card .priority-high .priority-footer {
+    background-color: #f8d7da;
+    color: #dc3545;
+  }
+  
+  /* =====================================
+     THEMING - DARK MODE
+  ===================================== */
+  .dark .anuncio-card {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: #444444 !important;
+  }
+  
+  .dark .anuncio-card .card-header {
+    background-color: var(--bs-secondary);
+  }
+  
+  .dark .anuncio-card .text-muted {
+    color: #bbbbbb !important;
+  }
+  
+  .dark .anuncio-card .priority-low .priority-footer {
+    background-color: #2d6b2d;
+    color: #66ff66;
+  }
+  
+  .dark .anuncio-card .priority-medium .priority-footer {
+    background-color: #856404;
+    color: #ffe066;
+  }
+  
+  .dark .anuncio-card .priority-high .priority-footer {
+    background-color: #721c24;
+    color: #ff6666;
+  }
+  

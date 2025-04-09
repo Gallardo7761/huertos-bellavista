@@ -22,7 +22,7 @@ const NavListaEspera = () => {
       <Link to="/lista-espera" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faEye} className="me-2" />Ver la lista
       </Link>
-      <Link to="/alta" className="dropdown-item nav-link">
+      <Link to="/alta" className="disabled text-muted  dropdown-item nav-link">
         <FontAwesomeIcon icon={faPlus} className="me-2" />Solicitar huerto
       </Link>
     </AnimatedDropdown>

@@ -33,7 +33,6 @@ function App() {
         <Route path="/solicitar-huerto" element={<SolicitarHuerto />} />
         <Route path="/solicitudes-alta" element={<SolicitudesAlta />} />
         <Route path="/solicitudes-invernadero-colaborador" element={<SolicitudesInverColab />} />
-        <Route path="/anuncios" element={<Anuncios />} />
       </Routes> */}
       <Routes>
         <Route path="/" element={<Home />} />
@@ -62,6 +61,11 @@ function App() {
         <Route path="/documentacion" element={
           <ProtectedRoute>
             <Documentacion />
+          </ProtectedRoute>
+        } />
+        <Route path="/anuncios" element={
+          <ProtectedRoute>
+            <Anuncios />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Building />} />

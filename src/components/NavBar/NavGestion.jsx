@@ -35,10 +35,10 @@ const NavGestion = () => {
         <FontAwesomeIcon icon={faFileInvoice} className="me-2" />Balance
       </Link>
       <hr className="dropdown-divider" />
-      <Link to="/gestion/altas" className="dropdown-item nav-link">
+      <Link to="/gestion/altas" className="disabled text-muted dropdown-item nav-link">
         <FontAwesomeIcon icon={faUserPlus} className="me-2" />Solicitudes de alta
       </Link>
-      <Link to="/gestion/solicitudes" className="dropdown-item nav-link">
+      <Link to="/gestion/solicitudes" className="disabled text-muted  dropdown-item nav-link">
         <FontAwesomeIcon icon={faShapes} className="me-2" />Solicitudes Inver./Colab.
       </Link>
     </AnimatedDropdown>

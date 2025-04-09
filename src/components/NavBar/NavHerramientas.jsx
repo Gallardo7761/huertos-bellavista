@@ -25,7 +25,7 @@ const NavHerramientas = () => {
       <Link to="/documentacion" className="dropdown-item nav-link">
         <FontAwesomeIcon icon={faFile} className="me-2" />Documentación
       </Link>
-      <Link to="/solicitud" className="dropdown-item nav-link">
+      <Link to="/solicitud" className="disabled text-muted dropdown-item nav-link">
         <FontAwesomeIcon icon={faConciergeBell} className="me-2" />Enviar una solicitud
       </Link>
     </AnimatedDropdown>

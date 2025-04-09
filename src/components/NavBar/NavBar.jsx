@@ -74,7 +74,7 @@ const NavBar = () => {
                 </Link>
               }
             >
-              <Link to="/perfil" className="dropdown-item nav-link">
+              <Link to="/perfil" className="disabled text-muted dropdown-item nav-link">
                 <FontAwesomeIcon icon={faUser} className="me-2" />
                 Mi perfil
               </Link>
