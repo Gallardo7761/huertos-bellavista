@@ -2,6 +2,8 @@ import { faFilter, faFilePdf, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AnimatedDropdown from './AnimatedDropdown';
 import Button from 'react-bootstrap/Button';
+import { CONSTANTS } from '../util/constants';
+import IfRole from './Auth/IfRole';
 
 const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate, onPDF }) => (
     <div className="sticky-toolbar search-toolbar-wrapper">
@@ -20,14 +22,18 @@ const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate,
                     </AnimatedDropdown>
                 )}
                 {onPDF && (
-                    <Button variant="transparent" onClick={onPDF}>
-                        <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
-                    </Button>
+                    <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+                        <Button variant="transparent" onClick={onPDF}>
+                            <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
+                        </Button>
+                    </IfRole>
                 )}
                 {onCreate && (
-                    <Button variant="transparent" onClick={onCreate}>
-                        <FontAwesomeIcon icon={faPlus} className='fa-md' />
-                    </Button>
+                    <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+                        <Button variant="transparent" onClick={onCreate}>
+                            <FontAwesomeIcon icon={faPlus} className='fa-md' />
+                        </Button>
+                    </IfRole>
                 )}
             </div>
         </div>
