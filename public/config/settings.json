@@ -1,6 +1,7 @@
 {
     "apiConfig": {
         "baseUrl": "https://api.huertosbellavista.es",
+        "coreUrl": "https://api.miarma.net",
         "ports": {
             "auth_logic": 10000,
             "auth_data": 10001,
@@ -48,6 +49,13 @@
             "pre_users": {
                 "all": "/raw/v1/pre_users",
                 "byId": "/raw/v1/pre_users/:pre_user_id"
+            },
+            "files": {
+                "all": "/v1/files",
+                "byId": "/v1/files/:file_id",
+                "upload": "/v1/files/upload",
+                "download": "/v1/files/download/:file_id",
+                "userFiles": "/v1/files/myfiles"
             }
         }
     }

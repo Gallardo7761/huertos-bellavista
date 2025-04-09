@@ -1,0 +1,62 @@
+.file-card {
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    background-color: var(--file-bg);
+    color: var(--file-fg);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.file-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 2px var(--light-green);
+}
+
+.file-card img {
+    max-width: 48px;
+    margin-bottom: 0.5rem;
+}
+
+.file-card p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: var(--file-fg);
+}
+
+/* Botón de eliminar */
+.file-card .btn {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    background-color: var(--file-btn-bg);
+    color: var(--file-btn-fg);
+    border: none;
+    border-radius: 8px;
+}
+
+.file-card .btn:hover {
+    background-color: var(--file-btn-hover);
+}
+
+/* Tema claro */
+.light .file-card {
+    --file-bg: var(--input-bg);
+    /* #f8f9fa */
+    --file-fg: var(--light-fg);
+    /* #212529 */
+    --file-btn-bg: #e9ecef;
+    --file-btn-fg: #212529;
+    --file-btn-hover: #dee2e6;
+}
+
+/* Tema oscuro */
+.dark .file-card {
+    --file-bg: var(--input-bg);
+    /* #1e1e2f */
+    --file-fg: var(--text-color);
+    /* #f1f1f1 */
+    --file-btn-bg: #3a3a3a;
+    --file-btn-fg: #f1f1f1;
+    --file-btn-hover: #4a4a4a;
+}

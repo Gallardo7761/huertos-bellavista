@@ -41,11 +41,17 @@ export const DataProvider = ({ children, config }) => {
   // =====================
   const postData = async (endpoint, payload) => {
     try {
-      const response = await axios.post(endpoint, payload, {
-        headers: getAuthHeaders(),
-      });
+      const isFormData = payload instanceof FormData;
+  
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      };
+  
+      const response = await axios.post(endpoint, payload, { headers });
+  
       await fetchData();
-      return response.data.data; // ✅ Cambio aquí
+      return response.data.data;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
       throw err;
@@ -84,6 +90,20 @@ export const DataProvider = ({ children, config }) => {
     }
   };
 
+  const deleteDataWithBody = async (endpoint, payload) => {
+    try {
+      const response = await axios.delete(endpoint, {
+        headers: getAuthHeaders(),
+        data: payload,
+      });
+      await fetchData();
+      return response.data.data; // ✅ Cambio aquí
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+      throw err;
+    }
+  }
+
   useEffect(() => {
     const configKey = JSON.stringify(config);
     if (prevConfigKey.current === configKey) return;
@@ -100,7 +120,8 @@ export const DataProvider = ({ children, config }) => {
         dataError,
         postData,
         putData,
-        deleteData
+        deleteData,
+        deleteDataWithBody
       }}
     >
       {children}

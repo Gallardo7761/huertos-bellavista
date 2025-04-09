@@ -1,0 +1,39 @@
+.upload-card {
+  transition: all 0.2s ease;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.upload-card.highlight {
+  border-color: var(--light-green);
+  background-color: var(--dark-green);
+}
+
+.upload-card .file-list {
+  margin-top: 1rem;
+  text-align: left;
+  padding: 0;
+  list-style: none;
+}
+
+.upload-card .file-list li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--upload-fg);
+}
+
+/* Tema claro */
+.light .upload-card {
+  border: 2px dashed var(--light-green);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+/* Tema oscuro */
+.dark .upload-card {
+  border: 2px dashed var(--light-green);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}

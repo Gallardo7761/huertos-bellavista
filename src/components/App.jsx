@@ -17,6 +17,7 @@ import SolicitudesInverColab from '../pages/SolicitudesInverColab'
 import Anuncios from '../pages/Anuncios'
 import ListaEspera from '../pages/ListaEspera'
 import Building from '../pages/Building'
+import Documentacion from '../pages/Documentacion'
 
 function App() {
 
@@ -54,6 +55,11 @@ function App() {
         <Route path="/gestion/balance" element={
           <ProtectedRoute>
             <Balance />
+          </ProtectedRoute>
+        } />
+        <Route path="/documentacion" element={
+          <ProtectedRoute>
+            <Documentacion />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Building />} />
