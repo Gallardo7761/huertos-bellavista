@@ -11,7 +11,7 @@ const PDFModal = ({ show, onClose, title, children }) => (
                 <FontAwesomeIcon icon={faXmark} className='close-button fa-xl' />
             </Button>
         </Modal.Header>
-        <Modal.Body style={{ height: '80vh' }}>
+        <Modal.Body className="rounded-bottom-4 p-0" style={{ height: '80vh' }}>
             <PDFViewer width="100%" height="100%">
                 {children}
             </PDFViewer>

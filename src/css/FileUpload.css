@@ -31,9 +31,17 @@
   color: var(--text-color);
 }
 
+.light .upload-card:hover {
+  border: 2px dashed var(--secondary-green);
+}
+
 /* Tema oscuro */
 .dark .upload-card {
   border: 2px dashed var(--light-green);
   background-color: var(--input-bg);
   color: var(--text-color);
+}
+
+.dark .upload-card:hover {
+  border: 2px dashed var(--secondary-green);
 }

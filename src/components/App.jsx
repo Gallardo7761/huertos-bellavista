@@ -19,9 +19,11 @@ import ListaEspera from '../pages/ListaEspera'
 import Building from '../pages/Building'
 import Documentacion from '../pages/Documentacion'
 
+import { CONSTANTS } from '../util/constants'
+
 function App() {
 
-  const routesWithFooter = ["/", "/lista-espera", "/login", "/gestion/socios"];
+  const routesWithFooter = ["/", "/lista-espera", "/login", "/gestion/socios", "/gestion/ingresos", "/gestion/gastos", "/gestion/balance"];
 
   return (
     <>
@@ -38,22 +40,22 @@ function App() {
         <Route path="/lista-espera" element={<ListaEspera />} />
         <Route path="/login" element={<Login />} />
         <Route path="/gestion/socios" element={
-          <ProtectedRoute>
+          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Socios />
           </ProtectedRoute>
         } />
         <Route path="/gestion/ingresos" element={
-          <ProtectedRoute>
+          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Ingresos />
           </ProtectedRoute>
         } />
         <Route path="/gestion/gastos" element={
-          <ProtectedRoute>
+          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Gastos />
           </ProtectedRoute>
         } />
         <Route path="/gestion/balance" element={
-          <ProtectedRoute>
+          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Balance />
           </ProtectedRoute>
         } />

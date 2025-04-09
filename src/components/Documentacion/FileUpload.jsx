@@ -68,8 +68,8 @@ const FileUpload = forwardRef(({ onFilesSelected }, ref) => {
       role="button"
     >
       <Card.Body className="text-center">
-        <h5 className="mb-3">📎 Subir archivo</h5>
-        <p className="text-muted">
+        <h2 className="mb-3">📎 Subir archivo</h2>
+        <p>
           Arrastra o haz click para seleccionar archivos (Máx. 10MB)
         </p>
         <input

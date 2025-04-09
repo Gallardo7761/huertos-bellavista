@@ -67,7 +67,7 @@ const DocumentacionContent = ({ config }) => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar ${file.file_name}?`)) {
       try {
         await deleteDataWithBody(`${config.baseUrl}/${file.file_id}`, {
-          file_path: file.file_path // 👈 Asegúrate que esto existe en el objeto
+          file_path: file.file_path
         });
       } catch (err) {
         console.error("Error al eliminar archivo:", err);
@@ -91,7 +91,7 @@ const DocumentacionContent = ({ config }) => {
         <div className="mt-4">
           {dataLoading && <LoadingIcon />}
           {dataError && <p className="text-danger">❌ Error al cargar los archivos.</p>}
-          {data?.length === 0 && !dataLoading && <p className="text-muted">No hay documentos todavía.</p>}
+          {data?.length === 0 && !dataLoading && <p>No hay documentos todavía.</p>}
           {data?.map((file, idx) => (
             <File key={idx} file={file} onDelete={handleDeleteFile} />
           ))}
