@@ -24,7 +24,7 @@ const File = ({ file, onDelete }) => {
 
   return (
     <Card
-      className="file-card shadow-sm col-sm-3 col-lg-2 col-xxl-1 m-0 p-0 position-relative text-decoration-none"
+      className="file-card col-sm-3 col-lg-2 col-xxl-1 m-0 p-0 position-relative text-decoration-none"
       onClick={() => window.open(`https://miarma.net/files/huertos/${file.file_name}`, "_blank")}
     >
       <Card.Body className="text-center">
@@ -40,7 +40,7 @@ const File = ({ file, onDelete }) => {
         variant="transparent"
         size="md"
         color="text-danger"
-        className="position-absolute top-0 end-0 m-0"
+        className="delete-btn position-absolute top-0 end-0 m-0"
         onClick={(e) => {
           e.stopPropagation();
           onDelete?.(file);

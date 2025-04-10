@@ -4,11 +4,18 @@
   padding: 2rem;
   text-align: center;
   cursor: pointer;
+  border: 2px dashed var(--primary-color) !important;
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+}
+
+.upload-card:hover {
+  border: 2px dashed var(--tertiary-color) !important;
 }
 
 .upload-card.highlight {
-  border-color: var(--light-green);
-  background-color: var(--dark-green);
+  border-color: var(--border-color);
+  background-color: var(--bg-color);
 }
 
 .upload-card .file-list {
@@ -21,27 +28,5 @@
 .upload-card .file-list li {
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
-  color: var(--upload-fg);
-}
-
-/* Tema claro */
-.light .upload-card {
-  border: 2px dashed var(--light-green);
-  background-color: var(--input-bg);
-  color: var(--text-color);
-}
-
-.light .upload-card:hover {
-  border: 2px dashed var(--secondary-green);
-}
-
-/* Tema oscuro */
-.dark .upload-card {
-  border: 2px dashed var(--light-green);
-  background-color: var(--input-bg);
-  color: var(--text-color);
-}
-
-.dark .upload-card:hover {
-  border: 2px dashed var(--secondary-green);
+  color: var(--fg-color);
 }

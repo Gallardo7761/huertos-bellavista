@@ -8,6 +8,7 @@ const AnimatedDropdown = ({
   icon,
   variant = "secondary",
   className = "",
+  buttonStyle = "",
   show,
   onToggle,
   onMouseEnter,
@@ -51,7 +52,7 @@ const AnimatedDropdown = ({
       <Button
         ref={triggerRef}
         variant={variant}
-        className={`circle-btn ${className}`}
+        className={`circle-btn ${buttonStyle}`}
         onClick={toggle}
       >
         {icon}
@@ -62,7 +63,7 @@ const AnimatedDropdown = ({
 
   return (
     <div
-      className="position-relative d-inline-block"
+      className={`position-relative d-inline-block`}
       onClick={toggle}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
