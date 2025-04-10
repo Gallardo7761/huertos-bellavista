@@ -1,120 +1,141 @@
 .footer {
-  border-top: 3px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--navbar-bg); /* más similar al navbar */
+  color: var(--fg-color);
+  border-top: 3px solid var(--border-color);
+  padding: 2rem 1rem;
+  font-size: 1rem;
+  box-shadow: 0 -2px 8px var(--shadow-color);
   transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background-color: var(--primary-color);
+  opacity: 0.1;
+  pointer-events: none;
 }
 
 .footer-title,
 .footer h6#devd {
-  font-size: 1.5rem;
+  font-family: "Product Sans";
+  font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.footer-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  background-color: var(--bg-hover-color); /* sutil contraste */
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+@media (min-width: 768px) {
+  .footer-columns {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-column h5 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--fg-color);
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-column ul li a {
+  color: var(--fg-color);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-column ul li a:hover {
+  color: var(--primary-color);
+  text-shadow: 0 0 4px currentColor;
 }
 
 .footer-bottom {
   font-size: 0.9rem;
   opacity: 0.85;
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--divider-color);
 }
 
 .footer-bottom a {
   font-weight: 600;
   text-decoration: none;
+  color: var(--fg-color);
   transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
 }
 
 .footer-bottom a:hover {
   text-shadow: 0 0 5px currentColor;
+  color: var(--primary-color);
 }
 
 .contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
   border-radius: 1rem;
   font-size: 0.95rem;
-  box-shadow: var(--bs-box-shadow-sm);
+  background-color: var(--contact-info-bg);
+  color: var(--primary-color);
+  box-shadow: 0 4px 10px var(--shadow-color);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .contact-info a {
   font-weight: 600;
   text-decoration: none;
+  color: var(--primary-color);
+  display: inline-flex;
+  align-items: center;
   gap: 0.5rem;
   transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .contact-info a:hover {
   transform: translateX(8px);
+  color: var(--secondary-color);
 }
 
 .contact-info .fa-icon {
   font-size: 1.2rem;
+  color: var(--primary-color);
 }
 
-/* LIGHT THEME */
-.light .footer {
-  background-color: var(--light-green);
-  color: var(--dark-green);
-}
-
-.light .footer-title {
-  color: var(--dark-green);
-}
-
-.light .contact-info {
-  background-color: #fff;
-  color: var(--light-green);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.light .contact-info a,
-.light .contact-info .fa-icon {
-  color: var(--light-green);
-}
-
-.light .contact-info a:hover {
-  color: var(--dark-green);
-}
-
-.light .footer-bottom a {
-  color: var(--dark-green);
-}
-
-.light .footer-bottom a:hover {
-  color: #ffffff;
-}
-
-/* DARK THEME */
-.dark .footer {
-  background-color: #1e1e1e;
-  color: #a5d6a7;
-  border-top: 3px solid #333;
-}
-
-.dark .footer-title {
-  color: #81c784;
-}
-
-.dark .contact-info {
-  background-color: #2a2a2a;
-  color: #a5d6a7;
-  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
-}
-
-.dark .contact-info a,
-.dark .contact-info .fa-icon {
-  color: #a5d6a7;
-}
-
-.dark .contact-info a:hover {
-  color: #c8e6c9;
-}
-
-.dark .footer-bottom a {
-  color: #81c784;
-}
-
-.dark .footer-bottom a:hover {
-  color: #ffffff;
-}
-
-/* Animación del corazón */
 .heart-anim {
   display: inline-block;
   animation: heartbeat 1.5s infinite ease-in-out;

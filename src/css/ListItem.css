@@ -1,46 +1,33 @@
 .custom-list-item {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: none !important;
+  background-color: var(--item-bg) !important;
+  color: var(--item-text) !important;
+  border: none !important;
+  border-radius: 1rem !important;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .custom-list-item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-/* Tema claro */
-.light .custom-list-item {
-    background-color: #ffffff;
-    color: #212529;
-}
-
-.light .subtitle {
-    color: #6c757d;
-}
-
-/* Tema oscuro */
-.dark .custom-list-item {
-    background-color: #2a2a2a;
-    color: #f1f1f1;
-}
-
-.dark .subtitle {
-    color: #6c757d;
+.subtitle {
+  color: var(--subtitle-color);
 }
 
 /* Imagen de perfil */
 .list-item-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
 }
 
 /* Índice */
 .list-item-index {
-    font-size: 2rem;
-    font-weight: bold;
-    width: 2rem;
-    text-align: center;
-    color: var(--light-green);
+  font-size: 2rem;
+  font-weight: bold;
+  width: 2rem;
+  text-align: center;
+  color: var(--primary-color);
 }

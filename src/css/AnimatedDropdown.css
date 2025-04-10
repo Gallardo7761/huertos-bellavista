@@ -3,8 +3,16 @@
 }
 
 .dropdown-menu {
-  background-color: var(--bg-color);
-  box-shadow: 0 8px 16px var(--shadow-color);
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+.dropdown-menu.show {
+  background-color: var(--bg-color) !important;
+}
+
+.dropdown-menu:hover {
+  background-color: var(--bg-color) !important;
 }
 
 .disabled.text-muted {

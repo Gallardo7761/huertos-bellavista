@@ -1,5 +1,6 @@
 import ListItem from "./ListItem";
 import {ListGroup} from 'react-bootstrap';
+import '../css/List.css';
 
 const List = ({ datos, config }) => {
   return (

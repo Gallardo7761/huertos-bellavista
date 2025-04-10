@@ -27,69 +27,240 @@
 }
 
 /* ================================
-  PALETA DE COLORES v2
+   PALETA DE COLORES
 ================================== */
 
 :root {
-  --priority-high: var(--bs-danger);
-  --priority-medium: var(--bs-warning);
-  --priority-low: var(--bs-success);
+  --highlight-border: var(--accent-color);
+  --box-shadow-soft: 0 4px 6px var(--shadow-color);
+  --alert-bg: #f8d7da;
 }
 
+/* Tema Claro */
 .light {
-  --primary-color: #84F879;
-  --secondary-color: #2EC748;
-  --tertiary-color: #59ac51;
-  --border-color: #9DFE94;
-  --fg-color: #222E22;
-  --bg-color: #eeeae2;
-  --bg-hover-color: #c8c2b8;
-  --bg-search-bar: #E4DDD1EE;
-  --divider-color: #DEE2E6;
-  --muted-color: #6c757d;
+  /* Verdes principales ajustados */
+  --primary-color: #4CBF50;         /* Más suave que el #3CCD3F */
+  --secondary-color: #1B8F1E;       /* Menos saturado que el #0BAF0F */
+  --tertiary-color: #74D96B;        /* Versión apagada del #67EF6B */
+
+  /* Verdes claros de apoyo */
+  --border-color: #B2F7A3;
+  --divider-color: #B2F7A3;
+
+  /* Fondo, texto y elementos generales */
+  --bg-color: #EDF6ED;             /* Más contrastado que #F3FFF3 */
+  --fg-color: #1F2F1F;
+  --text-color: #1F2F1F;
+  --muted-color: #4F6B4F;
   --shadow-color: rgba(0, 0, 0, 0.1);
+
+  /* Hover y barra de búsqueda */
+  --bg-hover-color: #E2F2E2;
+  --bg-search-bar: rgba(76, 191, 80, 0.08);
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: #B2F7A3;
+  --placeholder-color: #5CA55C;
+  --input-text: var(--text-color);
+
+  /* Botones y acentos */
+  --accent-color: var(--primary-color);
+  --btn-bg: var(--primary-color);
+  --btn-bg-hover: var(--secondary-color);
+  --btn-text: #fff;
+  --btn-text-hover: #fff;
+
+  /* Iconos y bordes resaltados */
+  --icon-color: var(--fg-color);
+  --highlight-border: var(--tertiary-color);
+
+  /* Tarjetas (Cards) */
+  --card-bg: #ffffff;
+  --card-border: #d8ecd8;
+  --card-text: var(--text-color);
+  --card-btn-hover: rgba(76, 191, 80, 0.06);
+  --card-muted-text: var(--muted-color);
+
+  /* Items, subtítulos */
+  --item-bg: #ffffff;
+  --item-text: var(--text-color);
+  --subtitle-color: var(--muted-color);
+
+  /* Login / formularios */
+  --login-bg: #F0FAF0;
+  --label-color: var(--text-color);
+  --login-btn-bg: var(--primary-color);
+  --login-btn-hover: var(--secondary-color);
+  --login-btn-text: #fff;
+  --login-btn-text-hover: var(--text-color);
+
+  /* Header */
+  --header-mask-color: #1B8F1Eaa;
+
+  /* Navbar */
+  --navbar-bg: #ffffff;
+  --navbar-brand-color: var(--primary-color);
+  --navbar-brand-hover: var(--secondary-color);
+  --navbar-link-color: #2F4F2F;
+  --navbar-link-hover-bg: rgba(76, 191, 80, 0.08);
+  --navbar-link-hover-color: var(--secondary-color);
+  --navbar-dropdown-bg: #ffffff;
+  --navbar-dropdown-item-color: var(--text-color);
+  --navbar-dropdown-item-hover-color: var(--primary-color);
+  --navbar-divider-color: #B2F7A3;
+  --hamburger-color: var(--primary-color);
+  --navbar-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  --show-btn-color: var(--primary-color);
+  --show-btn-hover: var(--tertiary-color);
+
+  --header-btn-hover: rgba(0, 0, 0, 0.05);
+
+  /* Listas (hover/active) */
+  --list-hover-bg: rgba(76, 191, 80, 0.03);
+  --list-hover-bg-light: #E9F9E9;
+  --list-active-bg-light: #CFF5CF;
+
+  /* Search */
+  --search-bg: rgba(255, 255, 255, 0.6);
+  --search-border: #1B8F1E;
+  --search-input-color: var(--text-color);
+  --search-placeholder: #5CA55C;
+
+  /* Toolbar */
+  --toolbar-btn-color: var(--fg-color);
+  --toolbar-btn-hover: rgba(0, 0, 0, 0.07);
+
+  /* Modal */
+  --modal-bg: #ffffff;
+  --modal-header-border: #B2F7A3;
+  --modal-body-bg: #ffffff;
+  --modal-close-color: var(--text-color);
+
+  /* Contacto / secciones de info */
+  --contact-info-bg: #EDF6ED;
 }
 
+/* Tema Oscuro */
 .dark {
-  --primary-color: #94C756;
-  --secondary-color: #3C4B3C;
-  --tertiary-color: #cffa9b;
-  --border-color: #75AC39;
-  --fg-color: #E4DDD1;
-  --bg-color: #222E22;
-  --bg-hover-color: #3b3b3b;
-  --bg-search-bar: #2E2E2EEE;
-  --divider-color: #3C4B3C;
-  --muted-color: #999;
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  /* Colores principales (verdes claros) */
+  --primary-color: #A9DF58;   /* El verde más llamativo */
+  --secondary-color: #94CD43; /* Verde un pelín más oscuro que el primary */
+  --tertiary-color: #73B025;  /* Otro tono verde de apoyo */
+  /* Puedes usar #52910A si quieres para el highlight-border o viceversa */
+  
+  /* Fondos (verdes oscuros) */
+  --bg-color: #1F2919;            /* Fondo principal, el más oscuro */
+  --bg-hover-color: #283221;      /* Hover en elementos */
+  --bg-search-bar: rgba(31, 41, 25, 0.8);
+  
+  /* Bordes y sombras */
+  --border-color: #48523D;
+  --divider-color: #353F2D;
+  --shadow-color: rgba(0, 0, 0, 0.35);
+  
+  /* Texto */
+  --text-color: #f0f5e6;
+  --fg-color: #e0ead4;
+  --muted-color: #a8b398;
+  
+  /* Inputs */
+  --input-bg: #2f3428;
+  --input-border: #606850;
+  --placeholder-color: #b5c0a0;
+  
+  /* Botones y acentos */
+  --accent-color: var(--primary-color);
+  --btn-bg: var(--primary-color);
+  --btn-bg-hover: var(--secondary-color);
+  --btn-text: #1e1e1e;
+  --btn-text-hover: #fff;
+  
+  /* Iconos / resaltados */
+  --icon-color: var(--text-color);
+  --highlight-border: var(--tertiary-color);
+  --alert-bg: #4e1c1c;
+  
+  /* Tarjetas (Cards) */
+  --card-bg: #283221;
+  --card-border: #353F2D;
+  --card-text: var(--text-color);
+  --card-btn-hover: rgba(255, 255, 255, 0.05);
+  
+  /* Elementos de lista, items... */
+  --item-bg: #283221;
+  --item-text: var(--text-color);
+  --subtitle-color: var(--muted-color);
+  
+  /* Login / formularios */
+  --login-bg: #1F2919;
+  --input-text: var(--text-color);
+  --label-color: var(--text-color);
+  --login-btn-bg: var(--primary-color);
+  --login-btn-hover: var(--secondary-color);
+  --login-btn-text: #222;
+  --login-btn-text-hover: #fff;
+  
+  /* Header */
+  --header-mask-color: #44732980;
+
+  /* Navbar */
+  --navbar-bg: #283221;
+  --navbar-brand-color: var(--primary-color);
+  --navbar-brand-hover: var(--secondary-color);
+  --navbar-link-color: #d8e8c0;
+  --navbar-link-hover-bg: rgba(169, 223, 88, 0.1);
+  --navbar-link-hover-color: var(--secondary-color);
+  --navbar-dropdown-bg: #283221;
+  --navbar-dropdown-item-color: #f0f0f0;
+  --navbar-dropdown-item-hover-color: #3e4434;
+  --navbar-divider-color: #444;
+  --hamburger-color: var(--primary-color);
+  --navbar-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  
+  /* Otros elementos */
+  --show-btn-color: var(--primary-color);
+  --show-btn-hover: var(--tertiary-color);
+  --card-muted-text: var(--muted-color);
+  --header-btn-hover: rgba(255, 255, 255, 0.05);
+  --list-hover-bg: rgba(255, 255, 255, 0.03);
+  --list-hover-bg-dark: #404833;
+  --list-active-bg-dark: #4f5a3b;
+  --search-bg: rgba(31, 41, 25, 0.7);
+  --search-border: #52910A;  /* Otro verde más intenso */
+  --search-input-color: #f0f0f0;
+  --search-placeholder: #c0d0b0;
+  --toolbar-btn-color: #dbe5cb;
+  --toolbar-btn-hover: rgba(255, 255, 255, 0.08);
+  --modal-bg: #283221;
+  --modal-header-border: #353F2D;
+  --modal-body-bg: #283221;
+  --modal-close-color: #fff;
+  --contact-info-bg: #1F2919;
 }
 
 /* ================================
    ESTILOS BASE / RESET SUAVE
 ================================== */
-
 html,
 body {
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif;
   color: var(--text-color);
-  background-color: var(--bg-green);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-color);
+  transition: all 0.3s ease;
 }
 
 body {
-  background-color: transparent !important; /* por compatibilidad con navbar fija */
+  background-color: transparent !important; /* compatibilidad navbar fija */
 }
 
 main {
   color: var(--text-color);
-  background-color: var(--bg-green);
+  background-color: var(--bg-color);
 }
 
-
-/* ================================
-   TIPOGRAFÍA GLOBAL
-================================== */
-
+/* Tipografía global */
 div,
 label,
 input,
@@ -97,7 +268,7 @@ p,
 span,
 a,
 button {
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif;
   color: var(--text-color);
 }
 
@@ -107,21 +278,16 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Product Sans";
+  font-family: "Product Sans", sans-serif;
   color: var(--text-color);
 }
 
-
-/* ================================
-   INPUTS ADAPTADOS AL TEMA
-================================== */
-
+/* Inputs */
 input,
 textarea,
 select {
   background-color: var(--input-bg) !important;
   color: var(--text-color) !important;
-  border-color: var(--input-border) !important;
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
 }
 
@@ -130,6 +296,7 @@ textarea::placeholder {
   color: var(--placeholder-color) !important;
 }
 
+/* Enfoque de campos */
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -145,19 +312,17 @@ input[type="url"]:focus,
 input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
-.uneditable-input:focus {   
-  border-color: var(--secondary-green) !important;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px var(--secondary-green) !important;
+.uneditable-input:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 
+    0 0 0px rgba(0, 0, 0, 0.075) inset,
+    0 0 0px var(--accent-color) !important;
   outline: 0 none !important;
 }
 
-
-/* ================================
-   TITULOS Y SEPARADORES
-================================== */
-
+/* Títulos y separadores */
 .section-title {
-  font-family: 'Product Sans';
+  font-family: 'Product Sans', sans-serif;
   font-size: 2.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -168,12 +333,77 @@ input[type="color"]:focus,
   height: 2px;
   margin: 1rem 0 2rem;
   width: 50px;
+  background-color: var(--text-color);
 }
 
-.light .section-divider {
-  background: black;
+/* ===================
+   SEARCH TOOLBAR
+=================== */
+.search-toolbar-wrapper {
+  position: sticky;
+  top: 64px;
+  z-index: 900;
+  margin-bottom: 2rem;
 }
 
-.dark .section-divider {
-  background-color: var(--white);
+.search-toolbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.5rem 1rem;
+  background-color: var(--search-bg);
+  border: 2px solid var(--search-border) !important;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Cuando el input está enfocado */
+.search-toolbar:has(input:focus) {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px var(--shadow-color);
+  border-color: var(--accent-color) !important;
+}
+
+/* Fallback si :has no es compatible */
+.search-toolbar.focused {
+  transform: scale(1.02);
+  box-shadow: 0 6px 16px var(--shadow-color);
+  border-color: var(--accent-color) !important;
+}
+
+.search-toolbar input.search-input {
+  all: unset;
+  flex-grow: 1;
+  width: 100%;
+  height: 32px;
+  font-size: 1.1rem;
+  font-family: "Open Sans", sans-serif;
+  padding-right: 1rem;
+  background: transparent !important;
+  color: var(--search-input-color);
+}
+
+.search-toolbar input.search-input::placeholder {
+  color: var(--search-placeholder);
+}
+
+.toolbar-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolbar-buttons .btn {
+  background: transparent;
+  border: none;
+  color: var(--toolbar-btn-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.toolbar-buttons .btn:hover {
+  background-color: var(--toolbar-btn-hover);
 }

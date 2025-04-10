@@ -6,7 +6,7 @@
   cursor: pointer;
   border: 2px dashed var(--primary-color) !important;
   background-color: var(--bg-color);
-  color: var(--fg-color);
+  color: var(--text-color);
 }
 
 .upload-card:hover {
@@ -14,8 +14,8 @@
 }
 
 .upload-card.highlight {
-  border-color: var(--border-color);
-  background-color: var(--bg-color);
+  border-color: var(--highlight-border) !important;
+  background-color: var(--bg-hover-color);
 }
 
 .upload-card .file-list {
@@ -28,5 +28,5 @@
 .upload-card .file-list li {
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
-  color: var(--fg-color);
+  color: var(--text-color);
 }

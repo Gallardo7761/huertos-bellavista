@@ -1,153 +1,35 @@
 .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
 }
 
 @media (max-width: 768px) {
-    .cards-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-} 
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
 
 .loading-trigger {
-    margin-top: 2rem;
-    text-align: center;
+  margin-top: 2rem;
+  text-align: center;
 }
 
-/* ===================
-  *  SEARCH TOOLBAR
-  * =================== */
-.search-toolbar-wrapper {
-    position: sticky;
-    top: 64px;
-    z-index: 900;
-    margin-bottom: 2rem;
+
+
+.modal-content {
+  background-color: var(--modal-bg);
 }
 
-.search-toolbar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    border-radius: 999px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 0.5rem 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
+.modal-content .modal-header {
+  border-bottom: 1px solid var(--modal-header-border);
 }
 
-.light .search-toolbar {
-    background-color: rgba(255, 255, 255, 0.6);
-    border: 2px solid #ccccccaa !important;
-}
-
-.dark .search-toolbar {
-    background-color: rgba(34, 34, 34, 0.6);
-    border: 2px solid #444444aa !important;
-}
-
-.search-toolbar input.search-input {
-    all: unset;
-    flex-grow: 1;
-    width: 100%;
-    height: 32px;
-    font-size: 1.1rem;
-    font-family: "Open Sans";
-    padding-right: 1rem;
-    background: transparent !important;
-    box-shadow: none !important;
-}
-
-.search-toolbar input.search-input:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-.light .search-toolbar input.search-input {
-    color: #000;
-    
-}
-
-.dark .search-toolbar input.search-input {
-    color: #fff;
-    
-}
-
-.light .search-toolbar input.search-input::placeholder {
-    color: #000;
-}
-
-.dark .search-toolbar input.search-input::placeholder {
-    color: #fff;
-}
-
-.toolbar-buttons {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.toolbar-buttons .btn {
-    background: transparent;
-    border: none;
-    color: inherit;
-    padding: 0.25rem 0.5rem;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-}
-
-.toolbar-buttons .btn:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.light .toolbar-buttons .btn {
-    color: #111111aa;
-}
-
-.light .toolbar-buttons .btn:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.dark .toolbar-buttons .btn {
-    color: #ffffffaa;
-}
-
-.dark .toolbar-buttons .btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.light .modal-content {
-    background-color: #fff;
-}
-
-.light .modal-content .modal-header {
-    border-bottom: 1px solid #ccc;
-}
-
-.light .modal-content .modal-body {
-    background-color: #fff;
-}
-
-.dark .modal-content {
-    background-color: #222;
-}
-
-.dark .modal-content .modal-header {
-    border-bottom: 1px solid #444;
-}
-
-.dark .modal-content .modal-body {
-    background-color: #222;
+.modal-content .modal-body {
+  background-color: var(--modal-body-bg);
 }
 
 .close-button {
-    background-color: transparent !important;
-}
-
-.light .close-button {
-    color: #000;
-}
-
-.dark .close-button {
-    color: #fff;
+  background-color: transparent !important;
+  color: var(--modal-close-color);
 }

@@ -10,15 +10,17 @@
 }
 
 .mask {
-  transition: background-color 0.3s ease;
+  background-color: var(--header-mask-color);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
+  transition: background-color 0.3s ease;
 }
 
 .header-title {
   font-family: 'Product Sans';
   font-size: 3em;
   font-weight: bolder;
+  color: var(--text-color);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
@@ -28,26 +30,8 @@
 
 
 /* ================================
-     LIGHT THEME
-  ================================== */
-
-.light .mask {
-  background-color: rgba(19, 146, 85, 0.6);
-}
-
-
-/* ================================
-     DARK THEME
-  ================================== */
-
-.dark .mask {
-  background-color: rgba(8, 82, 46, 0.6);
-}
-
-
-/* ================================
-     RESPONSIVE HEADER TITLE (opcional)
-  ================================== */
+     RESPONSIVE HEADER TITLE
+================================== */
 
 @media (max-width: 768px) {
   .header-title {

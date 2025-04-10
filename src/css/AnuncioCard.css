@@ -1,4 +1,7 @@
 .anuncio-card {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -7,23 +10,14 @@
   box-shadow: 0 0.75rem 1.5rem var(--shadow-color);
 }
 
-.anuncio-card .leer-mas-link:hover {
-  text-decoration: underline;
-}
-
-/* =====================================
-     THEMING - LIGHT MODE
-  ===================================== */
-
-.anuncio-card {
-  background-color: var(--bg-color);
-  color: var(--fg-color);
-  border: var(--border-color);
-}
-
 .anuncio-card .card-header {
   background-color: var(--primary-color);
-  color: var(--fg-color);
+  color: var(--fg-color); /* mantenemos el contraste claro sobre fondo primario */
+}
+
+.anuncio-card .leer-mas-link:hover {
+  text-decoration: underline;
+  color: var(--accent-color);
 }
 
 .anuncio-card .text-muted {

@@ -8,9 +8,9 @@ import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
 
 /* CSS */
-import './css/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import './css/index.css'
 
 
 createRoot(document.getElementById('root')).render(

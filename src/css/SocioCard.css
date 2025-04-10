@@ -3,12 +3,15 @@
 ================================== */
 
 .socio-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--card-border);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .socio-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.75rem 1.5rem var(--shadow-color);
 }
 
 .socio-card img {
@@ -20,15 +23,15 @@
 ================================== */
 
 .card-header.bg-light-red {
-  background-color: #f8d7da !important;
+  background-color: var(--alert-bg) !important;
 }
 
 .card-header.bg-light-red .card-title {
-  color: var(--bs-danger) !important;
+  color: var(--priority-high) !important;
 }
 
-.bg-light-green {
-  background-color: var(--secondary-green) !important;
+.card-header.bg-light-green {
+  background-color: var(--secondary-color) !important;
 }
 
 .socio-card .card-header button {
@@ -38,6 +41,7 @@
   width: 2.25rem;
   height: 2.25rem;
   background-color: transparent;
+  color: var(--text-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,17 +49,23 @@
 }
 
 .socio-card .card-header button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--header-btn-hover);
 }
 
 /* ================================
-   LISTA y NOTAS CARD (estilo)
+   LISTA y NOTAS CARD
 ================================== */
 
 .socio-card .notas-card {
   font-size: 0.95rem;
   font-style: italic;
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+}
 
+.socio-card .list-group,
+.socio-card .notas-card {
+  border-top: none;
 }
 
 .socio-card .list-group-item {
@@ -63,62 +73,14 @@
   font-size: 0.95rem;
   background-color: transparent;
   transition: background-color 0.2s ease;
+  color: var(--text-color);
+  border-color: var(--card-border);
 }
 
 .socio-card .list-group-item:hover {
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: var(--list-hover-bg);
 }
 
-/* ================================
-   THEMING - LIGHT MODE
-================================== */
-
-.light .socio-card,
-.light .socio-card .card,
-.light .socio-card .list-group-item {
-  background-color: #ffffff;
-  color: #000000;
-  border-color: #cccccc;
-}
-
-.light .socio-card .list-group,
-.light .socio-card .notas-card {
-  border-color: #e9ecef;
-  background-color: #ffffff;
-  border-top: none;
-}
-
-.light .socio-card .text-muted {
-  color: #6c757d !important;
-}
-
-.light .socio-card .card-header button {
-  color: #000000;
-}
-
-/* ================================
-   THEMING - DARK MODE
-================================== */
-
-.dark .socio-card,
-.dark .socio-card .card,
-.dark .socio-card .list-group-item {
-  background-color: #2a2a2a;
-  color: #ffffff;
-  border-color: #444444 !important;
-}
-
-.dark .socio-card .list-group,
-.dark .socio-card .notas-card {
-  border-color: #444444 !important;
-  border-top: none;
-  background-color: #2a2a2a;
-}
-
-.dark .socio-card .text-muted {
-  color: #bbbbbb !important;
-}
-
-.dark .socio-card .card-header button {
-  color: #ffffff;
+.socio-card .text-muted {
+  color: var(--card-muted-text) !important;
 }
