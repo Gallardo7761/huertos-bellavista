@@ -38,30 +38,30 @@
 
 /* Tema Claro */
 .light {
-  /* Verdes principales ajustados */
-  --primary-color: #4CBF50;         /* Más suave que el #3CCD3F */
-  --secondary-color: #1B8F1E;       /* Menos saturado que el #0BAF0F */
-  --tertiary-color: #74D96B;        /* Versión apagada del #67EF6B */
+  /* Verdes principales aún más suaves */
+  --primary-color: #43A748;         /* Más apagado que #4CBF50 */
+  --secondary-color: #187A1C;       /* Más terroso que #1B8F1E */
+  --tertiary-color: #6DC162;        /* Verde clarito más natural */
 
   /* Verdes claros de apoyo */
-  --border-color: #B2F7A3;
-  --divider-color: #B2F7A3;
+  --border-color: #A8E9A0;
+  --divider-color: #A8E9A0;
 
   /* Fondo, texto y elementos generales */
-  --bg-color: #EDF6ED;             /* Más contrastado que #F3FFF3 */
+  --bg-color: #E5F1E5;             /* Un poco más oscuro que #EDF6ED */
   --fg-color: #1F2F1F;
   --text-color: #1F2F1F;
   --muted-color: #4F6B4F;
   --shadow-color: rgba(0, 0, 0, 0.1);
 
   /* Hover y barra de búsqueda */
-  --bg-hover-color: #E2F2E2;
-  --bg-search-bar: rgba(76, 191, 80, 0.08);
+  --bg-hover-color: #D9EAD9;
+  --bg-search-bar: rgba(67, 167, 72, 0.08);
 
   /* Inputs */
   --input-bg: #ffffff;
-  --input-border: #B2F7A3;
-  --placeholder-color: #5CA55C;
+  --input-border: #A8E9A0;
+  --placeholder-color: #569B56;
   --input-text: var(--text-color);
 
   /* Botones y acentos */
@@ -77,9 +77,10 @@
 
   /* Tarjetas (Cards) */
   --card-bg: #ffffff;
-  --card-border: #d8ecd8;
+  --card-button: #fff;
+  --card-border: #cecece;
   --card-text: var(--text-color);
-  --card-btn-hover: rgba(76, 191, 80, 0.06);
+  --card-btn-hover: rgba(67, 167, 72, 0.06);
   --card-muted-text: var(--muted-color);
 
   /* Items, subtítulos */
@@ -88,7 +89,7 @@
   --subtitle-color: var(--muted-color);
 
   /* Login / formularios */
-  --login-bg: #F0FAF0;
+  --login-bg: #EAF7EA;
   --label-color: var(--text-color);
   --login-btn-bg: var(--primary-color);
   --login-btn-hover: var(--secondary-color);
@@ -96,19 +97,19 @@
   --login-btn-text-hover: var(--text-color);
 
   /* Header */
-  --header-mask-color: #1B8F1Eaa;
+  --header-mask-color: #187A1Caa;
 
   /* Navbar */
   --navbar-bg: #ffffff;
   --navbar-brand-color: var(--primary-color);
   --navbar-brand-hover: var(--secondary-color);
-  --navbar-link-color: #2F4F2F;
-  --navbar-link-hover-bg: rgba(76, 191, 80, 0.08);
+  --navbar-link-color: #2E462E;
+  --navbar-link-hover-bg: #ffffff;
   --navbar-link-hover-color: var(--secondary-color);
   --navbar-dropdown-bg: #ffffff;
   --navbar-dropdown-item-color: var(--text-color);
   --navbar-dropdown-item-hover-color: var(--primary-color);
-  --navbar-divider-color: #B2F7A3;
+  --navbar-divider-color: #A8E9A0;
   --hamburger-color: var(--primary-color);
   --navbar-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 
@@ -118,15 +119,15 @@
   --header-btn-hover: rgba(0, 0, 0, 0.05);
 
   /* Listas (hover/active) */
-  --list-hover-bg: rgba(76, 191, 80, 0.03);
-  --list-hover-bg-light: #E9F9E9;
-  --list-active-bg-light: #CFF5CF;
+  --list-hover-bg: rgba(67, 167, 72, 0.03);
+  --list-hover-bg-light: #E4F4E4;
+  --list-active-bg-light: #C3EAC3;
 
   /* Search */
   --search-bg: rgba(255, 255, 255, 0.6);
-  --search-border: #1B8F1E;
+  --search-border: #187A1C;
   --search-input-color: var(--text-color);
-  --search-placeholder: #5CA55C;
+  --search-placeholder: #569B56;
 
   /* Toolbar */
   --toolbar-btn-color: var(--fg-color);
@@ -134,13 +135,14 @@
 
   /* Modal */
   --modal-bg: #ffffff;
-  --modal-header-border: #B2F7A3;
+  --modal-header-border: #A8E9A0;
   --modal-body-bg: #ffffff;
   --modal-close-color: var(--text-color);
 
   /* Contacto / secciones de info */
-  --contact-info-bg: #EDF6ED;
+  --contact-info-bg: #E5F1E5;
 }
+
 
 /* Tema Oscuro */
 .dark {
@@ -184,8 +186,10 @@
   
   /* Tarjetas (Cards) */
   --card-bg: #283221;
+  --card-button: #283221;
   --card-border: #353F2D;
   --card-text: var(--text-color);
+  --card-text-secondary: #283221;
   --card-btn-hover: rgba(255, 255, 255, 0.05);
   
   /* Elementos de lista, items... */
@@ -194,7 +198,7 @@
   --subtitle-color: var(--muted-color);
   
   /* Login / formularios */
-  --login-bg: #1F2919;
+  --login-bg: #283221;
   --input-text: var(--text-color);
   --label-color: var(--text-color);
   --login-btn-bg: var(--primary-color);
@@ -210,7 +214,7 @@
   --navbar-brand-color: var(--primary-color);
   --navbar-brand-hover: var(--secondary-color);
   --navbar-link-color: #d8e8c0;
-  --navbar-link-hover-bg: rgba(169, 223, 88, 0.1);
+  --navbar-link-hover-bg: #283221;
   --navbar-link-hover-color: var(--secondary-color);
   --navbar-dropdown-bg: #283221;
   --navbar-dropdown-item-color: #f0f0f0;
@@ -293,6 +297,10 @@ select {
 
 input::placeholder,
 textarea::placeholder {
+  color: var(--placeholder-color) !important;
+}
+
+input.form-control ::after {
   color: var(--placeholder-color) !important;
 }
 

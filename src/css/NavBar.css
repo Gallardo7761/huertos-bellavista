@@ -42,22 +42,8 @@ a.nav-link,
 
 .nav-link:hover,
 .nav-link:focus {
-  background-color: var(--navbar-link-hover-bg);
+  background-color: var(--navbar-link-hover-bg)  !important;
   color: var(--navbar-link-hover-color) !important;
-}
-
-.dropdown-menu {
-  background-color: var(--navbar-dropdown-bg);
-  box-shadow: 0 5px 10px var(--shadow-color);
-}
-
-.dropdown-item {
-  color: var(--navbar-dropdown-item-color);
-}
-
-.dropdown-item:hover {
-  color: var(--navbar-dropdown-item-hover-color);
-  background-color: transparent;
 }
 
 hr {

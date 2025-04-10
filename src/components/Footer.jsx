@@ -18,7 +18,7 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="footer d-flex flex-column align-items-center gap-5 py-5 px-4">
+    <footer className="footer d-flex flex-column align-items-center gap-5 pt-5 px-4">
       <div className="footer-columns w-100" style={{ maxWidth: '900px' }}>
         {/* Columna 1 - Contacto */}
         <div className="footer-column">
@@ -50,8 +50,8 @@ const Footer = () => {
         </div> */}
       </div>
 
-      <div className="footer-bottom w-100 text-center">
-        <h6 id="devd">
+      <div className="footer-bottom w-100 py-5 text-center">
+        <h6 id="devd" className='m-0'>
           Hecho con <span className="heart-anim">{heart}</span> por{' '}
           <a href="https://gallardo.dev" target="_blank" rel="noopener noreferrer">
             Gallardo7761

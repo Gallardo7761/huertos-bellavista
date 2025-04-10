@@ -8,11 +8,18 @@
 }
 
 .dropdown-menu.show {
-  background-color: var(--bg-color) !important;
+  background-color: var(--navbar-bg) !important;
+  box-shadow: 0 5px 10px var(--shadow-color);
 }
 
-.dropdown-menu:hover {
-  background-color: var(--bg-color) !important;
+.dropdown-item {
+  background-color: var(--navbar-bg) !important;
+  color: var(--navbar-dropdown-item-color);
+}
+
+.dropdown-item:hover {
+  background-color: var(--navbar-bg) !important;
+  color: var(--secondary-color) !important;
 }
 
 .disabled.text-muted {

@@ -89,7 +89,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
   return (
-    <MotionCard className="socio-card shadow-sm rounded-4 border-0 h-100">
+    <MotionCard className="socio-card shadow-sm rounded-4 h-100">
       <Card.Header className={`d-flex align-items-center rounded-4 rounded-bottom-0 justify-content-between ${getHeaderColor(formData.status)}`}>
         <div className="d-flex align-items-center p-1 m-0">
           <img src={getPFP(formData.type)} width="36" className="rounded me-3" alt="PFP" />
@@ -113,7 +113,8 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
         {!createMode && (
           <AnimatedDropdown
           className='end-0'
-          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>
+          buttonStyle='card-button'
+          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
@@ -162,7 +163,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           ))}
         </ListGroup>
 
-        <Card className="mt-3 border-1 rounded-3 shadow-sm">
+        <Card className="mt-3 border-1 rounded-3 notas-card">
           <Card.Body>
             <Card.Subtitle className="mb-2 text-muted">
               <FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS

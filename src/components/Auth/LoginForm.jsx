@@ -93,7 +93,7 @@ const LoginForm = () => {
                                     value={formState.keepLoggedIn}
                                     onChange={(e) => { formState.keepLoggedIn = e.target.checked; setFormState({ ...formState }) }}
                                 />
-                                <Link disabled to="#" className="text-secondary">
+                                <Link disabled to="#" className="muted">
                                     Olvidé mi contraseña
                                 </Link>
                             </div>
