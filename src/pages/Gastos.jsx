@@ -45,7 +45,7 @@ const Gastos = () => {
 };
 
 const GastosContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
   const [showPDFModal, setShowPDFModal] = useState(false);
 
   const {

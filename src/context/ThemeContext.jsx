@@ -1,37 +1,31 @@
 import { createContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 
-const ThemeContext = createContext();
+export const ThemeContext = createContext();
 
-export function ThemeProvider({ children }) {
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("theme") || 
-         (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    });
-
-    useEffect(() => {
-        document.body.classList.remove("light", "dark");
-        document.body.classList.add(theme);
-
-        document.querySelector("html").classList.remove("light", "dark");
-        document.querySelector("html").classList.add(theme);
-    
-        localStorage.setItem("theme", theme);
-    }, [theme]);    
-
-    const toggleTheme = () => {
-        setTheme(prevTheme => (prevTheme === "light" ? "dark" : "light"));
-    };
-
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(() => {
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
-        </ThemeContext.Provider>
+      localStorage.getItem("theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
     );
-}
+  });
 
-ThemeProvider.propTypes = {
-    children: PropTypes.node.isRequired,
+  useEffect(() => {
+    const root = document.documentElement;
+    document.body.classList.remove("light", "dark");
+    document.body.classList.add(theme);
+    root.classList.remove("light", "dark");
+    root.classList.add(theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
-
-export { ThemeContext };

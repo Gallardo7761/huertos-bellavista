@@ -47,7 +47,7 @@ const Ingresos = () => {
 };
 
 const IngresosContent = ({ config }) => {
-    const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
+    const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
     const [showPDFModal, setShowPDFModal] = useState(false);
 
     const {

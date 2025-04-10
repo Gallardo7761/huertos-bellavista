@@ -1,69 +1,49 @@
-// AuthContext adaptado al nuevo modelo con data.token y data.member
-import { createContext, useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useConfig } from "../hooks/useConfig";
+import { useState, useEffect, createContext } from "react";
 import axios from "axios";
+import { useConfig } from "../hooks/useConfig";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const { config } = useConfig();
-
-  const [user, setUser] = useState(() => {
-    const stored = JSON.parse(localStorage.getItem("user"));
-    return stored || null;
-  });
-
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [authStatus, setAuthStatus] = useState("checking");
   const [error, setError] = useState(null);
 
   const BASE_URL = config?.apiConfig.baseUrl;
-  const LOGIN_ENDPOINT = config?.apiConfig.endpoints.auth.login;
-  const VALIDATE_TOKEN_ENDPOINT = config?.apiConfig.endpoints.auth.validateToken;
-  const LOGIN_URL = `${BASE_URL}${LOGIN_ENDPOINT}`;
-  const VALIDATE_TOKEN_URL = `${BASE_URL}${VALIDATE_TOKEN_ENDPOINT}`;
+  const LOGIN_URL = `${BASE_URL}${config?.apiConfig.endpoints.auth.login}`;
+  const VALIDATE_URL = `${BASE_URL}${config?.apiConfig.endpoints.auth.validateToken}`;
 
   useEffect(() => {
+    if (!token || !VALIDATE_URL) return;
     const checkAuth = async () => {
       try {
-        const response = await axios.get(VALIDATE_TOKEN_URL, {
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        const res = await axios.get(VALIDATE_URL, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        if (response.status === 200) {
-          setAuthStatus("authenticated");
-        } else {
-          logout();
-        }
+        if (res.status === 200) setAuthStatus("authenticated");
+        else logout();
       } catch {
         logout();
       }
     };
-
     checkAuth();
-  }, [token, config, VALIDATE_TOKEN_URL]);
+  }, [token, VALIDATE_URL]);
 
   const login = async (formData) => {
     setError(null);
-    try {
-      const response = await axios.post(LOGIN_URL, formData, {
-        headers: { "Content-Type": "application/json" },
-      });
+    const res = await axios.post(LOGIN_URL, formData);
+    const { token, member, tokenTime } = res.data.data;
 
-      const { token, member, tokenTime } = response.data.data;
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(member));
+    localStorage.setItem("tokenTime", tokenTime);
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(member));
-      localStorage.setItem("tokenTime", tokenTime);
-
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      setToken(token);
-      setUser(member);
-      setAuthStatus("authenticated");
-    } catch (err) {
-      setError(err.response?.data?.message || "Error de login");
-      throw err;
-    }
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setToken(token);
+    setUser(member);
+    setAuthStatus("authenticated");
   };
 
   const logout = () => {
@@ -80,9 +60,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export { AuthContext };

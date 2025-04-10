@@ -23,18 +23,18 @@ const ListaEspera = () => {
 
     return(
         <DataProvider config={reqConfig}>
-            <ListaEsperaContent />
+            <ListaEsperaContent config={reqConfig} />
         </DataProvider>
     );
 }
 
-const ListaEsperaContent = () => {
-    const { data, dataLoading, dataError } = useData();
+const ListaEsperaContent = ({ config }) => {
+    const { data, dataLoading, dataError } = useData(config);
 
     if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
     if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
-    const config = {
+    const displayConfig = {
         title: 'display_name',
         subtitle: 'created_at',
         showIndex: true
@@ -55,7 +55,7 @@ const ListaEsperaContent = () => {
             <ContentWrapper>
                 <h1 className='section-title'>Lista de Espera</h1>
                 <hr className="section-divider" />
-                <List datos={mapped} config={config} />
+                <List datos={mapped} config={displayConfig} />
             </ContentWrapper>
         </CustomContainer>
     );

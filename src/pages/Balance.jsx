@@ -20,13 +20,13 @@ const Balance = () => {
 
   return (
     <DataProvider config={reqConfig}>
-        <BalanceContent/>
+        <BalanceContent config={reqConfig}/>
     </DataProvider>
   );
 };
 
-const BalanceContent = () => {
-  const { data, dataLoading, dataError } = useData();
+const BalanceContent = ({ config }) => {
+  const { data, dataLoading, dataError } = useData(config);
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;

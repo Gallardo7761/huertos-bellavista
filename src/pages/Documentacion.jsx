@@ -36,7 +36,7 @@ const Documentacion = () => {
 };
 
 const DocumentacionContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, deleteDataWithBody } = useData();
+  const { data, dataLoading, dataError, postData, deleteDataWithBody } = useData(config);
   const fileUploadRef = useRef();
 
   const handleSelectFiles = async (files) => {

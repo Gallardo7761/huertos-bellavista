@@ -38,7 +38,7 @@ const Anuncios = () => {
 };
 
 const AnunciosContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
 
   const {
     paginated,

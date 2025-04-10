@@ -23,9 +23,9 @@ const Socios = () => {
 
   if (configLoading) return <p><LoadingIcon /></p>;
 
-  const HOST = config.apiConfig.baseUrl;
+  const HOST = config?.apiConfig.baseUrl;
   const BASE = `${HOST}`;
-  const ENDPOINT = config.apiConfig.endpoints.members.all;
+  const ENDPOINT = config?.apiConfig.endpoints.members.all;
 
   const reqConfig = {
     baseUrl: BASE + ENDPOINT,
@@ -43,7 +43,7 @@ const Socios = () => {
 };
 
 const SociosContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useData();
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
   const [showPDFModal, setShowPDFModal] = useState(false);
 
   const {
