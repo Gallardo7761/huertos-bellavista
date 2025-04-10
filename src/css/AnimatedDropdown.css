@@ -1,21 +1,12 @@
-.light .dropdown-menu .dropdown-divider {
-  border-top: 1px solid #dee2e6;
+.dropdown-menu .dropdown-divider {
+  border-top: 1px solid var(--divider-color);
 }
 
-.dark .dropdown-menu .dropdown-divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.light .dropdown-menu {
-  background-color: var(--white);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.dark .dropdown-menu {
-  background-color: var(--dark-green);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+.dropdown-menu {
+  background-color: var(--bg-color);
+  box-shadow: 0 8px 16px var(--shadow-color);
 }
 
 .disabled.text-muted {
-  color: #979fa5 !important;
+  color: var(--muted-color) !important;
 }

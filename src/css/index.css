@@ -26,37 +26,43 @@
   src: url('/fonts/ProductSansBold.ttf');
 }
 
-
 /* ================================
-   VARIABLES POR TEMA
+  PALETA DE COLORES v2
 ================================== */
 
+:root {
+  --priority-high: var(--bs-danger);
+  --priority-medium: var(--bs-warning);
+  --priority-low: var(--bs-success);
+}
+
 .light {
-  --white: #f8f9fa;
-  --light-green: #3e8f5a;
-  --dark-green: #132c18;
-  --bg-green: #bad3b9;
-  --secondary-green: #81c784;
-  --text-color: var(--dark-green);
-  --input-bg: #ffffff;
-  --input-border: #ced4da;
-  --placeholder-color: #6c757d;
-  --sticky-bg-color: #ffffffee;
+  --primary-color: #84F879;
+  --secondary-color: #2EC748;
+  --tertiary-color: #59ac51;
+  --border-color: #9DFE94;
+  --fg-color: #222E22;
+  --bg-color: #eeeae2;
+  --bg-hover-color: #c8c2b8;
+  --bg-search-bar: #E4DDD1EE;
+  --divider-color: #DEE2E6;
+  --muted-color: #6c757d;
+  --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 .dark {
-  --white: #f8f9fa;
-  --light-green: #81c784;
-  --dark-green: #121212;
-  --bg-green: #121212;
-  --secondary-green: #3e8f5a;
-  --text-color: var(--white);
-  --input-bg: #1e1e1e;
-  --input-border: #555;
-  --placeholder-color: #999;
-  --sticky-bg-color: #222222ee;
+  --primary-color: #94C756;
+  --secondary-color: #3C4B3C;
+  --tertiary-color: #cffa9b;
+  --border-color: #75AC39;
+  --fg-color: #E4DDD1;
+  --bg-color: #222E22;
+  --bg-hover-color: #3b3b3b;
+  --bg-search-bar: #2E2E2EEE;
+  --divider-color: #3C4B3C;
+  --muted-color: #999;
+  --shadow-color: rgba(0, 0, 0, 0.1);
 }
-
 
 /* ================================
    ESTILOS BASE / RESET SUAVE

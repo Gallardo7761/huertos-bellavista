@@ -1,4 +1,3 @@
-// AnuncioCard.jsx mejorado con edición, creación y control de errores
 import { useState } from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
@@ -77,7 +76,8 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
         {!createMode && !editMode && (
           <AnimatedDropdown
             className='end-0'
-            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>            
+            buttonStyle='bg-transparent border-0'
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>            
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
