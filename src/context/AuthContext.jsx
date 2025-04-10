@@ -16,20 +16,28 @@ export const AuthProvider = ({ children }) => {
   const VALIDATE_URL = `${BASE_URL}${config?.apiConfig.endpoints.auth.validateToken}`;
 
   useEffect(() => {
-    if (!token || !VALIDATE_URL) return;
+    if (!token || !config) return;
+  
+    const BASE_URL = config.apiConfig.baseUrl;
+    const VALIDATE_URL = `${BASE_URL}${config.apiConfig.endpoints.auth.validateToken}`;
+  
     const checkAuth = async () => {
       try {
         const res = await axios.get(VALIDATE_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.status === 200) setAuthStatus("authenticated");
-        else logout();
+        if (res.status === 200) {
+          setAuthStatus("authenticated");
+        } else {
+          logout();
+        }
       } catch {
         logout();
       }
     };
+  
     checkAuth();
-  }, [token, VALIDATE_URL]);
+  }, [token, config]);  
 
   const login = async (formData) => {
     setError(null);

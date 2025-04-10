@@ -68,7 +68,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
           <h5 className="mb-1 fw-bold">
             <span className="me-2">📢</span>Anuncio #{anuncio.announce_id}
           </h5>
-          <small className="text-muted">
+          <small className="muted">
             Publicado el {date} a las {time} por{' '}
             <span className="fw-semibold">{formData.published_by}</span>
           </small>

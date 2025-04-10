@@ -34,7 +34,7 @@
   color: var(--priority-high) !important;
 }
 
-.card-header.bg-light-green {
+.bg-light-green.card-header {
   background-color: var(--secondary-color) !important;
 }
 
@@ -88,6 +88,6 @@
   background-color: var(--list-hover-bg);
 }
 
-.socio-card .text-muted {
-  color: var(--card-muted-text) !important;
+.socio-card .card-subtitle.h6 {
+  color: var(--text-color) !important;
 }

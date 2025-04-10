@@ -165,7 +165,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
         <Card className="mt-3 border-1 rounded-3 notas-card">
           <Card.Body>
-            <Card.Subtitle className="mb-2 text-muted">
+            <Card.Subtitle className="mb-2">
               <FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS
             </Card.Subtitle>
             {editMode ? (

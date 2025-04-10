@@ -80,6 +80,7 @@
   --card-button: #fff;
   --card-border: #cecece;
   --card-text: var(--text-color);
+  --card-text-secondary: #fff;
   --card-btn-hover: rgba(67, 167, 72, 0.06);
   --card-muted-text: var(--muted-color);
 
@@ -125,7 +126,7 @@
 
   /* Search */
   --search-bg: rgba(255, 255, 255, 0.6);
-  --search-border: #187A1C;
+  --search-border: #347b36;
   --search-input-color: var(--text-color);
   --search-placeholder: #569B56;
 
@@ -141,6 +142,8 @@
 
   /* Contacto / secciones de info */
   --contact-info-bg: #E5F1E5;
+
+  --balance-report-bg: #ffffff;
 }
 
 
@@ -231,8 +234,8 @@
   --list-hover-bg: rgba(255, 255, 255, 0.03);
   --list-hover-bg-dark: #404833;
   --list-active-bg-dark: #4f5a3b;
-  --search-bg: rgba(31, 41, 25, 0.7);
-  --search-border: #52910A;  /* Otro verde más intenso */
+  --search-bg: #1f2919b3;
+  --search-border: #697b54;  /* Otro verde más intenso */
   --search-input-color: #f0f0f0;
   --search-placeholder: #c0d0b0;
   --toolbar-btn-color: #dbe5cb;
@@ -242,6 +245,8 @@
   --modal-body-bg: #283221;
   --modal-close-color: #fff;
   --contact-info-bg: #1F2919;
+
+  --balance-report-bg: #283221;
 }
 
 /* ================================
@@ -414,4 +419,18 @@ input[type="color"]:focus,
 
 .toolbar-buttons .btn:hover {
   background-color: var(--toolbar-btn-hover);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 2px solid var(--modal-header-border);
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+}
+
+.modal-body {
+  background-color: transparent !important;
 }

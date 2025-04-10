@@ -1,8 +1,9 @@
 .anuncio-card {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
+  background-color: var(--card-bg) !important;
+  color: var(--card-text);
+  border: none !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: "Open Sans", sans-serif;
 }
 
 .anuncio-card:hover {
@@ -11,30 +12,58 @@
 }
 
 .anuncio-card .card-header {
-  background-color: var(--primary-color);
-  color: var(--fg-color); /* mantenemos el contraste claro sobre fondo primario */
+  background-color: var(--secondary-color) !important;
+  color: var(--card-text-secondary) !important;
+  border-bottom: 1px solid var(--divider-color);
+}
+
+.anuncio-card .card-header button {
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: transparent;
+  color: var(--card-button) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.anuncio-card .card-header button:hover {
+  background-color: var(--header-btn-hover);
+}
+
+.anuncio-card .leer-mas-link {
+  font-weight: 600;
+  color: var(--accent-color);
+  transition: color 0.2s ease;
 }
 
 .anuncio-card .leer-mas-link:hover {
   text-decoration: underline;
-  color: var(--accent-color);
+  color: var(--btn-bg-hover);
 }
 
 .anuncio-card .text-muted {
-  color: var(--muted-color) !important;
+  color: var(--card-muted-text) !important;
+}
+
+.anuncio-card .priority-footer {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-top: 1px solid var(--divider-color);
 }
 
 .anuncio-card .priority-low .priority-footer {
-  background-color: var(--bg-color);
-  color: var(--priority-low);
+  color: var(--tertiary-color);
 }
 
 .anuncio-card .priority-medium .priority-footer {
-  background-color: var(--bg-color);
-  color: var(--priority-medium);
+  color: var(--accent-color);
 }
 
 .anuncio-card .priority-high .priority-footer {
-  background-color: var(--bg-color);
-  color: var(--priority-high);
+  color: #dc3545; /* Rojo alerta, puedes usar uno del theme si has definido prioridad alta */
 }

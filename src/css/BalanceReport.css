@@ -1,8 +1,8 @@
-.balance-report {
+.balance-report.card {
   border-radius: 1.75rem;
   box-shadow: 0 6px 24px var(--shadow-color);
   transition: background-color 0.3s ease;
-  background-color: var(--bg-color);
+  background-color: var(--balance-report-bg);
   color: var(--text-color);
   border: 1px solid var(--border-color);
 }
