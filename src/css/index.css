@@ -104,7 +104,7 @@
   --navbar-bg: #ffffff;
   --navbar-brand-color: var(--primary-color);
   --navbar-brand-hover: var(--secondary-color);
-  --navbar-link-color: #2E462E;
+  --navbar-link-color: #2e462e;
   --navbar-link-hover-bg: #ffffff;
   --navbar-link-hover-color: var(--secondary-color);
   --navbar-dropdown-bg: #ffffff;
@@ -433,4 +433,34 @@ input[type="color"]:focus,
 
 .modal-body {
   background-color: transparent !important;
+}
+
+.form-control ~ label {
+  color: var(--text-color) !important;
+}
+
+.form-control:focus ~ label {
+  color: var(--text-color) !important;
+}
+
+.card-header span:not(.badge) {
+  font-size: 1.1rem;
+}
+
+.card-header span:not(.badge),small {
+  color: var(--card-text-secondary) !important;
+}
+
+.custom-toggler svg {
+  width: 30px;
+  height: 30px;
+  transition: stroke 0.2s ease;
+}
+
+button.custom-toggler {
+  background: transparent !important;
+  border: none !important;
+  color: var(--secondary-color) !important;
+  font-size: 1.5rem !important;
+  transition: background-color 0.2s ease !important;
 }

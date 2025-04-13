@@ -18,17 +18,6 @@
   color: var(--navbar-brand-hover) !important;
 }
 
-button.custom-hamburger.navbar-toggler {
-  margin-bottom: 1rem;
-  transition: all 0.1s ease-in-out;
-  color: var(--hamburger-color);
-  background-color: transparent;
-}
-
-button.custom-hamburger.navbar-toggler.collapsed {
-  margin-bottom: 0 !important;
-}
-
 a.nav-link,
 .nav-item > a.nav-link,
 .dropdown-item {

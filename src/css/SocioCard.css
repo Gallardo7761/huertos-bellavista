@@ -31,7 +31,7 @@
 }
 
 .card-header.bg-light-red .card-title {
-  color: var(--priority-high) !important;
+  color: var(--alert-text) !important;
 }
 
 .bg-light-green.card-header {

@@ -5,20 +5,22 @@ export const useData = (config) => {
   const [data, setData] = useState(null);
   const [dataLoading, setLoading] = useState(true);
   const [dataError, setError] = useState(null);
-  const prevConfigKey = useRef(null);
+
+  const configRef = useRef(config);
+  configRef.current = config; // Se actualiza siempre
 
   const getAuthHeaders = () => ({
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${localStorage.getItem("token")}`
+    "Authorization": `Bearer ${localStorage.getItem("token")}`,
   });
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(config.baseUrl, {
+      const response = await axios.get(configRef.current.baseUrl, {
         headers: getAuthHeaders(),
-        params: config.params,
+        params: configRef.current.params,
       });
       setData(response.data.data);
     } catch (err) {
@@ -26,14 +28,11 @@ export const useData = (config) => {
     } finally {
       setLoading(false);
     }
-  }, [config]);
+  }, []); // ← sin dependencias
 
   useEffect(() => {
-    const configKey = JSON.stringify(config);
-    if (prevConfigKey.current === configKey) return;
-    prevConfigKey.current = configKey;
     fetchData();
-  }, [config, fetchData]);
+  }, [fetchData, JSON.stringify(config)]); // se vuelve a ejecutar si cambia el config
 
   const postData = async (endpoint, payload) => {
     const headers = {
@@ -41,7 +40,7 @@ export const useData = (config) => {
       ...(payload instanceof FormData ? {} : { "Content-Type": "application/json" }),
     };
     const response = await axios.post(endpoint, payload, { headers });
-    await fetchData();
+    await fetchData(); // ← SIEMPRE usa el último config
     return response.data.data;
   };
 

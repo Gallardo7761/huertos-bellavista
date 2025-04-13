@@ -57,7 +57,7 @@ const DocumentacionContent = ({ config }) => {
 
     try {
       await postData(config.uploadUrl, formData);
-      fileUploadRef.current?.resetSelectedFiles(); // Limpiar input
+      fileUploadRef.current?.resetSelectedFiles();
     } catch (err) {
       console.error("Error al subir archivo:", err);
     }

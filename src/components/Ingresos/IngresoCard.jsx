@@ -92,7 +92,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           </small>
         </div>
         {!createMode && (
-          <AnimatedDropdown className='end-0' icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>
+          <AnimatedDropdown className='end-0' icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { setEditMode(true); closeDropdown(); }}>

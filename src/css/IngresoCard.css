@@ -3,9 +3,9 @@
 ================================== */
 
 .ingreso-card {
-  background-color: var(--card-bg);
-  color: var(--card-text);
-  border: 1px solid var(--card-border);
+  background-color: var(--card-bg) !important;
+  color: var(--text-color);
+  border: none !important;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -22,18 +22,6 @@
    CARD HEADER
 ================================== */
 
-.card-header.bg-light-red {
-  background-color: var(--alert-bg) !important;
-}
-
-.card-header.bg-light-red .card-title {
-  color: var(--priority-high) !important;
-}
-
-.card-header.bg-light-green {
-  background-color: var(--secondary-color) !important;
-}
-
 .ingreso-card .card-header button {
   border: none;
   border-radius: 50%;
@@ -41,7 +29,7 @@
   width: 2.25rem;
   height: 2.25rem;
   background-color: transparent;
-  color: var(--card-text);
+  color: var(--card-button) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,5 +37,5 @@
 }
 
 .ingreso-card .card-header button:hover {
-  background-color: var(--card-btn-hover);
+  background-color: var(--header-btn-hover);
 }

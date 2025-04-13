@@ -5,12 +5,13 @@
   text-align: center;
   cursor: pointer;
   border: 2px dashed var(--primary-color) !important;
-  background-color: var(--bg-color);
+  background-color: var(--bg-color) !important;
   color: var(--text-color);
 }
 
 .upload-card:hover {
   border: 2px dashed var(--tertiary-color) !important;
+  background-color: var(--bg-hover-color) !important;
 }
 
 .upload-card.highlight {

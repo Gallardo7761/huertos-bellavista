@@ -54,16 +54,5 @@
   padding: 0.5rem 1rem;
   font-weight: bold;
   border-top: 1px solid var(--divider-color);
-}
-
-.anuncio-card .priority-low .priority-footer {
-  color: var(--tertiary-color);
-}
-
-.anuncio-card .priority-medium .priority-footer {
-  color: var(--accent-color);
-}
-
-.anuncio-card .priority-high .priority-footer {
-  color: #dc3545; /* Rojo alerta, puedes usar uno del theme si has definido prioridad alta */
+  color: var(--card-text);
 }

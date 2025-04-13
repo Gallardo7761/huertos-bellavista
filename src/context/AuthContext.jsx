@@ -1,10 +1,11 @@
 import { useState, useEffect, createContext } from "react";
-import axios from "axios";
+import createAxiosInstance from "../api/axiosInstance";
 import { useConfig } from "../hooks/useConfig";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const axios = createAxiosInstance();
   const { config } = useConfig();
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -48,14 +49,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(member));
     localStorage.setItem("tokenTime", tokenTime);
 
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     setToken(token);
     setUser(member);
     setAuthStatus("authenticated");
   };
 
   const logout = () => {
-    delete axios.defaults.headers.common["Authorization"];
     localStorage.clear();
     setUser(null);
     setToken(null);

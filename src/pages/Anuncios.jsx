@@ -2,7 +2,6 @@ import { useConfig } from '../hooks/useConfig';
 import { useData } from '../hooks/useData';
 import { usePaginatedList } from '../hooks/usePaginatedList';
 import { DataProvider } from '../context/DataContext';
-import useInfiniteScroll from '../hooks/useInfiniteScroll';
 
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
@@ -89,8 +88,6 @@ const AnunciosContent = ({ config }) => {
       esteMes: true
     }
   });
-
-  useInfiniteScroll(loaderRef, loading);
 
   const handleCreate = () => {
     const grid = document.querySelector('.cards-grid');

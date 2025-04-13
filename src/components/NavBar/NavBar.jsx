@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSignIn,
   faUser,
-  faSignOut
+  faSignOut,
+  faHouse
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../../css/NavBar.css';
 
-import NavHome from './NavHome';
 import NavListaEspera from './NavListaEspera';
 import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
@@ -29,6 +29,7 @@ const NavBar = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [showingUserDropdown, setShowingUserDropdown] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const collapse = document.querySelector(".navbar-collapse");
@@ -37,14 +38,48 @@ const NavBar = () => {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (expanded) {
+      const collapse = document.querySelector(".navbar-collapse");
+      if (collapse?.classList.contains("show")) {
+        collapse.classList.remove("show");
+      }
+    } else {
+      const collapse = document.querySelector(".navbar-collapse");
+      if (!collapse?.classList.contains("show")) {
+        collapse.classList.add("show");
+      }
+    }
+  }, [expanded]);
+
+
   return (
-    <Navbar expand="lg" sticky="top">
+    <Navbar expand="lg" sticky="top" expanded={expanded} onToggle={() => setExpanded(!expanded)}>
       <Container fluid>
-        <Navbar.Toggle aria-controls="main-navbar" className="custom-hamburger" />
+        <Navbar.Toggle aria-controls="navbar" className="custom-toggler">
+          <svg width="30" height="30" viewBox="0 0 30 30">
+            <path
+              d="M4 7h22M4 15h22M4 23h22"
+              stroke="var(--navbar-link-color)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeMiterlimit="10"
+            />
+          </svg>
+        </Navbar.Toggle>
 
         <Navbar.Collapse id="main-navbar">
           <Nav className="me-auto gap-2">
-            <NavHome />
+            <Nav.Link
+              as={Link}
+              to="/"
+              title="Inicio"
+              href="/"
+              className={expanded ? "mt-3" : ""}
+            >
+              <FontAwesomeIcon icon={faHouse} className="me-2" />
+              Inicio
+            </Nav.Link>
             <NavListaEspera />
             <NavHerramientas />
             <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>

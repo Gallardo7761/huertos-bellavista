@@ -6,9 +6,9 @@ import { faEdit, faTrash, faEllipsisVertical } from '@fortawesome/free-solid-svg
 import '../../css/AnuncioCard.css';
 
 const PRIORITY_CONFIG = {
-  0: { label: 'Baja', className: 'priority-low' },
-  1: { label: 'Media', className: 'priority-medium' },
-  2: { label: 'Alta', className: 'priority-high' },
+  0: { label: 'BAJA', className: 'text-success' },
+  1: { label: 'MEDIA', className: 'text-warning' },
+  2: { label: 'ALTA', className: 'text-danger' },
 };
 
 const formatDateTime = (iso) => {
@@ -56,21 +56,21 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
-  const { date, time } = formatDateTime(anuncio.created_at || new Date());
+  const { date, time } = formatDateTime(anuncio.created_at);
   const priorityInfo = PRIORITY_CONFIG[formData.priority] || PRIORITY_CONFIG[1];
   const isLongBody = formData.body.length > 300 && !showFullBody;
   const displayBody = isLongBody ? `${formData.body.slice(0, 300)}...` : formData.body;
 
   return (
-    <Card className={`anuncio-card rounded-4 border-0 shadow-sm mb-4 ${priorityInfo.className}`}>      
+    <Card className={`anuncio-card rounded-4 border-0 shadow-sm mb-4`}>      
       <Card.Header className="d-flex justify-content-between align-items-center rounded-top-4 px-3 py-2">
         <div className="d-flex flex-column">
-          <h5 className="mb-1 fw-bold">
-            <span className="me-2">📢</span>Anuncio #{anuncio.announce_id}
-          </h5>
+          <span className="fw-bold">
+          📢&emsp;Anuncio #{anuncio.announce_id}
+          </span>
           <small className="muted">
-            Publicado el {date} a las {time} por{' '}
-            <span className="fw-semibold">{formData.published_by}</span>
+            Publicado el {date} a las {time} por{' #'}
+            <span className="fw-semibold">{anuncio.published_by}</span>
           </small>
         </div>
         {!createMode && !editMode && (
@@ -139,7 +139,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
 
       {!editMode && (
         <Card.Footer className="priority-footer text-center rounded-bottom-4 fw-medium py-2">
-          Prioridad: <span className="fw-bold">{priorityInfo.label}</span>
+          Prioridad: <span className={`fw-bold ${priorityInfo.className}`}>{priorityInfo.label}</span>
         </Card.Footer>
       )}
     </Card>
