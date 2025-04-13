@@ -52,6 +52,17 @@ const NavBar = () => {
     }
   }, [expanded]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 992) {
+        setExpanded(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  });
+
 
   return (
     <Navbar expand="lg" sticky="top" expanded={expanded} onToggle={() => setExpanded(!expanded)}>

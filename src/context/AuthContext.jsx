@@ -17,7 +17,10 @@ export const AuthProvider = ({ children }) => {
   const VALIDATE_URL = `${BASE_URL}${config?.apiConfig.endpoints.auth.validateToken}`;
 
   useEffect(() => {
-    if (!token || !config) return;
+    if (!token || !config) {
+      setAuthStatus("unauthenticated");
+      return;
+    }  
   
     const BASE_URL = config.apiConfig.baseUrl;
     const VALIDATE_URL = `${BASE_URL}${config.apiConfig.endpoints.auth.validateToken}`;

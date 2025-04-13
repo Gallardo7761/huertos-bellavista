@@ -432,6 +432,10 @@ input[type="color"]:focus,
 }
 
 .modal-body {
+  background-color: transparent;
+}
+
+.modal-dialog,.modal-content {
   background-color: transparent !important;
 }
 
