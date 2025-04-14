@@ -435,6 +435,15 @@ input[type="color"]:focus,
   background-color: transparent;
 }
 
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border: none;
+  background-color: var(--modal-bg);
+}
+
 .modal-dialog,.modal-content {
   background-color: transparent !important;
 }
@@ -451,7 +460,7 @@ input[type="color"]:focus,
   font-size: 1.1rem;
 }
 
-.card-header span:not(.badge),small {
+.card-header span:not(.badge),small:not(.dates-small) {
   color: var(--card-text-secondary) !important;
 }
 
@@ -487,4 +496,11 @@ button.custom-toggler {
 
 .themed-input::placeholder {
   color: var(--placeholder-color) !important;
+}
+
+.dates {
+  font-size: 0.8rem;
+  color: var(--subtitle-color) !important;
+  font-style: italic;
+  margin-top: -0.5rem;
 }

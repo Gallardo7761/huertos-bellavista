@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSignIn,
   faUser,
   faSignOut,
-  faHouse
+  faHouse,
+  faList
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../../css/NavBar.css';
 
-import NavListaEspera from './NavListaEspera';
 import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
 import ThemeButton from '../ThemeButton.jsx';
@@ -91,8 +91,20 @@ const NavBar = () => {
               <FontAwesomeIcon icon={faHouse} className="me-2" />
               Inicio
             </Nav.Link>
-            <NavListaEspera />
-            <NavHerramientas />
+            <Nav.Link
+              as={Link}
+              to="/lista-espera"
+              title="Lista de espera"
+              className={expanded ? "mt-3" : ""}
+            >
+              <FontAwesomeIcon icon={faList} className="me-2" />
+              Lista de espera
+            </Nav.Link>
+            
+            <IfAuthenticated>
+              <NavHerramientas />
+            </IfAuthenticated>
+
             <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
               <NavGestion />
             </IfRole>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTools, faBullhorn, faFile, faConciergeBell } from '@fortawesome/free-solid-svg-icons';
+import { faTools, faBullhorn, faFile, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 
 const NavHerramientas = () => {
   const [showing, setShowing] = useState(false);
@@ -26,7 +26,7 @@ const NavHerramientas = () => {
         <FontAwesomeIcon icon={faFile} className="me-2" />Documentación
       </Link>
       <Link to="/solicitud" className="disabled text-muted dropdown-item nav-link">
-        <FontAwesomeIcon icon={faConciergeBell} className="me-2" />Enviar una solicitud
+        <FontAwesomeIcon icon={faPaperPlane} className="me-2" />Enviar una solicitud
       </Link>
     </AnimatedDropdown>
   );

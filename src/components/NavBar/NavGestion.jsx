@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faGear, faUsers, faMoneyBill, faWallet, faFileInvoice,
-  faUserPlus, faShapes
+  faGear, faUsers, faMoneyBill, faWallet, faFileInvoice, faInbox
 } from '@fortawesome/free-solid-svg-icons';
 
 const NavGestion = () => {
@@ -36,10 +35,7 @@ const NavGestion = () => {
       </Link>
       <hr className="dropdown-divider" />
       <Link to="/gestion/altas" className="disabled text-muted dropdown-item nav-link">
-        <FontAwesomeIcon icon={faUserPlus} className="me-2" />Solicitudes de alta
-      </Link>
-      <Link to="/gestion/solicitudes" className="disabled text-muted  dropdown-item nav-link">
-        <FontAwesomeIcon icon={faShapes} className="me-2" />Solicitudes Inver./Colab.
+        <FontAwesomeIcon icon={faInbox} className="me-2" />Solicitudes
       </Link>
     </AnimatedDropdown>
   );

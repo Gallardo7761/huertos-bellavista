@@ -79,6 +79,7 @@
   font-style: italic;
   font-size: 0.95rem;
   background-color: transparent;
+  border-radius: 0;
   transition: background-color 0.2s ease;
   color: var(--text-color);
   border-color: var(--card-border);

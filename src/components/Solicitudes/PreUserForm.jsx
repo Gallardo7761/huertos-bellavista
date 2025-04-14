@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 
 const PreUserForm = ({ onSubmit }) => {
-  const fetchedOnce = useRef(false); // ✅ este flag evita múltiples peticiones
+  const fetchedOnce = useRef(false);
 
   const [form, setForm] = useState({
     user_name: '',
@@ -50,75 +50,52 @@ const PreUserForm = ({ onSubmit }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="p-3">
-      <Row className="gy-4">
+    <Form onSubmit={handleSubmit} className="p-3 px-md-4">
+      <Row className="gy-3">
+
+        {[
+          { label: 'Nombre completo', name: 'display_name', type: 'text', required: true },
+          { label: 'Nombre de usuario', name: 'user_name', type: 'text', required: true },
+          { label: 'DNI', name: 'dni', type: 'text', required: true, maxLength: 9 },
+          { label: 'Teléfono', name: 'phone', type: 'tel', required: true },
+          { label: 'Correo electrónico', name: 'email', type: 'email', required: true },
+          { label: 'Domicilio', name: 'address', type: 'text' },
+          { label: 'Código Postal', name: 'zip_code', type: 'text' },
+          { label: 'Ciudad', name: 'city', type: 'text' }
+        ].map(({ label, name, type, required, maxLength }) => (
+          <Col md={4} key={name}>
+            <Form.Group>
+              <Form.Label className="fw-semibold">{label}</Form.Label>
+              <Form.Control
+                className="themed-input shadow-sm"
+                type={type}
+                name={name}
+                value={form[name]}
+                onChange={handleChange}
+                required={required}
+                maxLength={maxLength}
+              />
+            </Form.Group>
+          </Col>
+        ))}
 
         <Col md={4}>
           <Form.Group>
-            <Form.Label>Nombre completo</Form.Label>
-            <Form.Control name="display_name" value={form.display_name} onChange={handleChange} required />
+            <Form.Label className="fw-semibold">Nº Socio</Form.Label>
+            <Form.Control
+              className="shadow-sm"
+              disabled
+              type="number"
+              name="member_number"
+              value={form.member_number}
+              onChange={handleChange}
+            />
           </Form.Group>
         </Col>
 
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Nombre de usuario</Form.Label>
-            <Form.Control name="user_name" value={form.user_name} onChange={handleChange} required />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>DNI</Form.Label>
-            <Form.Control name="dni" value={form.dni} onChange={handleChange} required maxLength={9} />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Teléfono</Form.Label>
-            <Form.Control type="tel" name="phone" value={form.phone} onChange={handleChange} required />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Correo electrónico</Form.Label>
-            <Form.Control type="email" name="email" value={form.email} onChange={handleChange} required />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Domicilio</Form.Label>
-            <Form.Control name="address" value={form.address} onChange={handleChange} />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Código Postal</Form.Label>
-            <Form.Control name="zip_code" value={form.zip_code} onChange={handleChange} />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Ciudad</Form.Label>
-            <Form.Control name="city" value={form.city} onChange={handleChange} />
-          </Form.Group>
-        </Col>
-
-        <Col md={4}>
-          <Form.Group>
-            <Form.Label>Nº Socio</Form.Label>
-            <Form.Control disabled name="member_number" type="number" value={form.member_number} onChange={handleChange} />
-          </Form.Group>
-        </Col>
-
-        <Col xs={12} className="text-center mt-4">
-          <Button type="submit" variant="primary">
-            Enviar
+        <Col xs={12} className="text-center mt-3">
+          <Button type="submit" variant="success" size="lg" className="px-5 shadow-sm">
+            Enviar solicitud
           </Button>
         </Col>
       </Row>

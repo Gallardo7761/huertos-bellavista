@@ -1,14 +1,14 @@
-// SocioCard.jsx adaptado al nuevo modelo plano de datos
 import { useState } from 'react';
 import {
-  Card, ListGroup, Badge, Button, Form, Dropdown, Image
+  Card, ListGroup, Badge, Button, Form
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt,
   faEllipsisVertical, faEdit, faTrash, faMoneyBill,
   faCheck,
-  faXmark
+  faXmark,
+  faCalendar
 } from '@fortawesome/free-solid-svg-icons';
 import { motion as _motion } from 'framer-motion';
 import PropTypes from 'prop-types';
@@ -16,9 +16,62 @@ import AnimatedDropdown from '../../components/AnimatedDropdown';
 import '../../css/SocioCard.css';
 import TipoSocioDropdown from './TipoSocioDropdown';
 
-const getFechas = (socio) => {
-  const alta = socio.created_at?.split('T')[0] || '';
-  return `<strong>ALTA:</strong> ${parseDate(alta)}`;
+const getFechas = (formData, editMode, handleChange) => {
+  const { created_at, assigned_at, deactivated_at } = formData;
+
+  if (!editMode && !created_at && !assigned_at && !deactivated_at) return null;
+
+  return (
+    <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
+      <ListGroup.Item className="d-flex justify-content-between align-items-center">
+        <span><FontAwesomeIcon icon={faCalendar} className="me-2" />ALTA</span>
+        {editMode ? (
+          <Form.Control
+            type="date"
+            size="sm"
+            className="themed-input"
+            style={{ maxWidth: '200px' }}
+            value={created_at}
+            onChange={(e) => handleChange('created_at', e.target.value)}
+          />
+        ) : (
+          <strong>{parseDate(created_at)}</strong>
+        )}
+      </ListGroup.Item>
+
+      <ListGroup.Item className="d-flex justify-content-between align-items-center">
+        <span><FontAwesomeIcon icon={faCalendar} className="me-2" />ENTREGA</span>
+        {editMode ? (
+          <Form.Control
+            type="date"
+            size="sm"
+            className="themed-input"
+            style={{ maxWidth: '200px' }}
+            value={assigned_at}
+            onChange={(e) => handleChange('assigned_at', e.target.value)}
+          />
+        ) : (
+          <strong>{parseDate(assigned_at)}</strong>
+        )}
+      </ListGroup.Item>
+
+      <ListGroup.Item className="d-flex justify-content-between align-items-center">
+        <span><FontAwesomeIcon icon={faCalendar} className="me-2" />BAJA</span>
+        {editMode ? (
+          <Form.Control
+            type="date"
+            size="sm"
+            className="themed-input"
+            style={{ maxWidth: '200px' }}
+            value={deactivated_at}
+            onChange={(e) => handleChange('deactivated_at', e.target.value)}
+          />
+        ) : (
+          <strong>{parseDate(deactivated_at)}</strong>
+        )}
+      </ListGroup.Item>
+    </ListGroup>
+  );
 };
 
 const getBadgeColor = (estado) => estado === 1 ? 'success' : 'danger';
@@ -72,7 +125,10 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     plot_number: socio.plot_number || 0,
     notes: socio.notes || '',
     status: socio.status ?? 1,
-    type: socio.type ?? 1
+    type: socio.type ?? 1,
+    created_at: socio.created_at?.split('T')[0] || '',
+    assigned_at: socio.assigned_at?.split('T')[0] || '',
+    deactivated_at: socio.deactivated_at?.split('T')[0] || ''
   });
 
   const handleEdit = () => setEditMode(true);
@@ -155,10 +211,6 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
       <Card.Body>
         {error && <div className="alert alert-danger py-1 px-2 small" role="alert">{error}</div>}
 
-        <Card.Text as="div">
-          <small dangerouslySetInnerHTML={{ __html: getFechas(socio) }} />
-        </Card.Text>
-
         <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
           {[{
             label: 'DNI', icon: faIdCard, value: formData.dni, field: 'dni', type: 'text', maxWidth: '180px'
@@ -182,10 +234,16 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           ))}
         </ListGroup>
 
-        <Card className="mt-3 border-1 rounded-3 notas-card">
+        {getFechas(formData, editMode, handleChange)}
+
+        <Card className="mt-2 border-1 rounded-3 notas-card">
           <Card.Body>
             <Card.Subtitle className="mb-2">
-              <FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS
+              {editMode ? (
+                <><FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS (máx. 256)</>
+              ) : (
+                <><FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS</>
+              )}
             </Card.Subtitle>
             {editMode ? (
               <Form.Control className="themed-input" as="textarea" rows={3} value={formData.notes} onChange={(e) => handleChange('notes', e.target.value)} />
@@ -197,8 +255,8 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
         {editMode && (
           <div className="d-flex justify-content-end gap-2 mt-3">
-            <Button variant="secondary" size="sm" onClick={handleCancel}>Cancelar</Button>
-            <Button variant="primary" size="sm" onClick={handleSave}>Guardar</Button>
+            <Button variant="danger" size="sm" onClick={handleCancel}>Cancelar</Button>
+            <Button variant="success" size="sm" onClick={handleSave}>Guardar</Button>
           </div>
         )}
       </Card.Body>

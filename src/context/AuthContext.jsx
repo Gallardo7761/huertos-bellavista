@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext } from "react";
 import createAxiosInstance from "../api/axiosInstance";
 import { useConfig } from "../hooks/useConfig";
+import { Navigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     };
   
     checkAuth();
-  }, [token, config]);  
+  }, [token, config, axios]);  
 
   const login = async (formData) => {
     setError(null);
