@@ -468,3 +468,23 @@ button.custom-toggler {
   font-size: 1.5rem !important;
   transition: background-color 0.2s ease !important;
 }
+
+.themed-input {
+  background-color: var(--input-bg) !important;
+  color: var(--input-text) !important;
+  border: 1px solid var(--input-border) !important;
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.themed-input:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 0.15rem rgba(67, 167, 72, 0.25);
+  outline: none;
+}
+
+.themed-input::placeholder {
+  color: var(--placeholder-color) !important;
+}

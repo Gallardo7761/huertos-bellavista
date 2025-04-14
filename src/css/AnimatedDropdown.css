@@ -15,6 +15,7 @@
 .dropdown-item {
   background-color: var(--navbar-bg) !important;
   color: var(--navbar-dropdown-item-color);
+  cursor: pointer;
 }
 
 .dropdown-item:hover {

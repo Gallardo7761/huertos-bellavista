@@ -98,7 +98,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
 
         {editMode ? (
           <Form.Group className="mb-3">
-            <Form.Control
+            <Form.Control className="themed-input" 
               as="textarea"
               rows={4}
               value={formData.body}
@@ -119,7 +119,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
 
         {editMode && (
           <Form.Select
-            className="mb-2"
+            className="mb-2 themed-input"
             value={formData.priority}
             onChange={(e) => handleChange('priority', parseInt(e.target.value))}
           >

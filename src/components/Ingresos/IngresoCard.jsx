@@ -83,7 +83,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <span className="fw-bold">
             <FontAwesomeIcon icon={faFileInvoice} className="me-2" />
             {editMode ? (
-              <Form.Control size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
+              <Form.Control className="themed-input"  size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
             ) : formData.concept}
           </span>
           <small>
@@ -114,7 +114,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <FontAwesomeIcon icon={faUser} className="me-2" />
           <strong>Socio Nº:</strong>{' '}
           {editMode ? (
-            <Form.Control size="sm" type="number" value={formData.member_number} onChange={(e) => handleChange('member_number', parseInt(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
+            <Form.Control className="themed-input"  size="sm" type="number" value={formData.member_number} onChange={(e) => handleChange('member_number', parseInt(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
           ) : formData.member_number}
         </Card.Text>
 
@@ -122,7 +122,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <FontAwesomeIcon icon={faMoneyBillWave} className="me-2" />
           <strong>Importe:</strong>{' '}
           {editMode ? (
-            <Form.Control size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
+            <Form.Control className="themed-input"  size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
           ) : `${formData.amount.toFixed(2)} €`}
         </Card.Text>
 
@@ -130,14 +130,14 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <>
             <Form.Group className="mb-2">
               <Form.Label>Tipo de pago</Form.Label>
-              <Form.Select size="sm" value={formData.type} onChange={(e) => handleChange('type', parseInt(e.target.value))}>
+              <Form.Select className='themed-input' size="sm" value={formData.type} onChange={(e) => handleChange('type', parseInt(e.target.value))}>
                 <option value={CONSTANTS.PAYMENT_TYPE_CASH}>Caja</option>
                 <option value={CONSTANTS.PAYMENT_TYPE_BANK}>Banco</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Frecuencia</Form.Label>
-              <Form.Select size="sm" value={formData.frequency} onChange={(e) => handleChange('frequency', parseInt(e.target.value))}>
+              <Form.Select className='themed-input' size="sm" value={formData.frequency} onChange={(e) => handleChange('frequency', parseInt(e.target.value))}>
                 <option value={CONSTANTS.PAYMENT_FREQUENCY_YEARLY}>Anual</option>
                 <option value={CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY}>Semestral</option>
               </Form.Select>

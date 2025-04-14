@@ -1,17 +1,20 @@
 // SocioCard.jsx adaptado al nuevo modelo plano de datos
 import { useState } from 'react';
 import {
-  Card, ListGroup, Badge, Button, Form
+  Card, ListGroup, Badge, Button, Form, Dropdown, Image
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faIdCard, faUser, faSunPlantWilt, faPhone, faClipboard, faAt,
-  faEllipsisVertical, faEdit, faTrash, faMoneyBill
+  faEllipsisVertical, faEdit, faTrash, faMoneyBill,
+  faCheck,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons';
 import { motion as _motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
 import '../../css/SocioCard.css';
+import TipoSocioDropdown from './TipoSocioDropdown';
 
 const getFechas = (socio) => {
   const alta = socio.created_at?.split('T')[0] || '';
@@ -20,7 +23,19 @@ const getFechas = (socio) => {
 
 const getBadgeColor = (estado) => estado === 1 ? 'success' : 'danger';
 const getHeaderColor = (estado) => estado === 1 ? 'bg-light-green' : 'bg-light-red';
-const getEstado = (estado) => estado === 1 ? 'ACTIVO' : 'INACTIVO';
+const getEstado = (estado) =>
+  estado === 1 ? (
+    <>
+      <FontAwesomeIcon icon={faCheck} className="me-2" />
+      ACTIVO
+    </>
+  ) : (
+    <>
+      <FontAwesomeIcon icon={faXmark} className="me-2" />
+      INACTIVO
+    </>
+  );
+
 const parseNull = (attr) => attr === null || attr === '' ? 'NO' : attr;
 const getPFP = (tipo) => {
   const base = '/images/icons/';
@@ -92,29 +107,33 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     <MotionCard className="socio-card shadow-sm rounded-4 h-100">
       <Card.Header className={`d-flex align-items-center rounded-4 rounded-bottom-0 justify-content-between ${getHeaderColor(formData.status)}`}>
         <div className="d-flex align-items-center p-1 m-0">
-          <img src={getPFP(formData.type)} width="36" className="rounded me-3" alt="PFP" />
-          <div>
+          {editMode ? (
+            <TipoSocioDropdown value={formData.type} onChange={(val) => handleChange('type', val)} />
+          ) : (
+            <img src={getPFP(formData.type)} width="36" className="rounded me-3" alt="PFP" />
+          )}
+          <div className='d-flex flex-column gap-1'>
             <Card.Title className="m-0">
               {editMode ? (
-                <Form.Control size="sm" value={formData.display_name} onChange={(e) => handleChange('display_name', e.target.value)} style={{ maxWidth: '220px' }} />
+                <Form.Control className="themed-input" size="sm" value={formData.display_name} onChange={(e) => handleChange('display_name', e.target.value)} style={{ maxWidth: '220px' }} />
               ) : formData.display_name}
             </Card.Title>
             {editMode ? (
-              <Form.Select size="sm" value={formData.status} onChange={(e) => handleChange('status', parseInt(e.target.value))} style={{ maxWidth: '8rem' }}>
+              <Form.Select className="themed-input" size="sm" value={formData.status} onChange={(e) => handleChange('status', parseInt(e.target.value))} style={{ maxWidth: '8rem' }}>
                 <option value={1}>ACTIVO</option>
                 <option value={0}>INACTIVO</option>
               </Form.Select>
             ) : (
-              <Badge bg={getBadgeColor(formData.status)}>{getEstado(formData.status)}</Badge>
+              <Badge style={{ width: 'fit-content' }} bg={getBadgeColor(formData.status)}>{getEstado(formData.status)}</Badge>
             )}
           </div>
         </div>
 
         {!createMode && (
           <AnimatedDropdown
-          className='end-0'
-          buttonStyle='card-button'
-          icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>
+            className='end-0'
+            buttonStyle='card-button'
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
@@ -155,7 +174,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
             <ListGroup.Item key={field} className="d-flex justify-content-between align-items-center">
               <span><FontAwesomeIcon icon={icon} className="me-2" />{label}</span>
               {editMode ? (
-                <Form.Control size="sm" type={type} value={value} onChange={(e) => handleChange(field, e.target.value)} style={{ maxWidth }} />
+                <Form.Control className="themed-input" size="sm" type={type} value={value} onChange={(e) => handleChange(field, e.target.value)} style={{ maxWidth }} />
               ) : (
                 <strong>{parseNull(value)}</strong>
               )}
@@ -169,7 +188,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
               <FontAwesomeIcon icon={faClipboard} className="me-2" />NOTAS
             </Card.Subtitle>
             {editMode ? (
-              <Form.Control as="textarea" rows={3} value={formData.notes} onChange={(e) => handleChange('notes', e.target.value)} />
+              <Form.Control className="themed-input" as="textarea" rows={3} value={formData.notes} onChange={(e) => handleChange('notes', e.target.value)} />
             ) : (
               <Card.Text>{parseNull(formData.notes)}</Card.Text>
             )}

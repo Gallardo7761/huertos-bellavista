@@ -81,7 +81,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <span className="fw-bold">
             <FontAwesomeIcon icon={faFileInvoice} className="me-2" />
             {editMode ? (
-              <Form.Control size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
+              <Form.Control className="themed-input"  size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
             ) : formData.concept}
           </span>
           <small>
@@ -112,7 +112,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <FontAwesomeIcon icon={faMoneyBillWave} className="me-2" />
           <strong>Importe:</strong>{' '}
           {editMode ? (
-            <Form.Control size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
+            <Form.Control className="themed-input"  size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
           ) : `${formData.amount.toFixed(2)} €`}
         </Card.Text>
 
@@ -120,7 +120,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <FontAwesomeIcon icon={faTruck} className="me-2" />
           <strong>Proveedor:</strong>{' '}
           {editMode ? (
-            <Form.Control size="sm" type="text" value={formData.supplier} onChange={(e) => handleChange('supplier', e.target.value)} />
+            <Form.Control className="themed-input"  size="sm" type="text" value={formData.supplier} onChange={(e) => handleChange('supplier', e.target.value)} />
           ) : formData.supplier}
         </Card.Text>
 
@@ -128,7 +128,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <FontAwesomeIcon icon={faReceipt} className="me-2" />
           <strong>Factura:</strong>{' '}
           {editMode ? (
-            <Form.Control size="sm" type="text" value={formData.invoice} onChange={(e) => handleChange('invoice', e.target.value)} />
+            <Form.Control className="themed-input"  size="sm" type="text" value={formData.invoice} onChange={(e) => handleChange('invoice', e.target.value)} />
           ) : formData.invoice}
         </Card.Text>
 
@@ -136,7 +136,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <>
             <Form.Group className="mb-3">
               <Form.Label>Tipo de gasto</Form.Label>
-              <Form.Select size="sm" value={formData.type} onChange={(e) => handleChange('type', parseInt(e.target.value))}>
+              <Form.Select className='themed-input' size="sm" value={formData.type} onChange={(e) => handleChange('type', parseInt(e.target.value))}>
                 <option value={0}>Banco</option>
                 <option value={1}>Caja</option>
               </Form.Select>
