@@ -48,7 +48,6 @@ const ListaEsperaContent = ({ config }) => {
     };
     const handleFormClose = () => setShowFormModal(false);
 
-
     const [modalShown, setModalShown] = useState(false);
 
     useEffect(() => {
@@ -84,7 +83,7 @@ const ListaEsperaContent = ({ config }) => {
                     <div className='d-flex align-items-center m-0 p-0 justify-content-between'>
                         <h1 className='section-title'>Lista de Espera</h1>
                         <IfNotAuthenticated>
-                            <Button disabled variant="danger" onClick={() => setShowFormModal(true)}>
+                            <Button variant="danger" onClick={() => setShowFormModal(true)}>
                                 <FontAwesomeIcon icon={faPencil} className="me-2" />
                                 Apuntarme
                             </Button>
@@ -95,9 +94,9 @@ const ListaEsperaContent = ({ config }) => {
                 </ContentWrapper>
             </CustomContainer>
 
-            <Modal show={null} onHide={handleClose}>
+            <Modal show={modalShown} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>¿Quieres unirte? [PROXIMAMENTE]</Modal.Title>
+                    <Modal.Title>¿Quieres unirte?</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -108,7 +107,7 @@ const ListaEsperaContent = ({ config }) => {
                     <Button variant="danger" onClick={handleClose}>
                         Cerrar
                     </Button>
-                    <Button disabled variant="success" onClick={handleFormOpen}>
+                    <Button variant="success" onClick={handleFormOpen}>
                         Apuntarme
                     </Button>
                 </Modal.Footer>

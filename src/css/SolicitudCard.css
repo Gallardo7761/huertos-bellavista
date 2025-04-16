@@ -1,0 +1,65 @@
+/* ================================
+   SOLICITUD CARD - BASE
+================================== */
+
+.solicitud-card {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color);
+    border: none !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.solicitud-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75rem 1.5rem var(--shadow-color);
+}
+
+.solicitud-card img {
+    object-fit: cover;
+}
+
+.card-header {
+    background-color: var(--secondary-color) !important;
+}
+
+.card-header .card-title {
+    color: var(--card-text-secondary) !important;
+}
+
+/* ================================
+     LISTA Y CONTENIDO
+  ================================== */
+
+.solicitud-card .list-group {
+    border: 1px solid var(--card-border) !important;
+}
+
+.solicitud-card .list-group-item {
+    font-style: italic;
+    font-size: 0.95rem;
+    background-color: transparent;
+    border-radius: 0;
+    transition: background-color 0.2s ease;
+    color: var(--text-color);
+    border-color: var(--card-border);
+}
+
+.solicitud-card .list-group-item:hover {
+    background-color: var(--list-hover-bg);
+}
+
+.solicitud-card .card-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+/* ================================
+     ACCIONES (BOTONES)
+  ================================== */
+
+.solicitud-card .btn {
+    font-weight: 500;
+}

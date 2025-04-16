@@ -17,6 +17,7 @@
             "members": {
                 "all": "/raw/v1/members",
                 "byId": "/raw/v1/members/:user_id",
+                "profile": "/v1/members/profile",
                 "byMemberNumber": "/v1/members/number/:member_number",
                 "byPlotNumber": "/v1/members/plot/:plot_number",
                 "byDni": "/v1/members/dni/:dni",
@@ -44,7 +45,9 @@
             },
             "requests": {
                 "all": "/raw/v1/requests",
-                "byId": "/raw/v1/requests/:request_id"
+                "byId": "/raw/v1/requests/:request_id",
+                "allWithPreUsers": "/v1/requests-full",
+                "byIdWithPreUser": "/v1/requests-full/:request_id"
             },
             "pre_users": {
                 "all": "/raw/v1/pre_users",

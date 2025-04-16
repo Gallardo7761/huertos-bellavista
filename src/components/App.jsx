@@ -11,15 +11,14 @@ import Ingresos from '../pages/Ingresos'
 import Gastos from '../pages/Gastos'
 import Balance from '../pages/Balance'
 import Login from '../pages/Login'
-import SolicitarHuerto from '../pages/SolicitarHuerto'
-import SolicitudesAlta from '../pages/SolicitudesAlta'
-import SolicitudesInverColab from '../pages/SolicitudesInverColab'
+import Solicitudes from '../pages/Solicitudes'
 import Anuncios from '../pages/Anuncios'
 import ListaEspera from '../pages/ListaEspera'
 import Building from '../pages/Building'
 import Documentacion from '../pages/Documentacion'
 
 import { CONSTANTS } from '../util/constants'
+import Perfil from '../pages/Perfil.jsx'
 
 function App() {
 
@@ -29,11 +28,6 @@ function App() {
     <>
       <Header />
       <NavBar />
-      {/**<Routes>
-        <Route path="/solicitar-huerto" element={<SolicitarHuerto />} />
-        <Route path="/solicitudes-alta" element={<SolicitudesAlta />} />
-        <Route path="/solicitudes-invernadero-colaborador" element={<SolicitudesInverColab />} />
-      </Routes> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/lista-espera" element={<ListaEspera />} />
@@ -66,6 +60,16 @@ function App() {
         <Route path="/anuncios" element={
           <ProtectedRoute>
             <Anuncios />
+          </ProtectedRoute>
+        } />
+        <Route path="/gestion/solicitudes" element={
+          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+            <Solicitudes />
+          </ProtectedRoute>
+        } />
+        <Route path="/perfil" element={
+          <ProtectedRoute>
+            <Perfil />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Building />} />

@@ -1,0 +1,64 @@
+/* ================================
+   PERFIL CARD - BASE
+================================== */
+
+.perfil-card {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color);
+    border: none !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.perfil-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem var(--shadow-color);
+}
+
+/* ================================
+     CARD HEADER
+  ================================== */
+
+.perfil-card .card-header {
+    background-color: var(--secondary-color) !important;
+    color: var(--card-text-secondary) !important;
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+    padding: 1rem;
+}
+
+.perfil-card .card-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.perfil-card small {
+    font-style: italic;
+    color: var(--card-text-secondary);
+}
+
+/* ================================
+     LISTA DE DATOS
+  ================================== */
+
+.perfil-card .list-group {
+    border: 1px solid var(--card-border) !important;
+}
+
+.perfil-card .list-group-item {
+    font-style: italic;
+    font-size: 0.95rem;
+    background-color: transparent;
+    border-radius: 0;
+    transition: background-color 0.2s ease;
+    color: var(--text-color);
+    border-color: var(--card-border);
+    padding: 0.75rem 1rem;
+}
+
+.perfil-card .list-group-item:hover {
+    background-color: var(--list-hover-bg);
+}
+
+.perfil-card strong {
+    font-style: normal;
+}

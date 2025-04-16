@@ -7,12 +7,13 @@ import {
   faUser,
   faSignOut,
   faHouse,
-  faList
+  faList,
+  faBullhorn,
+  faFile
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../../css/NavBar.css';
 
-import NavHerramientas from './NavHerramientas';
 import NavGestion from './NavGestion';
 import ThemeButton from '../ThemeButton.jsx';
 
@@ -100,9 +101,25 @@ const NavBar = () => {
               <FontAwesomeIcon icon={faList} className="me-2" />
               Lista de espera
             </Nav.Link>
-            
+
             <IfAuthenticated>
-              <NavHerramientas />
+              <Nav.Link
+                as={Link}
+                to="/anuncios"
+                title="Anuncios"
+                className={expanded ? "mt-3" : ""}
+              >
+                <FontAwesomeIcon icon={faBullhorn} className="me-2" />Anuncios
+              </Nav.Link>
+
+              <Nav.Link
+                as={Link}
+                to="/documentacion"
+                title="Documentación"
+                className={expanded ? "mt-3" : ""}
+              >
+                <FontAwesomeIcon icon={faFile} className="me-2" />Documentación
+              </Nav.Link>
             </IfAuthenticated>
 
             <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
@@ -132,7 +149,7 @@ const NavBar = () => {
                 </Link>
               }
             >
-              <Link to="/perfil" className="disabled text-muted dropdown-item nav-link">
+              <Link to="/perfil" className="text-muted dropdown-item nav-link">
                 <FontAwesomeIcon icon={faUser} className="me-2" />
                 Mi perfil
               </Link>
