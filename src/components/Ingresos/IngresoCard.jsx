@@ -31,11 +31,20 @@ const getTypeTextColor = (type, theme) => type === CONSTANTS.PAYMENT_TYPE_BANK ?
 const getFreqColor = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? "warning" : "danger";
 const getFreqTextColor = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? "dark" : "light";
 
-const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCancel }) => {
+const IngresoCard = ({
+  income,
+  isNew = false,
+  onCreate,
+  onUpdate,
+  onDelete,
+  onCancel,
+  className = '',
+  editable = true // <--- nueva prop
+}) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(isNew);
   const [error, setError] = useState(null);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
 
   const [formData, setFormData] = useState({
     concept: income.concept || '',
@@ -46,7 +55,8 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
     created_at: income.created_at
   });
 
-  const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+  const handleChange = (field, value) =>
+    setFormData(prev => ({ ...prev, [field]: value }));
 
   const handleDelete = () => typeof onDelete === 'function' && onDelete(income.income_id);
   const handleCancel = () => {
@@ -72,13 +82,18 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
   };
 
   return (
-    <MotionCard className="ingreso-card shadow-sm rounded-4 border-0 h-100">
+    <MotionCard className={`ingreso-card shadow-sm rounded-4 border-0 h-100 ${className}`}>
       <Card.Header className="d-flex justify-content-between align-items-center rounded-top-4 bg-light-green">
         <div className="d-flex flex-column">
           <span className="fw-bold">
             <FontAwesomeIcon icon={faFileInvoice} className="me-2" />
             {editMode ? (
-              <Form.Control className="themed-input"  size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
+              <Form.Control
+                className="themed-input"
+                size="sm"
+                value={formData.concept}
+                onChange={(e) => handleChange('concept', e.target.value)}
+              />
             ) : formData.concept}
           </span>
           <small>
@@ -86,8 +101,12 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
             {DateParser.isoToStringWithTime(formData.created_at)}
           </small>
         </div>
-        {!createMode && (
-          <AnimatedDropdown className='end-0' icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>
+
+        {editable && !createMode && (
+          <AnimatedDropdown
+            className='end-0'
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}
+          >
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { setEditMode(true); closeDropdown(); }}>
@@ -109,7 +128,14 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <FontAwesomeIcon icon={faUser} className="me-2" />
           <strong>Socio Nº:</strong>{' '}
           {editMode ? (
-            <Form.Control className="themed-input"  size="sm" type="number" value={formData.member_number} onChange={(e) => handleChange('member_number', parseInt(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
+            <Form.Control
+              className="themed-input"
+              size="sm"
+              type="number"
+              value={formData.member_number}
+              onChange={(e) => handleChange('member_number', parseInt(e.target.value))}
+              style={{ maxWidth: '150px', display: 'inline-block' }}
+            />
           ) : formData.member_number}
         </Card.Text>
 
@@ -117,7 +143,15 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <FontAwesomeIcon icon={faMoneyBillWave} className="me-2" />
           <strong>Importe:</strong>{' '}
           {editMode ? (
-            <Form.Control className="themed-input"  size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
+            <Form.Control
+              className="themed-input"
+              size="sm"
+              type="number"
+              step="0.01"
+              value={formData.amount}
+              onChange={(e) => handleChange('amount', parseFloat(e.target.value))}
+              style={{ maxWidth: '150px', display: 'inline-block' }}
+            />
           ) : `${formData.amount.toFixed(2)} €`}
         </Card.Text>
 
@@ -125,14 +159,24 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           <>
             <Form.Group className="mb-2">
               <Form.Label>Tipo de pago</Form.Label>
-              <Form.Select className='themed-input' size="sm" value={formData.type} onChange={(e) => handleChange('type', parseInt(e.target.value))}>
+              <Form.Select
+                className='themed-input'
+                size="sm"
+                value={formData.type}
+                onChange={(e) => handleChange('type', parseInt(e.target.value))}
+              >
                 <option value={CONSTANTS.PAYMENT_TYPE_CASH}>Caja</option>
                 <option value={CONSTANTS.PAYMENT_TYPE_BANK}>Banco</option>
               </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Frecuencia</Form.Label>
-              <Form.Select className='themed-input' size="sm" value={formData.frequency} onChange={(e) => handleChange('frequency', parseInt(e.target.value))}>
+              <Form.Select
+                className='themed-input'
+                size="sm"
+                value={formData.frequency}
+                onChange={(e) => handleChange('frequency', parseInt(e.target.value))}
+              >
                 <option value={CONSTANTS.PAYMENT_FREQUENCY_YEARLY}>Anual</option>
                 <option value={CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY}>Semestral</option>
               </Form.Select>
@@ -159,7 +203,9 @@ IngresoCard.propTypes = {
   onCreate: PropTypes.func,
   onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
-  onCancel: PropTypes.func
+  onCancel: PropTypes.func,
+  className: PropTypes.string,
+  editable: PropTypes.bool
 };
 
 export default IngresoCard;

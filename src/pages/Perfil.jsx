@@ -10,10 +10,20 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser, faIdCard, faEnvelope, faPhone, faHashtag,
-  faSeedling, faUserShield, faCalendar
+  faSeedling, faUserShield, faCalendar,
+  faUserSlash, faUserPlus,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../css/Perfil.css';
+
+import { useEffect, useState } from 'react';
+import IngresoCard from '../components/Ingresos/IngresoCard';
+import SolicitudCard from '../components/Solicitudes/SolicitudCard';
+import CustomModal from '../components/CustomModal';
+import PreUserForm from '../components/Solicitudes/PreUserForm';
+import NotificationModal from '../components/NotificationModal';
+import { Button, Col, Row } from 'react-bootstrap';
 
 const parseDate = (date) => {
   if (!date) return 'NO';
@@ -28,56 +38,289 @@ const Perfil = () => {
 
   const reqConfig = {
     baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.profile}`,
+    myIncomesUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.incomes.myIncomes}`,
+    requestUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.all,
+    preUsersUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.all,
+    myRequestsUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.myRequests}`
   };
 
   return (
     <DataProvider config={reqConfig}>
-      <PerfilContent />
+      <PerfilContent config={reqConfig} />
     </DataProvider>
   );
 };
 
-const PerfilContent = () => {
-  const { data, dataLoading, dataError } = useDataContext();
+const PerfilContent = ({ config }) => {
+  const { data, dataLoading, dataError, getData } = useDataContext();
+
+  const usuario = data;
+
+  const [incomes, setIncomes] = useState([]);
+  const [incomesLoading, setIncomesLoading] = useState(true);
+  const [incomesError, setIncomesError] = useState(null);
+
+  const [myRequests, setMyRequests] = useState([]);
+  const [requestsLoading, setRequestsLoading] = useState(true);
+  const [requestsError, setRequestsError] = useState(null);
+
+  const [showAddCollaboratorModal, setShowAddCollaboratorModal] = useState(false);
+  const [showRemoveCollaboratorModal, setShowRemoveCollaboratorModal] = useState(false);
+  const [feedbackModal, setFeedbackModal] = useState(null);
+  const closeFeedback = () => setFeedbackModal(null);
+
+  useEffect(() => {
+    const loadIncomes = async () => {
+      try {
+        const { data: fetchedIncomes, error } = await getData(config.myIncomesUrl);
+        if (error) throw new Error(error);
+        setIncomes(fetchedIncomes);
+      } catch (err) {
+        setIncomesError(err.message);
+      } finally {
+        setIncomesLoading(false);
+      }
+    };
+
+    if (config) loadIncomes();
+  }, [config, getData]);
+
+  useEffect(() => {
+    const loadRequests = async () => {
+      try {
+        const { data: fetchedRequests, error } = await getData(config.myRequestsUrl);
+        if (error) throw new Error(error);
+        setMyRequests(fetchedRequests);
+      } catch (err) {
+        setRequestsError(err.message);
+      } finally {
+        setRequestsLoading(false);
+      }
+    };
+
+    if (config) loadRequests();
+  }, [config, getData]);
+
+  const handleRequestUnregister = async () => {
+    try {
+      const res = await fetch(config.requestUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 1,
+          status: 0,
+          requested_by: usuario.user_id
+        })
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) throw new Error(json.message || 'Error al crear la solicitud.');
+
+      setFeedbackModal({
+        title: 'Solicitud enviada',
+        message: 'Se ha enviado la solicitud de baja correctamente.',
+        variant: 'success'
+      });
+    } catch (err) {
+      setFeedbackModal({
+        title: 'Error',
+        message: err.message,
+        variant: 'danger'
+      });
+    }
+  };
+
+  
+
+  const mappedRequests = myRequests.map(r => ({
+    ...r,
+    request_type: r.request_type ?? r.type,
+    request_status: r.request_status ?? r.status,
+    request_created_at: r.request_created_at ?? r.created_at
+  }));
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
-  const usuario = data;
-
   return (
     <CustomContainer>
       <ContentWrapper>
-        <h1 className='section-title'>Mi Perfil</h1>
-        <hr className="section-divider" />
+        <Row className='gap-2 justify-content-center'>
+          <Col xs={12} md={4} className="mb-4">
+            <Card className="shadow-sm rounded-4 perfil-card">
+              <Card.Header className="bg-secondary text-white rounded-top-4">
+                <Card.Title className="mb-0">Tus datos</Card.Title>
+                <small>Te uniste el {parseDate(usuario.created_at)}</small>
+              </Card.Header>
 
-        <Card className="shadow-sm rounded-4 perfil-card">
-          <Card.Header className="bg-secondary text-white rounded-top-4">
-            <Card.Title className="mb-0">Información del usuario</Card.Title>
-            <small>Desde {parseDate(usuario.created_at)}</small>
-          </Card.Header>
+              <Card.Body>
+                <ListGroup variant="flush" className="border rounded-3">
+                  <ListGroup.Item><FontAwesomeIcon icon={faUser} className="me-2" />Nombre: <strong>{usuario.display_name}</strong></ListGroup.Item>
+                  <ListGroup.Item><FontAwesomeIcon icon={faIdCard} className="me-2" />DNI: <strong>{usuario.dni}</strong></ListGroup.Item>
+                  <ListGroup.Item><FontAwesomeIcon icon={faEnvelope} className="me-2" />Email: <strong>{usuario.email}</strong></ListGroup.Item>
+                  <ListGroup.Item><FontAwesomeIcon icon={faPhone} className="me-2" />Teléfono: <strong>{usuario.phone}</strong></ListGroup.Item>
+                  <ListGroup.Item>
+                    <FontAwesomeIcon icon={faHashtag} className="me-2" />Socio Nº: <strong>{usuario.member_number}</strong> | Huerto Nº: <strong>{usuario.plot_number}</strong>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo de socio: <strong>{['Lista de Espera', 'Hortelano', 'Hortelano + Invernadero', 'Colaborador'][usuario.type]}</strong>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <FontAwesomeIcon icon={faUserShield} className="me-2" />Rol en huertos: <strong>{['Usuario', 'Admin', 'Desarrollador'][usuario.role]}</strong> | Global: <strong>{['Usuario', 'Admin'][usuario.global_role]}</strong>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <FontAwesomeIcon icon={faCalendar} className="me-2" />Estado: <strong>{usuario.status === 1 ? 'Activo' : 'Inactivo'}</strong>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
 
-          <Card.Body>
-            <ListGroup variant="flush" className="border rounded-3">
-              <ListGroup.Item><FontAwesomeIcon icon={faUser} className="me-2" />Nombre: <strong>{usuario.display_name}</strong></ListGroup.Item>
-              <ListGroup.Item><FontAwesomeIcon icon={faIdCard} className="me-2" />DNI: <strong>{usuario.dni}</strong></ListGroup.Item>
-              <ListGroup.Item><FontAwesomeIcon icon={faEnvelope} className="me-2" />Email: <strong>{usuario.email}</strong></ListGroup.Item>
-              <ListGroup.Item><FontAwesomeIcon icon={faPhone} className="me-2" />Teléfono: <strong>{usuario.phone}</strong></ListGroup.Item>
-              <ListGroup.Item>
-                <FontAwesomeIcon icon={faHashtag} className="me-2" />Socio Nº: <strong>{usuario.member_number}</strong> | Huerto Nº: <strong>{usuario.plot_number}</strong>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo de socio: <strong>{['Lista de Espera', 'Hortelano', 'Hortelano + Invernadero', 'Colaborador'][usuario.type]}</strong>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <FontAwesomeIcon icon={faUserShield} className="me-2" />Rol en huertos: <strong>{['Usuario', 'Admin', 'Desarrollador'][usuario.role]}</strong> | Global: <strong>{['Usuario', 'Admin'][usuario.global_role]}</strong>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <FontAwesomeIcon icon={faCalendar} className="me-2" />Estado: <strong>{usuario.status === 1 ? 'Activo' : 'Inactivo'}</strong>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card.Body>
-        </Card>
+
+          <Col xs={12} md={7}>
+            <h2 className='section-title'>Mis Ingresos</h2>
+            <hr className="section-divider" />
+
+            {incomesLoading && <p className="text-center my-3"><LoadingIcon /></p>}
+            {incomesError && <p className="text-danger text-center my-3">{incomesError}</p>}
+            {!incomesLoading && incomes.length === 0 && <p className="text-center">No hay ingresos registrados.</p>}
+
+            <div className="d-flex flex-wrap gap-3 mb-4">
+              {incomes.map(income => (
+                <IngresoCard key={income.income_id} income={income} editable={false} />
+              ))}
+            </div>
+
+            <h2 className='section-title'>Mis Solicitudes</h2>
+            <hr className="section-divider" />
+
+            <div className="d-flex flex-wrap gap-3 mb-3">
+              <Button variant="danger" onClick={handleRequestUnregister}>
+                <FontAwesomeIcon icon={faUserSlash} className="me-2" />
+                Baja
+              </Button>
+
+              <Button variant="success" onClick={() => setShowAddCollaboratorModal(true)}>
+                <FontAwesomeIcon icon={faUserPlus} className="me-2" />
+                Colaborador
+              </Button>
+
+              <Button variant="warning" onClick={() => setShowRemoveCollaboratorModal(true)}>
+                <FontAwesomeIcon icon={faTrash} className="me-2" />
+                Colaborador
+              </Button>
+            </div>
+
+            {requestsLoading && <p className="text-center my-3"><LoadingIcon /></p>}
+            {requestsError && <p className="text-danger text-center my-3">{requestsError}</p>}
+            {!requestsLoading && myRequests.length === 0 && <p className="text-center">No tienes solicitudes registradas.</p>}
+
+            <div className="d-flex flex-wrap gap-3 mb-4">
+              {mappedRequests.map(request => (
+                <SolicitudCard key={request.request_id} data={request} editable={false} onProfile={true} />
+              ))}
+            </div>
+          </Col>
+        </Row>
+
+        <CustomModal
+          title="Añadir colaborador"
+          show={showAddCollaboratorModal}
+          onClose={() => setShowAddCollaboratorModal(false)}
+        >
+          <PreUserForm
+            onSubmit={async (formData) => {
+              try {
+                const requestRes = await fetch(config.requestUrl, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ type: 2, status: 0 })
+                });
+
+                const requestJson = await requestRes.json();
+                const requestId = requestJson.data?.request_id;
+                if (!requestRes.ok || !requestId) throw new Error("No se pudo crear la solicitud.");
+
+                const preUserRes = await fetch(config.preUsersUrl, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ ...formData, request_id: requestId })
+                });
+
+                const preUserJson = await preUserRes.json();
+                if (!preUserRes.ok) throw new Error(preUserJson.message);
+
+                setFeedbackModal({
+                  title: "Colaborador añadido",
+                  message: "Tu solicitud de colaborador ha sido enviada correctamente.",
+                  variant: "success"
+                });
+
+                setShowAddCollaboratorModal(false);
+              } catch (err) {
+                setFeedbackModal({
+                  title: "Error",
+                  message: err.message,
+                  variant: "danger"
+                });
+              }
+            }}
+          />
+        </CustomModal>
+
+        <CustomModal
+          title="Eliminar colaborador"
+          show={showRemoveCollaboratorModal}
+          onClose={() => setShowRemoveCollaboratorModal(false)}
+        >
+          <p className=' p-3'>¿Estás seguro de que quieres eliminar tu colaborador actual?</p>
+          <div className="d-flex justify-content-end gap-2 mt-3 p-3">
+            <Button variant="secondary" onClick={() => setShowRemoveCollaboratorModal(false)}>Cancelar</Button>
+            <Button
+              variant="warning"
+              onClick={async () => {
+                try {
+                  const res = await fetch(config.requestUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type: 3, status: 0, requested_by: usuario.user_id })
+                  });
+
+                  const json = await res.json();
+                  if (!res.ok) throw new Error(json.message);
+
+                  setFeedbackModal({
+                    title: "Solicitud enviada",
+                    message: "Se ha solicitado la eliminación del colaborador.",
+                    variant: "success"
+                  });
+                  setShowRemoveCollaboratorModal(false);
+                } catch (err) {
+                  setFeedbackModal({
+                    title: "Error",
+                    message: err.message,
+                    variant: "danger"
+                  });
+                }
+              }}
+            >
+              Confirmar
+            </Button>
+          </div>
+        </CustomModal>
+
+        {feedbackModal && (
+          <NotificationModal
+            show={true}
+            onClose={closeFeedback}
+            title={feedbackModal.title}
+            message={feedbackModal.message}
+            variant={feedbackModal.variant}
+            buttons={[{ label: "Aceptar", variant: feedbackModal.variant, onClick: closeFeedback }]}
+          />
+        )}
+
       </ContentWrapper>
     </CustomContainer>
   );

@@ -15,6 +15,7 @@ import CustomModal from '../components/CustomModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import IfNotAuthenticated from '../components/Auth/IfNotAuthenticated';
+import NotificationModal from '../components/NotificationModal';
 
 const ListaEspera = () => {
   const { config, configLoading } = useConfig();
@@ -42,6 +43,16 @@ const ListaEsperaContent = ({ reqConfig }) => {
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showPreUserFormModal, setShowPreUserFormModal] = useState(false);
 
+  const [feedbackModal, setFeedbackModal] = useState({
+    show: false,
+    title: '',
+    message: '',
+    variant: 'info',
+    buttons: []
+  });
+
+  const closeFeedbackModal = () => setFeedbackModal(prev => ({ ...prev, show: false }));
+
   useEffect(() => {
     if (authStatus !== 'authenticated' && authStatus !== 'unauthenticated') return;
 
@@ -62,41 +73,60 @@ const ListaEsperaContent = ({ reqConfig }) => {
       const requestRes = await fetch(reqConfig.requestUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: 0,
-          status: 0
-        })
+        body: JSON.stringify({ type: 0, status: 0 })
       });
 
       const requestJson = await requestRes.json();
       const requestId = requestJson.data?.request_id;
 
       if (!requestRes.ok || !requestId) {
-        alert("❌ No se pudo registrar la solicitud");
+        setFeedbackModal({
+          show: true,
+          title: "Error",
+          message: "No se pudo registrar la solicitud.",
+          variant: "danger",
+          buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
+        });
         return;
       }
 
       const preUserRes = await fetch(reqConfig.preUsersUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          request_id: requestId
-        })
+        body: JSON.stringify({ ...formData, request_id: requestId })
       });
 
       const preUserJson = await preUserRes.json();
 
       if (!preUserRes.ok) {
-        alert(`❌ Error al registrar el preusuario: ${preUserJson.message}`);
+        setFeedbackModal({
+          show: true,
+          title: "Error al registrar preusuario",
+          message: preUserJson.message,
+          variant: "danger",
+          buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
+        });
         return;
       }
 
-      alert("✅ Solicitud enviada correctamente. Te notificaremos por email cuando haya una respuesta.");
+      setFeedbackModal({
+        show: true,
+        title: "Solicitud enviada",
+        message: "Tu solicitud se ha enviado correctamente. Te notificaremos por email cuando haya una respuesta.",
+        variant: "success",
+        buttons: [{ label: "Vale", variant: "success", onClick: closeFeedbackModal }]
+      });
+
       setShowPreUserFormModal(false);
     } catch (err) {
       console.error("Error al enviar la solicitud:", err);
-      alert("❌ Error inesperado al enviar la solicitud. Inténtalo más tarde.");
+      setFeedbackModal({
+        show: true,
+        title: "Error inesperado",
+        message: "Ocurrió un error al enviar la solicitud. Intenta más tarde.",
+        variant: "danger",
+        buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
+      });
     }
   };
 
@@ -159,6 +189,15 @@ const ListaEsperaContent = ({ reqConfig }) => {
       <CustomModal title="Solicitud de Huerto" show={showPreUserFormModal} onClose={() => setShowPreUserFormModal(false)}>
         <PreUserForm onSubmit={handleRegisterSubmit} />
       </CustomModal>
+
+      <NotificationModal
+        show={feedbackModal.show}
+        onClose={closeFeedbackModal}
+        title={feedbackModal.title}
+        message={feedbackModal.message}
+        variant={feedbackModal.variant}
+        buttons={feedbackModal.buttons}
+      />
     </>
   );
 };

@@ -109,7 +109,7 @@ const getPFP = (tipo) => {
 
 const MotionCard = _motion.create(Card);
 
-const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel }) => {
+const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel, onViewIncomes }) => {
   const createMode = isNew;
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(isNew);
@@ -165,6 +165,10 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
+  const handleViewIncomes = () => {
+    onViewIncomes(socio.user_id);
+  }
+
   return (
     <MotionCard className="socio-card shadow-sm rounded-4 h-100">
       <Card.Header className={`d-flex align-items-center rounded-4 rounded-bottom-0 justify-content-between ${getHeaderColor(formData.status)}`}>
@@ -201,7 +205,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
                   <FontAwesomeIcon icon={faEdit} className="me-2" />Editar
                 </div>
-                <div className="dropdown-item d-flex align-items-center" onClick={closeDropdown}>
+                <div className="dropdown-item d-flex align-items-center" onClick={() => { handleViewIncomes(); closeDropdown(); }}>
                   <FontAwesomeIcon icon={faMoneyBill} className="me-2" />Ver ingresos
                 </div>
                 <hr className="dropdown-divider" />

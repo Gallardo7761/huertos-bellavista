@@ -19,6 +19,7 @@ const Solicitudes = () => {
 
   const reqConfig = {
     baseUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.allWithPreUsers,
+    rawUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.all,
     params: {}
   };
 
@@ -30,7 +31,7 @@ const Solicitudes = () => {
 };
 
 const SolicitudesContent = ({ reqConfig }) => {
-  const { data, dataLoading, dataError, putData } = useDataContext();
+  const { data, dataLoading, dataError, putData, deleteData } = useDataContext();
 
   const {
     filtered,
@@ -52,9 +53,9 @@ const SolicitudesContent = ({ reqConfig }) => {
 
   const handleAccept = async (entry) => {
     try {
-      await putData(`${reqConfig.baseUrl}/${entry.request_id}`, {
+      await putData(`${reqConfig.rawUrl}/${entry.request_id}`, {
         ...entry,
-        request_status: 1
+        status: 1
       });
       console.log("✅ Solicitud aceptada:", entry.request_id);
     } catch (err) {
@@ -63,16 +64,23 @@ const SolicitudesContent = ({ reqConfig }) => {
   };
 
   const handleReject = async (entry) => {
-    try {
-      await putData(`${reqConfig.baseUrl}/${entry.request_id}`, {
-        ...entry,
-        request_status: 2
-      });
+    try {  
+      // 1. Si tiene preusuario, eliminarlo
+      if (entry.pre_user_id) {
+        const preUserUrl = reqConfig.rawUrl.replace("requests", "pre_users") + `/${entry.pre_user_id}`;
+        await deleteData(preUserUrl);
+        console.log("🗑️ Preusuario eliminado:", entry.pre_user_id);
+      }
+  
+      // 2. Rechazar la solicitud
+      const requestUrl = `${reqConfig.rawUrl}/${entry.request_id}`;
+      await putData(requestUrl, { ...entry, status: 2 });
+  
       console.log("🛑 Solicitud rechazada:", entry.request_id);
     } catch (err) {
       console.error("❌ Error al rechazar solicitud:", err.message);
     }
-  };
+  };  
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;

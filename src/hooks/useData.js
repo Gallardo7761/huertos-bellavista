@@ -46,6 +46,21 @@ export const useData = (config) => {
     }
   }, [config, fetchData]);
 
+  const getData = async (url, params = {}) => {
+    try {
+      const response = await axios.get(url, {
+        headers: getAuthHeaders(),
+        params,
+      });
+      return { data: response.data.data, error: null };
+    } catch (err) {
+      return {
+        data: null,
+        error: err.response?.data?.message || err.message,
+      };
+    }
+  };  
+
   const postData = async (endpoint, payload) => {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -85,7 +100,7 @@ export const useData = (config) => {
     data,
     dataLoading,
     dataError,
-    refetch: fetchData, // Puedes usar esto manualmente si hace falta
+    getData,
     postData,
     putData,
     deleteData,

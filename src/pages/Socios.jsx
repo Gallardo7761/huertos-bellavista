@@ -13,6 +13,8 @@ import SociosFilter from '../components/Socios/SociosFilter';
 import SocioCard from '../components/Socios/SocioCard';
 import { SociosPDF } from '../components/Socios/SociosPDF';
 import PaginatedCardGrid from '../components/PaginatedCardGrid';
+import CustomModal from '../components/CustomModal';
+import IngresoCard from '../components/Ingresos/IngresoCard';
 
 import '../css/Socios.css';
 
@@ -25,6 +27,8 @@ const Socios = () => {
 
   const reqConfig = {
     baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.all}`,
+    incomesUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.payments}`,
+    rawIncomesUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.incomes.all}`,
     params: {
       _sort: "member_number",
       _order: "asc"
@@ -39,11 +43,17 @@ const Socios = () => {
 };
 
 const SociosContent = ({ reqConfig }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useDataContext();
+  const { data, dataLoading, dataError, getData, postData, putData, deleteData } = useDataContext();
 
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [creatingSocio, setCreatingSocio] = useState(false);
   const [tempSocio, setTempSocio] = useState(null);
+  const [showIncomesModal, setShowIncomesModal] = useState(false);
+  const [selectedMemberNumber, setSelectedMemberNumber] = useState(null);
+  const [incomes, setIncomes] = useState([]);
+  const [incomesLoading, setIncomesLoading] = useState(false);
+  const [incomesError, setIncomesError] = useState(null);
+
 
   const {
     filtered,
@@ -141,6 +151,33 @@ const SociosContent = ({ reqConfig }) => {
     }
   };
 
+  const handleViewIncomes = async (memberNumber) => {
+    setSelectedMemberNumber(memberNumber);
+    setShowIncomesModal(true);
+    setIncomes([]);
+    setIncomesLoading(true);
+    setIncomesError(null);
+
+    try {
+      const url = reqConfig.incomesUrl.replace(":member_number", memberNumber);
+      const res = await getData(url);
+      setIncomes(res.data);
+    } catch (err) {
+      setIncomesError(err.message);
+    } finally {
+      setIncomesLoading(false);
+    }
+  };
+
+  const handleIncomeUpdate = async (editado) => {
+    try {
+      await putData(`${reqConfig.rawIncomesUrl}/${editado.income_id}`, editado);
+      await handleViewIncomes(selectedMemberNumber);
+    } catch (err) {
+      console.error("Error actualizando ingreso:", err);
+    }
+  };
+
   const showPDFPopup = () => setShowPDFModal(true);
   const closePDFPopup = () => setShowPDFModal(false);
 
@@ -172,8 +209,6 @@ const SociosContent = ({ reqConfig }) => {
               socio={tempSocio}
               isNew
               onCreate={handleCreateSubmit}
-              onUpdate={handleEditSubmit}
-              onDelete={handleDelete}
               onCancel={handleCancelCreate}
             />
           )}
@@ -184,6 +219,7 @@ const SociosContent = ({ reqConfig }) => {
               onUpdate={handleEditSubmit}
               onDelete={handleDelete}
               onCancel={handleCancelCreate}
+              onViewIncomes={() => handleViewIncomes(socio.member_number)}
             />
           )}
         />
@@ -192,6 +228,25 @@ const SociosContent = ({ reqConfig }) => {
       <PDFModal show={showPDFModal} onClose={closePDFPopup} title="Vista previa del PDF">
         <SociosPDF socios={filtered} />
       </PDFModal>
+
+      <CustomModal
+        show={showIncomesModal}
+        onClose={() => setShowIncomesModal(false)}
+        title={`Ingresos del socio nº ${selectedMemberNumber}`}
+      >
+        {incomesLoading && <p className="text-center my-3"><LoadingIcon /></p>}
+        {incomesError && <p className="text-danger text-center my-3">{incomesError}</p>}
+        {!incomesLoading && !incomesError && incomes.length === 0 && (
+          <p className="text-center my-3">Este socio no tiene ingresos registrados.</p>
+        )}
+        <div className="d-flex flex-wrap gap-3 p-3 justify-content-start">
+          {incomes.map((income) => (
+            <IngresoCard key={income.income_id} income={income} 
+              onUpdate={handleIncomeUpdate} className='from-members' />
+          ))}
+        </div>
+      </CustomModal>
+
     </CustomContainer>
   );
 };

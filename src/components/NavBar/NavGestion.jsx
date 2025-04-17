@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGear, faUsers, faMoneyBill, faWallet, faFileInvoice, faInbox
 } from '@fortawesome/free-solid-svg-icons';
+import useRequestCount from '../../hooks/useRequestCount';
 
 const NavGestion = () => {
   const [showing, setShowing] = useState(false);
+  const count = useRequestCount();
 
   return (
     <AnimatedDropdown
@@ -35,7 +37,11 @@ const NavGestion = () => {
       </Link>
       <hr className="dropdown-divider" />
       <Link to="/gestion/solicitudes" className="text-muted dropdown-item nav-link">
-        <FontAwesomeIcon icon={faInbox} className="me-2" />Solicitudes
+        <span className="icon-with-badge me-2">
+          <FontAwesomeIcon icon={faInbox} />
+          {count > 0 && <span className="icon-badge">{count}</span>}
+        </span>
+        Solicitudes
       </Link>
     </AnimatedDropdown>
   );

@@ -25,12 +25,17 @@
                 "hasPaid": "/v1/members/number/:member_number/has-paid",
                 "waitlist": "/v1/members/waitlist",
                 "limitedWaitlist": "/v1/members/waitlist/limited",
-                "lastMemberNumber": "/v1/members/latest-number"
+                "lastMemberNumber": "/v1/members/latest-number",
+                "hasCollaborator": "/v1/members/number/:member_number/has-collaborator",
+                "hasCollaboratorRequest": "/v1/members/number/:member_number/has-collaborator-request",
+                "hasGreenhouse": "/v1/members/number/:member_number/has-greenhouse",
+                "hasGreenhouseRequest": "/v1/members/number/:member_number/has-greenhouse-request"
             },
             "incomes": {
                 "all": "/raw/v1/incomes",
                 "allWithNames": "/v1/incomes/with-names",
-                "byId": "/raw/v1/incomes/:income_id"
+                "byId": "/raw/v1/incomes/:income_id",
+                "myIncomes": "/v1/incomes/my-incomes"
             },
             "expenses": {
                 "all": "/raw/v1/expenses",
@@ -47,7 +52,9 @@
                 "all": "/raw/v1/requests",
                 "byId": "/raw/v1/requests/:request_id",
                 "allWithPreUsers": "/v1/requests-full",
-                "byIdWithPreUser": "/v1/requests-full/:request_id"
+                "byIdWithPreUser": "/v1/requests-full/:request_id",
+                "countPending": "/v1/requests/count",
+                "myRequests": "/v1/requests/my-requests"
             },
             "pre_users": {
                 "all": "/raw/v1/pre_users",

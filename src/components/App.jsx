@@ -21,7 +21,6 @@ import { CONSTANTS } from '../util/constants'
 import Perfil from '../pages/Perfil.jsx'
 
 function App() {
-
   const routesWithFooter = ["/", "/lista-espera", "/login", "/gestion/socios", "/gestion/ingresos", "/gestion/gastos", "/gestion/balance"];
 
   return (
