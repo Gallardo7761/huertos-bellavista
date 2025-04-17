@@ -5,9 +5,14 @@ export const useData = (config) => {
   const [data, setData] = useState(null);
   const [dataLoading, setLoading] = useState(true);
   const [dataError, setError] = useState(null);
+  const configRef = useRef();
 
-  const configRef = useRef(config);
-  configRef.current = config; // Se actualiza siempre
+  // Actualizamos configRef cuando cambia config
+  useEffect(() => {
+    if (config?.baseUrl) {
+      configRef.current = config;
+    }
+  }, [config]);
 
   const getAuthHeaders = () => ({
     "Content-Type": "application/json",
@@ -15,12 +20,16 @@ export const useData = (config) => {
   });
 
   const fetchData = useCallback(async () => {
+    const current = configRef.current;
+    if (!current?.baseUrl) return;
+
     setLoading(true);
     setError(null);
+
     try {
-      const response = await axios.get(configRef.current.baseUrl, {
+      const response = await axios.get(current.baseUrl, {
         headers: getAuthHeaders(),
-        params: configRef.current.params,
+        params: current.params,
       });
       setData(response.data.data);
     } catch (err) {
@@ -28,11 +37,14 @@ export const useData = (config) => {
     } finally {
       setLoading(false);
     }
-  }, []); // ← sin dependencias
+  }, []);
 
+  // Siempre que cambie config, hacemos fetch
   useEffect(() => {
-    fetchData();
-  }, [fetchData]); // se vuelve a ejecutar si cambia el config
+    if (config?.baseUrl) {
+      fetchData();
+    }
+  }, [config, fetchData]);
 
   const postData = async (endpoint, payload) => {
     const headers = {
@@ -40,7 +52,7 @@ export const useData = (config) => {
       ...(payload instanceof FormData ? {} : { "Content-Type": "application/json" }),
     };
     const response = await axios.post(endpoint, payload, { headers });
-    await fetchData(); // ← SIEMPRE usa el último config
+    await fetchData(); // Refresca tras crear
     return response.data.data;
   };
 
@@ -48,7 +60,7 @@ export const useData = (config) => {
     const response = await axios.put(endpoint, payload, {
       headers: getAuthHeaders(),
     });
-    await fetchData();
+    await fetchData(); // Refresca tras editar
     return response.data.data;
   };
 
@@ -56,7 +68,7 @@ export const useData = (config) => {
     const response = await axios.delete(endpoint, {
       headers: getAuthHeaders(),
     });
-    await fetchData();
+    await fetchData(); // Refresca tras borrar
     return response.data.data;
   };
 
@@ -73,7 +85,7 @@ export const useData = (config) => {
     data,
     dataLoading,
     dataError,
-    refetch: fetchData,
+    refetch: fetchData, // Puedes usar esto manualmente si hace falta
     postData,
     putData,
     deleteData,

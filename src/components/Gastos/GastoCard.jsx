@@ -20,14 +20,9 @@ import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { useTheme } from '../../hooks/useTheme';
 import '../../css/IngresoCard.css';
 import { CONSTANTS } from '../../util/constants';
+import { DateParser } from '../../util/parsers/dateParser';
 
 const MotionCard = _motion.create(Card);
-
-const formatDate = (iso) => {
-  if (!iso) return "Fecha no disponible";
-  const [y, m, d] = iso.split("T")[0].split("-");
-  return `${d}/${m}/${y}`;
-};
 
 const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? "Banco" : "Caja";
 const getTypeColor = (type, theme) => type === 0 ? "primary" : theme === "light" ? "dark" : "light";
@@ -45,7 +40,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
     supplier: gasto.supplier || '',
     invoice: gasto.invoice || '',
     type: gasto.type ?? 0,
-    created_at: gasto.created_at || new Date().toISOString()
+    created_at: gasto.created_at
   });
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
@@ -86,7 +81,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           </span>
           <small>
             <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
-            {formatDate(formData.created_at)}
+            {DateParser.isoToStringWithTime(formData.created_at)}
           </small>
         </div>
         {!createMode && (

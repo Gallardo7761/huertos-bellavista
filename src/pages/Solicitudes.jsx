@@ -1,6 +1,8 @@
-import { useData } from '../hooks/useData';
-import { DataProvider } from '../context/DataContext';
 import { useConfig } from '../hooks/useConfig';
+import { DataProvider } from '../context/DataContext';
+import { useDataContext } from '../hooks/useDataContext';
+import { usePaginatedList } from '../hooks/usePaginatedList';
+
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
 import LoadingIcon from '../components/LoadingIcon';
@@ -8,42 +10,32 @@ import SearchToolbar from '../components/SearchToolbar';
 import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import SolicitudCard from '../components/Solicitudes/SolicitudCard';
 
-import { usePaginatedList } from '../hooks/usePaginatedList';
-
 const PAGE_SIZE = 10;
 
 const Solicitudes = () => {
   const { config, configLoading } = useConfig();
 
-  if (configLoading) return <p><LoadingIcon /></p>;
-
-  const HOST = config?.apiConfig.baseUrl;
-  const BASE = `${HOST}`;
-  const ENDPOINT = config?.apiConfig.endpoints.requests.allWithPreUsers; // asegúrate que apunta a /raw/v1/requests/with_pre_users
+  if (configLoading || !config) return <p className="text-center my-5"><LoadingIcon /></p>;
 
   const reqConfig = {
-    baseUrl: BASE + ENDPOINT,
+    baseUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.allWithPreUsers,
     params: {}
   };
 
   return (
     <DataProvider config={reqConfig}>
-      <SolicitudesContent config={reqConfig} />
+      <SolicitudesContent reqConfig={reqConfig} />
     </DataProvider>
   );
 };
 
-const SolicitudesContent = ({ config }) => {
-  const { data, dataLoading, dataError, putData } = useData(config);
+const SolicitudesContent = ({ reqConfig }) => {
+  const { data, dataLoading, dataError, putData } = useDataContext();
 
   const {
-    paginated,
     filtered,
     searchTerm,
-    setSearchTerm,
-    loaderRef,
-    loading,
-    isUsingFilters: usingSearch
+    setSearchTerm
   } = usePaginatedList({
     data,
     pageSize: PAGE_SIZE,
@@ -60,25 +52,25 @@ const SolicitudesContent = ({ config }) => {
 
   const handleAccept = async (entry) => {
     try {
-      await putData(`${config.baseUrl}/${entry.request_id}`, {
+      await putData(`${reqConfig.baseUrl}/${entry.request_id}`, {
         ...entry,
         request_status: 1
       });
-      console.log("Solicitud aceptada:", entry.request_id);
+      console.log("✅ Solicitud aceptada:", entry.request_id);
     } catch (err) {
-      console.error("Error al aceptar solicitud:", err.message);
+      console.error("❌ Error al aceptar solicitud:", err.message);
     }
   };
 
   const handleReject = async (entry) => {
     try {
-      await putData(`${config.baseUrl}/${entry.request_id}`, {
+      await putData(`${reqConfig.baseUrl}/${entry.request_id}`, {
         ...entry,
         request_status: 2
       });
-      console.log("Solicitud rechazada:", entry.request_id);
+      console.log("🛑 Solicitud rechazada:", entry.request_id);
     } catch (err) {
-      console.error("Error al rechazar solicitud:", err.message);
+      console.error("❌ Error al rechazar solicitud:", err.message);
     }
   };
 
@@ -102,9 +94,7 @@ const SolicitudesContent = ({ config }) => {
         />
 
         <PaginatedCardGrid
-          items={usingSearch ? filtered : paginated}
-          loaderRef={loaderRef}
-          loading={loading}
+          items={filtered}
           renderCard={(entry) => (
             <SolicitudCard
               key={entry.request_id}

@@ -27,7 +27,7 @@ const PreUserForm = ({ onSubmit }) => {
       try {
         const res = await fetch("https://api.huertosbellavista.es/v1/members/latest-number");
         const data = await res.json();
-        setForm((prev) => ({ ...prev, member_number: data.data.lastMemberNumber }));
+        setForm((prev) => ({ ...prev, member_number: data.data.lastMemberNumber+1 }));
       } catch (err) {
         console.error("Error al obtener el número de socio:", err);
       }
@@ -35,6 +35,18 @@ const PreUserForm = ({ onSubmit }) => {
 
     fetchLastNumber();
   }, []);
+
+  useEffect(() => {
+    const trimmedName = form.display_name?.trim() ?? "";
+  
+    const nuevoUsername = trimmedName
+      ? trimmedName.split(' ')[0].toLowerCase() + form.member_number
+      : "";
+  
+    if (form.user_name !== nuevoUsername) {
+      setForm(prev => ({ ...prev, user_name: nuevoUsername }));
+    }
+  }, [form.member_number, form.display_name, form.user_name]); 
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;

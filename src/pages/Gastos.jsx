@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
-import { useData } from '../hooks/useData';
-import { usePaginatedList } from '../hooks/usePaginatedList';
 import { DataProvider } from '../context/DataContext';
+import { useDataContext } from '../hooks/useDataContext';
+import { usePaginatedList } from '../hooks/usePaginatedList';
 
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
@@ -10,7 +10,6 @@ import LoadingIcon from '../components/LoadingIcon';
 import SearchToolbar from '../components/SearchToolbar';
 import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import PDFModal from '../components/PDFModal';
-
 import GastoCard from '../components/Gastos/GastoCard';
 import GastosFilter from '../components/Gastos/GastosFilter';
 import { GastosPDF } from '../components/Gastos/GastosPDF';
@@ -25,43 +24,33 @@ const Gastos = () => {
 
   if (configLoading) return <p><LoadingIcon /></p>;
 
-  const HOST = config.apiConfig.baseUrl;
-  const BASE = `${HOST}`;
-  const ENDPOINT = config.apiConfig.endpoints.expenses.all;
-
   const reqConfig = {
-    baseUrl: BASE + ENDPOINT,
+    baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.expenses.all}`,
     params: {
       _sort: 'created_at',
-      _order: 'desc'
-    }
+      _order: 'desc',
+    },
   };
 
   return (
     <DataProvider config={reqConfig}>
-      <GastosContent config={reqConfig} />
+      <GastosContent reqConfig={reqConfig} />
     </DataProvider>
   );
 };
 
-const GastosContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
+const GastosContent = ({ reqConfig }) => {
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useDataContext();
   const [showPDFModal, setShowPDFModal] = useState(false);
+  const [creatingGasto, setCreatingGasto] = useState(false);
+  const [tempGasto, setTempGasto] = useState(null);
 
   const {
-    paginated,
     filtered,
     searchTerm,
     setSearchTerm,
     filters,
     setFilters,
-    loaderRef,
-    loading,
-    isUsingFilters,
-    creatingItem: creatingGasto,
-    setCreatingItem: setCreatingGasto,
-    tempItem: tempGasto,
-    setTempItem: setTempGasto
   } = usePaginatedList({
     data,
     pageSize: PAGE_SIZE,
@@ -72,12 +61,9 @@ const GastosContent = ({ config }) => {
     },
     filterFn: (gasto, filters) => {
       if (filters.todos) return true;
-
-      const { banco, caja } = filters;
-
       return (
-        (banco && gasto.type === CONSTANTS.PAYMENT_TYPE_BANK) ||
-        (caja && gasto.type === CONSTANTS.PAYMENT_TYPE_CASH)
+        (filters.banco && gasto.type === CONSTANTS.PAYMENT_TYPE_BANK) ||
+        (filters.caja && gasto.type === CONSTANTS.PAYMENT_TYPE_CASH)
       );
     },
     searchFn: (gasto, term) => {
@@ -90,12 +76,6 @@ const GastosContent = ({ config }) => {
     }
   });
 
-  const showPDFPopup = () => setShowPDFModal(true);
-  const closePDFPopup = () => setShowPDFModal(false);
-
-  if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
-  if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
-
   const handleCreate = () => {
     const grid = document.querySelector('.cards-grid');
     setCreatingGasto(true);
@@ -105,42 +85,38 @@ const GastosContent = ({ config }) => {
       amount: 0.0,
       supplier: '',
       invoice: '',
-      type: 0,
-      created_at: new Date().toISOString()
+      type: 0
     });
-    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleCreateSubmit = async (newGasto) => {
+  const handleCreateSubmit = async (nuevo) => {
     try {
-      const res = await postData(config.baseUrl, newGasto);
-      console.log("Gasto creado:", res);
+      await postData(reqConfig.baseUrl, nuevo);
       setCreatingGasto(false);
       setTempGasto(null);
     } catch (err) {
-      console.error("Error creando gasto:", err);
+      console.error("Error creando gasto:", err.message);
     }
   };
 
-  const handleEditSubmit = async (updatedGasto) => {
+  const handleEditSubmit = async (editado) => {
     try {
-      const res = await putData(`${config.baseUrl}/${updatedGasto.expense_id}`, updatedGasto);
-      console.log("Gasto actualizado:", res);
+      await putData(`${reqConfig.baseUrl}/${editado.expense_id}`, editado);
     } catch (err) {
-      console.error("Error actualizando gasto:", err);
+      console.error("Error actualizando gasto:", err.message);
     }
   };
 
-  const handleDelete = async (expenseId) => {
-    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el gasto con ID ${expenseId}?`);
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar este gasto?");
     if (!confirmed) return;
 
     try {
-      await deleteData(`${config.baseUrl}/${expenseId}`);
-      console.log("Gasto eliminado correctamente");
+      await deleteData(`${reqConfig.baseUrl}/${id}`);
       setSearchTerm("");
     } catch (err) {
-      console.error("Error eliminando gasto:", err);
+      console.error("Error eliminando gasto:", err.message);
     }
   };
 
@@ -148,6 +124,9 @@ const GastosContent = ({ config }) => {
     setCreatingGasto(false);
     setTempGasto(null);
   };
+
+  if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
+  if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
   return (
     <CustomContainer>
@@ -163,13 +142,11 @@ const GastosContent = ({ config }) => {
           onSearchChange={setSearchTerm}
           filtersComponent={<GastosFilter filters={filters} onChange={setFilters} />}
           onCreate={handleCreate}
-          onPDF={showPDFPopup}
+          onPDF={() => setShowPDFModal(true)}
         />
 
         <PaginatedCardGrid
-          items={isUsingFilters ? filtered : paginated}
-          loaderRef={loaderRef}
-          loading={loading}
+          items={filtered}
           creatingItem={creatingGasto}
           renderCreatingCard={() => (
             <GastoCard
@@ -191,11 +168,11 @@ const GastosContent = ({ config }) => {
             />
           )}
         />
-      </ContentWrapper>
 
-      <PDFModal show={showPDFModal} onClose={closePDFPopup} title="Vista previa del PDF">
-        <GastosPDF gastos={filtered} />
-      </PDFModal>
+        <PDFModal show={showPDFModal} onClose={() => setShowPDFModal(false)} title="Vista previa del PDF">
+          <GastosPDF gastos={filtered} />
+        </PDFModal>
+      </ContentWrapper>
     </CustomContainer>
   );
 };

@@ -19,14 +19,9 @@ import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { CONSTANTS } from '../../util/constants';
 import '../../css/IngresoCard.css';
 import { useTheme } from '../../hooks/useTheme';
+import { DateParser } from '../../util/parsers/dateParser';
 
 const MotionCard = _motion.create(Card);
-
-const formatDate = (iso) => {
-  if (!iso) return "Fecha no disponible";
-  const [y, m, d] = iso.split("T")[0].split("-");
-  return `${d}/${m}/${y}`;
-};
 
 const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? "Banco" : "Caja";
 const getFrequencyLabel = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? "Semestral" : "Anual";
@@ -48,7 +43,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
     type: income.type ?? CONSTANTS.PAYMENT_TYPE_CASH,
     frequency: income.frequency ?? CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
     member_number: income.member_number,
-    created_at: income.created_at || new Date().toISOString()
+    created_at: income.created_at
   });
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
@@ -88,7 +83,7 @@ const IngresoCard = ({ income, isNew = false, onCreate, onUpdate, onDelete, onCa
           </span>
           <small>
             <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
-            {formatDate(formData.created_at)}
+            {DateParser.isoToStringWithTime(formData.created_at)}
           </small>
         </div>
         {!createMode && (

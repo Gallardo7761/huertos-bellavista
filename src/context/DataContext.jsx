@@ -2,7 +2,7 @@ import { createContext } from "react";
 import PropTypes from "prop-types";
 import { useData } from "../hooks/useData";
 
-const DataContext = createContext();
+export const DataContext = createContext();
 
 export const DataProvider = ({ config, children }) => {
   const data = useData(config);

@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
-import { useData } from '../hooks/useData';
-import { usePaginatedList } from '../hooks/usePaginatedList';
 import { DataProvider } from '../context/DataContext';
+import { useDataContext } from '../hooks/useDataContext';
+import { usePaginatedList } from '../hooks/usePaginatedList';
 
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
@@ -18,41 +19,32 @@ const Anuncios = () => {
 
   if (configLoading) return <p><LoadingIcon /></p>;
 
-  const BASE = config.apiConfig.baseUrl;
-  const ENDPOINT = config.apiConfig.endpoints.announces.all;
-
   const reqConfig = {
-    baseUrl: BASE + ENDPOINT,
+    baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.announces.all}`,
     params: {
       _sort: 'created_at',
-      _order: 'desc'
-    }
+      _order: 'desc',
+    },
   };
 
   return (
     <DataProvider config={reqConfig}>
-      <AnunciosContent config={reqConfig} />
+      <AnunciosContent reqConfig={reqConfig} />
     </DataProvider>
   );
 };
 
-const AnunciosContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
+const AnunciosContent = ({ reqConfig }) => {
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useDataContext();
+  const [creatingAnuncio, setCreatingAnuncio] = useState(false);
+  const [tempAnuncio, setTempAnuncio] = useState(null);
 
   const {
-    paginated,
     filtered,
     searchTerm,
     setSearchTerm,
     filters,
     setFilters,
-    loaderRef,
-    loading,
-    creatingItem: creatingAnuncio,
-    setCreatingItem: setCreatingAnuncio,
-    tempItem: tempAnuncio,
-    setTempItem: setTempAnuncio,
-    isUsingFilters: usingSearchOrFilters
   } = usePaginatedList({
     data,
     pageSize: PAGE_SIZE,
@@ -62,14 +54,13 @@ const AnunciosContent = ({ config }) => {
         (filters.baja && anuncio.priority === 0) ||
         (filters.media && anuncio.priority === 1) ||
         (filters.alta && anuncio.priority === 2);
-
       const createdAt = new Date(anuncio.created_at);
       const now = new Date();
-
       const matchesFecha =
         (filters.ultimos7 && (now - createdAt) / (1000 * 60 * 60 * 24) <= 7) ||
-        (filters.esteMes && createdAt.getMonth() === now.getMonth() && createdAt.getFullYear() === now.getFullYear());
-
+        (filters.esteMes &&
+          createdAt.getMonth() === now.getMonth() &&
+          createdAt.getFullYear() === now.getFullYear());
       return matchesPrioridad || matchesFecha;
     },
     searchFn: (anuncio, term) => {
@@ -85,20 +76,19 @@ const AnunciosContent = ({ config }) => {
       media: true,
       alta: true,
       ultimos7: true,
-      esteMes: true
-    }
+      esteMes: true,
+    },
   });
 
   const handleCreate = () => {
-    const grid = document.querySelector('.cards-grid');
     setCreatingAnuncio(true);
     setTempAnuncio({
       announce_id: null,
       body: 'Nuevo anuncio',
       priority: 1,
-      published_by_name: 'Admin'
+      published_by_name: 'Admin',
     });
-    grid.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelector('.cards-grid')?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCancelCreate = () => {
@@ -108,7 +98,7 @@ const AnunciosContent = ({ config }) => {
 
   const handleCreateSubmit = async (nuevo) => {
     try {
-      await postData(config.baseUrl, nuevo);
+      await postData(reqConfig.baseUrl, nuevo);
       setCreatingAnuncio(false);
       setTempAnuncio(null);
     } catch (err) {
@@ -118,18 +108,16 @@ const AnunciosContent = ({ config }) => {
 
   const handleEditSubmit = async (editado, id) => {
     try {
-      await putData(`${config.baseUrl}/${id}`, editado);
+      await putData(`${reqConfig.baseUrl}/${id}`, editado);
     } catch (err) {
       console.error("Error al editar anuncio:", err.message);
     }
   };
 
   const handleDelete = async (id) => {
-    const confirmed = window.confirm("¿Estás seguro de que quieres eliminar este anuncio?");
-    if (!confirmed) return;
-
+    if (!window.confirm("¿Estás seguro de que quieres eliminar este anuncio?")) return;
     try {
-      await deleteData(`${config.baseUrl}/${id}`);
+      await deleteData(`${reqConfig.baseUrl}/${id}`);
     } catch (err) {
       console.error("Error al eliminar anuncio:", err.message);
     }
@@ -155,9 +143,7 @@ const AnunciosContent = ({ config }) => {
         />
 
         <PaginatedCardGrid
-          items={usingSearchOrFilters ? filtered : paginated}
-          loaderRef={loaderRef}
-          loading={loading}
+          items={filtered}
           creatingItem={creatingAnuncio}
           renderCreatingCard={() => (
             <AnuncioCard

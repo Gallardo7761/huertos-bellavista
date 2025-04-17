@@ -1,34 +1,30 @@
-import { useData } from '../hooks/useData';
-import { DataProvider } from '../context/DataContext';
+import { useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
+import { DataProvider } from '../context/DataContext';
+import { useDataContext } from '../hooks/useDataContext';
 import { usePaginatedList } from '../hooks/usePaginatedList';
 
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
 import LoadingIcon from '../components/LoadingIcon';
 import SearchToolbar from '../components/SearchToolbar';
-import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import PDFModal from '../components/PDFModal';
 import SociosFilter from '../components/Socios/SociosFilter';
 import SocioCard from '../components/Socios/SocioCard';
 import { SociosPDF } from '../components/Socios/SociosPDF';
+import PaginatedCardGrid from '../components/PaginatedCardGrid';
 
 import '../css/Socios.css';
-import { useState } from 'react';
 
 const PAGE_SIZE = 10;
 
 const Socios = () => {
   const { config, configLoading } = useConfig();
 
-  if (configLoading) return <p><LoadingIcon /></p>;
-
-  const HOST = config?.apiConfig.baseUrl;
-  const BASE = `${HOST}`;
-  const ENDPOINT = config?.apiConfig.endpoints.members.all;
+  if (configLoading || !config) return <p className="text-center my-5"><LoadingIcon /></p>;
 
   const reqConfig = {
-    baseUrl: BASE + ENDPOINT,
+    baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.all}`,
     params: {
       _sort: "member_number",
       _order: "asc"
@@ -37,29 +33,24 @@ const Socios = () => {
 
   return (
     <DataProvider config={reqConfig}>
-      <SociosContent config={reqConfig} />
+      <SociosContent reqConfig={reqConfig} />
     </DataProvider>
   );
 };
 
-const SociosContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useData(config);
+const SociosContent = ({ reqConfig }) => {
+  const { data, dataLoading, dataError, postData, putData, deleteData } = useDataContext();
+
   const [showPDFModal, setShowPDFModal] = useState(false);
+  const [creatingSocio, setCreatingSocio] = useState(false);
+  const [tempSocio, setTempSocio] = useState(null);
 
   const {
-    paginated,
     filtered,
     searchTerm,
     setSearchTerm,
     filters,
-    setFilters,
-    loaderRef,
-    loading,
-    creatingItem: creatingSocio,
-    setCreatingItem: setCreatingSocio,
-    tempItem: tempSocio,
-    setTempItem: setTempSocio,
-    isUsingFilters: usingSearchOrFilters
+    setFilters
   } = usePaginatedList({
     data,
     pageSize: PAGE_SIZE,
@@ -95,7 +86,7 @@ const SociosContent = ({ config }) => {
   const handleCreate = () => {
     const grid = document.querySelector('.cards-grid');
     setCreatingSocio(true);
-    setTempSocio({
+    const nuevo = {
       user_id: null,
       user_name: "nuevo" + Date.now(),
       email: "",
@@ -109,8 +100,9 @@ const SociosContent = ({ config }) => {
       notes: "",
       status: 1,
       type: 1
-    });
-    tempSocio.user_name = tempSocio.display_name.split(" ")[0].toLowerCase() + tempSocio.member_number;
+    };
+    nuevo.user_name = nuevo.display_name.split(" ")[0].toLowerCase() + nuevo.member_number;
+    setTempSocio(nuevo);
     grid.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -123,8 +115,7 @@ const SociosContent = ({ config }) => {
     try {
       const usuario = newSocio.display_name.split(" ")[0].toLowerCase() + newSocio.member_number;
       newSocio.user_name = usuario;
-      const res = await postData(config.baseUrl, newSocio);
-      console.log("Socio creado:", res);
+      await postData(reqConfig.baseUrl, newSocio);
       setCreatingSocio(false);
       setTempSocio(null);
     } catch (err) {
@@ -134,21 +125,17 @@ const SociosContent = ({ config }) => {
 
   const handleEditSubmit = async (updatedSocio, userId) => {
     try {
-      const res = await putData(`${config.baseUrl}/${userId}`, updatedSocio);
-      console.log("Socio actualizado:", res);
+      await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio);
     } catch (err) {
       console.error("Error al actualizar socio:", err.message);
     }
   };
 
   const handleDelete = async (userId) => {
-    const confirmed = window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${userId}?`);
-    if (!confirmed) return;
-
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${userId}?`)) return;
     try {
-      await deleteData(`${config.baseUrl}/${userId}`);
-      console.log("Socio eliminado correctamente");
-      setSearchTerm(""); // por si estaba buscando ese
+      await deleteData(`${reqConfig.baseUrl}/${userId}`);
+      setSearchTerm("");
     } catch (err) {
       console.error("Error al eliminar socio:", err.message);
     }
@@ -178,9 +165,7 @@ const SociosContent = ({ config }) => {
         />
 
         <PaginatedCardGrid
-          items={usingSearchOrFilters ? filtered : paginated}
-          loaderRef={loaderRef}
-          loading={loading}
+          items={filtered}
           creatingItem={creatingSocio}
           renderCreatingCard={() => (
             <SocioCard

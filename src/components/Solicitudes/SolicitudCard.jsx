@@ -66,8 +66,8 @@ const SolicitudCard = ({ data, onAccept, onReject }) => {
           <ListGroup.Item><FontAwesomeIcon icon={faHome} className="me-2" />Dirección: <strong>{data.pre_address ?? 'NO'}</strong></ListGroup.Item>
           <ListGroup.Item><FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" />Ciudad: <strong>{data.pre_city ?? 'NO'} ({data.pre_zip_code ?? 'NO'})</strong></ListGroup.Item>
           <ListGroup.Item><FontAwesomeIcon icon={faHashtag} className="me-2" />Nº socio: <strong>{data.pre_member_number ?? 'NO'}</strong> | Nº huerto: <strong>{data.pre_plot_number ?? 'NO'}</strong></ListGroup.Item>
-          <ListGroup.Item><FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo: <strong>{['General', 'Escolar', 'Comunitario', 'Temporal'][data.pre_type]}</strong></ListGroup.Item>
-          <ListGroup.Item><FontAwesomeIcon icon={faUserShield} className="me-2" />Rol: <strong>{['Usuario', 'Gestor', 'Admin'][data.pre_role]}</strong></ListGroup.Item>
+          <ListGroup.Item><FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo: <strong>{['Lista de Espera', 'Hortelano', 'Hortelano + Invernadero', 'Colaborador'][data.pre_type]}</strong></ListGroup.Item>
+          <ListGroup.Item><FontAwesomeIcon icon={faUserShield} className="me-2" />Rol: <strong>{['Usuario', 'Admin', 'Desarrollador'][data.pre_role]}</strong></ListGroup.Item>
         </ListGroup>
 
         {data.request_status === 0 && (
