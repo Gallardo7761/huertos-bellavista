@@ -164,8 +164,6 @@ const AnunciosContent = ({ config }) => {
               anuncio={tempAnuncio}
               isNew
               onCreate={handleCreateSubmit}
-              onUpdate={handleEditSubmit}
-              onDelete={handleDelete}
               onCancel={handleCancelCreate}
             />
           )}
@@ -173,7 +171,7 @@ const AnunciosContent = ({ config }) => {
             <AnuncioCard
               key={anuncio.announce_id}
               anuncio={anuncio}
-              onEdit={(a) => handleEditSubmit(a, a.announce_id)}
+              onUpdate={(a, id) => handleEditSubmit(a, id)}
               onDelete={() => handleDelete(anuncio.announce_id)}
             />
           )}

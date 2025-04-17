@@ -121,6 +121,8 @@ const SociosContent = ({ config }) => {
 
   const handleCreateSubmit = async (newSocio) => {
     try {
+      const usuario = newSocio.display_name.split(" ")[0].toLowerCase() + newSocio.member_number;
+      newSocio.user_name = usuario;
       const res = await postData(config.baseUrl, newSocio);
       console.log("Socio creado:", res);
       setCreatingSocio(false);

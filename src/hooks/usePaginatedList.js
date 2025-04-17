@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect } from 'react';
 import useInfiniteScroll from './useInfiniteScroll';
 
 export const usePaginatedList = ({
@@ -32,18 +32,28 @@ export const usePaginatedList = ({
   }, [data, filterFn, filters, searchFn, searchTerm]);
 
   const loadMore = () => {
-    if (loading || !data) return;
+    if (loading || !filteredData) return;
     setLoading(true);
     setTimeout(() => {
       const start = page * pageSize;
       const end = start + pageSize;
-      const chunk = data.slice(start, end);
+      const chunk = filteredData.slice(start, end);
       setPaginated(prev => [...prev, ...chunk]);
       setPage(prev => prev + 1);
       setLoading(false);
-      if (end >= data.length) setHasMore(false);
+      if (end >= filteredData.length) setHasMore(false);
     }, 500);
-  };
+  };  
+
+  useEffect(() => {
+    if (!filteredData) return;
+  
+    const initialChunk = filteredData.slice(0, pageSize);
+  
+    setPaginated(initialChunk);
+    setPage(1);
+    setHasMore(filteredData.length > pageSize);
+  }, [data, searchTerm, filters, pageSize]);  
 
   useInfiniteScroll(loaderRef, loadMore, enablePagination && hasMore && !usingSearchOrFilters);
 

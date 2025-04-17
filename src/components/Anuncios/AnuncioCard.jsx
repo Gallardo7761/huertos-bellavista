@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, Button, Form } from 'react-bootstrap';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,6 +33,16 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
     priority: anuncio.priority ?? 1,
     published_by: JSON.parse(localStorage.getItem('user'))?.user_id
   });
+
+  useEffect(() => {
+    if (!editMode) {
+      setFormData({
+        body: anuncio.body || '',
+        priority: anuncio.priority ?? 1,
+        published_by: JSON.parse(localStorage.getItem('user'))?.user_id
+      });
+    }
+  }, [anuncio, editMode]);
 
   const handleEdit = () => setEditMode(true);
   const handleDelete = () => typeof onDelete === 'function' && onDelete(anuncio.announce_id);

@@ -8,13 +8,17 @@ import {
   faEllipsisVertical, faEdit, faTrash, faMoneyBill,
   faCheck,
   faXmark,
-  faCalendar
+  faCalendar,
+  faKey
 } from '@fortawesome/free-solid-svg-icons';
 import { motion as _motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
 import '../../css/SocioCard.css';
 import TipoSocioDropdown from './TipoSocioDropdown';
+import { getNowAsLocalDatetime } from '../../util/date';
+import { generateSecurePassword } from '../../util/passwordGenerator';
+import { DateParser } from '../../util/parsers/dateParser';
 
 const getFechas = (formData, editMode, handleChange) => {
   const { created_at, assigned_at, deactivated_at } = formData;
@@ -27,7 +31,7 @@ const getFechas = (formData, editMode, handleChange) => {
         <span><FontAwesomeIcon icon={faCalendar} className="me-2" />ALTA</span>
         {editMode ? (
           <Form.Control
-            type="date"
+            type="datetime-local"
             size="sm"
             className="themed-input"
             style={{ maxWidth: '200px' }}
@@ -35,7 +39,7 @@ const getFechas = (formData, editMode, handleChange) => {
             onChange={(e) => handleChange('created_at', e.target.value)}
           />
         ) : (
-          <strong>{parseDate(created_at)}</strong>
+          <strong>{DateParser.isoToStringWithTime(created_at)}</strong>
         )}
       </ListGroup.Item>
 
@@ -43,7 +47,7 @@ const getFechas = (formData, editMode, handleChange) => {
         <span><FontAwesomeIcon icon={faCalendar} className="me-2" />ENTREGA</span>
         {editMode ? (
           <Form.Control
-            type="date"
+            type="datetime-local"
             size="sm"
             className="themed-input"
             style={{ maxWidth: '200px' }}
@@ -51,7 +55,7 @@ const getFechas = (formData, editMode, handleChange) => {
             onChange={(e) => handleChange('assigned_at', e.target.value)}
           />
         ) : (
-          <strong>{parseDate(assigned_at)}</strong>
+          <strong>{DateParser.isoToStringWithTime(assigned_at)}</strong>
         )}
       </ListGroup.Item>
 
@@ -59,7 +63,7 @@ const getFechas = (formData, editMode, handleChange) => {
         <span><FontAwesomeIcon icon={faCalendar} className="me-2" />BAJA</span>
         {editMode ? (
           <Form.Control
-            type="date"
+            type="datetime-local"
             size="sm"
             className="themed-input"
             style={{ maxWidth: '200px' }}
@@ -67,7 +71,7 @@ const getFechas = (formData, editMode, handleChange) => {
             onChange={(e) => handleChange('deactivated_at', e.target.value)}
           />
         ) : (
-          <strong>{parseDate(deactivated_at)}</strong>
+          <strong>{DateParser.isoToStringWithTime(deactivated_at)}</strong>
         )}
       </ListGroup.Item>
     </ListGroup>
@@ -102,11 +106,6 @@ const getPFP = (tipo) => {
   };
   return base + (map[tipo] || 'farmer.png');
 };
-const parseDate = (date) => {
-  if (!date) return 'NO';
-  const [y, m, d] = date.split('-');
-  return `${d}/${m}/${y}`;
-};
 
 const MotionCard = _motion.create(Card);
 
@@ -114,21 +113,24 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   const createMode = isNew;
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(isNew);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    display_name: socio.display_name || '',
-    user_name: socio.user_name || '',
+    display_name: socio.display_name,
+    user_name: socio.user_name,
     email: socio.email || '',
-    dni: socio.dni || '',
-    phone: socio.phone || 0,
+    dni: socio.dni,
+    phone: socio.phone,
     member_number: socio.member_number,
-    plot_number: socio.plot_number || 0,
+    plot_number: socio.plot_number,
     notes: socio.notes || '',
-    status: socio.status ?? 1,
-    type: socio.type ?? 1,
-    created_at: socio.created_at?.split('T')[0] || '',
-    assigned_at: socio.assigned_at?.split('T')[0] || '',
-    deactivated_at: socio.deactivated_at?.split('T')[0] || ''
+    status: socio.status,
+    type: socio.type,
+    created_at: socio.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
+    assigned_at: socio.assigned_at?.slice(0, 16) || undefined,
+    deactivated_at: socio.deactivated_at?.slice(0, 16) || undefined,
+    global_role: 0,
+    password: createMode ? generateSecurePassword() : '',
   });
 
   const handleEdit = () => setEditMode(true);
@@ -151,6 +153,10 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
       ...socio,
       ...formData
     };
+
+    if (!createMode && !formData.password?.trim()) {
+      delete updatedSocio.password;
+    }
 
     if (createMode && typeof onCreate === "function") return onCreate(updatedSocio);
     if (typeof onUpdate === "function") onUpdate(updatedSocio, socio.user_id);
@@ -219,7 +225,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           }, {
             label: 'HUERTO Nº', icon: faSunPlantWilt, value: formData.plot_number, field: 'plot_number', type: 'number', maxWidth: '100px'
           }, {
-            label: 'TLF.', icon: faPhone, value: formData.phone, field: 'phone', type: 'text', maxWidth: '200px'
+            label: 'TLF.', icon: faPhone, value: formData.phone, field: 'phone', type: 'number', maxWidth: '200px'
           }, {
             label: 'EMAIL', icon: faAt, value: formData.email, field: 'email', type: 'text', maxWidth: '250px'
           }].map(({ label, icon, value, field, type, maxWidth }) => (
@@ -232,6 +238,36 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
               )}
             </ListGroup.Item>
           ))}
+          {editMode && (
+            <ListGroup.Item className="d-flex justify-content-between align-items-center">
+              <span><FontAwesomeIcon icon={faKey} className="me-2" />CONTRASEÑA</span>
+              <div className="d-flex align-items-center gap-2" style={{ maxWidth: 'fit-content' }}>
+                <Form.Control
+                  className="themed-input"
+                  size="sm"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={(e) => handleChange('password', e.target.value)}
+                  style={{ maxWidth: '200px' }}
+                />
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={() => setShowPassword(prev => !prev)}
+                >
+                  {showPassword ? "Ocultar" : "Mostrar"}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={() => handleChange('password', generateSecurePassword())}
+                >
+                  Generar
+                </Button>
+              </div>
+            </ListGroup.Item>
+          )}
+
         </ListGroup>
 
         {getFechas(formData, editMode, handleChange)}

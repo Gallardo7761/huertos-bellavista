@@ -32,7 +32,7 @@ export const useData = (config) => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData, JSON.stringify(config)]); // se vuelve a ejecutar si cambia el config
+  }, [fetchData]); // se vuelve a ejecutar si cambia el config
 
   const postData = async (endpoint, payload) => {
     const headers = {

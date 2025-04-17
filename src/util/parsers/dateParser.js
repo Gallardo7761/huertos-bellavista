@@ -1,14 +1,22 @@
-const DateParser = {
+export const DateParser = {
     sqlToString: (sqlDate) => {
-        let pieces = sqlDate.split('-');
-        return pieces[2] + '/' + pieces[1] + '/' + pieces[0];
+        const [datePart] = sqlDate.split('T');
+        const [year, month, day] = datePart.split('-');
+        return `${day}/${month}/${year}`;
     },
 
     timestampToString: (timestamp) => {
-        let pieces = timestamp.split('T');
-        let date = pieces[0].split('-');
-        return date[2] + '/' + date[1] + '/' + date[0];
-    }
-}
+        const [datePart] = timestamp.split('T');
+        const [year, month, day] = datePart.split('-');
+        return `${day}/${month}/${year}`;
+    },
 
-export default DateParser;
+    isoToStringWithTime: (iso) => {
+        if (!iso) return 'NO';
+        const [datePart, timePart] = iso.split('T');
+        if (!datePart || !timePart) return 'NO';
+        const [year, month, day] = datePart.split('-');
+        const [hour, minute] = timePart.split(':');
+        return `${day}/${month}/${year} a las ${hour}:${minute}`;
+    }
+};
