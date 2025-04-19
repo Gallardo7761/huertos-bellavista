@@ -2,6 +2,7 @@ import { useConfig } from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
 import { useDataContext } from '../hooks/useDataContext';
 import { usePaginatedList } from '../hooks/usePaginatedList';
+import { useState } from 'react';
 
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
@@ -9,6 +10,8 @@ import LoadingIcon from '../components/LoadingIcon';
 import SearchToolbar from '../components/SearchToolbar';
 import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import SolicitudCard from '../components/Solicitudes/SolicitudCard';
+import { Button } from 'react-bootstrap';
+import CustomModal from '../components/CustomModal';
 
 const PAGE_SIZE = 10;
 
@@ -34,6 +37,7 @@ const Solicitudes = () => {
 
 const SolicitudesContent = ({ reqConfig }) => {
   const { data, dataLoading, dataError, putData, deleteData } = useDataContext();
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const {
     filtered,
@@ -62,7 +66,7 @@ const SolicitudesContent = ({ reqConfig }) => {
       console.error("❌ Error al aceptar solicitud:", err.message);
     }
   };
-  
+
   const handleReject = async (entry) => {
     const url = reqConfig.rejectUrl.replace(":request_id", entry.request_id);
     try {
@@ -71,16 +75,10 @@ const SolicitudesContent = ({ reqConfig }) => {
     } catch (err) {
       console.error("❌ Error al rechazar solicitud:", err.message);
     }
-  };  
+  };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(`¿Estás seguro de que deseas eliminar esta solicitud manualmente?`)) return;
-    try {
-      await deleteData(`${reqConfig.rawUrl}/${id}`);
-      setSearchTerm("");
-    } catch (err) {
-      console.error(err);
-    }
+    setDeleteTargetId(id);
   }
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
@@ -114,6 +112,32 @@ const SolicitudesContent = ({ reqConfig }) => {
             />
           )}
         />
+
+        <CustomModal
+          title="Confirmar eliminación"
+          show={deleteTargetId !== null}
+          onClose={() => setDeleteTargetId(null)}
+        >
+          <p className='p-3'>¿Estás seguro de que quieres eliminar la solicitud manualmente?</p>
+          <div className="d-flex justify-content-end gap-2 mt-3 p-3">
+            <Button variant="secondary" onClick={() => setDeleteTargetId(null)}>Cancelar</Button>
+            <Button
+              variant="danger"
+              onClick={async () => {
+                try {
+                  await deleteData(`${reqConfig.rawUrl}/${deleteTargetId}`);
+                  setSearchTerm("");
+                  setDeleteTargetId(null);
+                } catch (err) {
+                  console.error(err);
+                }
+              }}
+            >
+              Confirmar
+            </Button>
+          </div>
+        </CustomModal>
+
       </ContentWrapper>
     </CustomContainer>
   );

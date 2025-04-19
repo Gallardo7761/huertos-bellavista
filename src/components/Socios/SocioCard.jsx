@@ -20,6 +20,7 @@ import { getNowAsLocalDatetime } from '../../util/date';
 import { generateSecurePassword } from '../../util/passwordGenerator';
 import { DateParser } from '../../util/parsers/dateParser';
 import { renderErrorAlert } from '../../util/alertHelpers';
+import { useDataContext } from "../../hooks/useDataContext";
 
 const getFechas = (formData, editMode, handleChange) => {
   const { created_at, assigned_at, deactivated_at } = formData;
@@ -115,6 +116,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   const [editMode, setEditMode] = useState(isNew);
   const [showPassword, setShowPassword] = useState(false);
   const [latestNumber, setLatestNumber] = useState(null);
+  const { getData } = useDataContext();
 
   const [formData, setFormData] = useState({
     display_name: socio.display_name,
@@ -160,16 +162,19 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   useEffect(() => {
     const fetchLastNumber = async () => {
       try {
-        if(!(createMode || editMode)) return;
-        const res = await fetch("https://api.huertosbellavista.es/v1/members/latest-number");
-        const data = await res.json();
-        setLatestNumber(data.data.lastMemberNumber+1 );
+        if (!(createMode || editMode)) return;
+  
+        const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
+        if (error) throw new Error(error);
+  
+        setLatestNumber(data.lastMemberNumber + 1);
       } catch (err) {
         console.error("Error al obtener el número de socio:", err);
       }
     };
-
+  
     fetchLastNumber();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createMode, editMode]);
 
   const handleEdit = () => {

@@ -13,6 +13,8 @@ import AnuncioCard from '../components/Anuncios/AnuncioCard';
 import AnunciosFilter from '../components/Anuncios/AnunciosFilter';
 
 import { errorParser } from '../util/parsers/errorParser';
+import CustomModal from '../components/CustomModal';
+import {Button} from 'react-bootstrap';
 
 const PAGE_SIZE = 10;
 
@@ -41,6 +43,7 @@ const AnunciosContent = ({ reqConfig }) => {
   const [creatingAnuncio, setCreatingAnuncio] = useState(false);
   const [tempAnuncio, setTempAnuncio] = useState(null);
   const [error, setError] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const {
     filtered,
@@ -121,12 +124,7 @@ const AnunciosContent = ({ reqConfig }) => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("¿Estás seguro de que quieres eliminar este anuncio?")) return;
-    try {
-      await deleteData(`${reqConfig.baseUrl}/${id}`);
-    } catch (err) {
-      console.error("Error al eliminar anuncio:", err.message);
-    }
+    setDeleteTargetId(id);
   };
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
@@ -172,6 +170,32 @@ const AnunciosContent = ({ reqConfig }) => {
             />
           )}
         />
+
+        <CustomModal
+          title="Confirmar eliminación"
+          show={deleteTargetId !== null}
+          onClose={() => setDeleteTargetId(null)}
+        >
+          <p className='p-3'>¿Estás seguro de que quieres eliminar el anuncio?</p>
+          <div className="d-flex justify-content-end gap-2 mt-3 p-3">
+            <Button variant="secondary" onClick={() => setDeleteTargetId(null)}>Cancelar</Button>
+            <Button
+              variant="danger"
+              onClick={async () => {
+                try {
+                  await deleteData(`${reqConfig.baseUrl}/${deleteTargetId}`);
+                  setSearchTerm("");
+                  setDeleteTargetId(null);
+                } catch (err) {
+                  setError(errorParser(err));
+                }
+              }}
+            >
+              Confirmar
+            </Button>
+          </div>
+        </CustomModal>
+
       </ContentWrapper>
     </CustomContainer>
   );

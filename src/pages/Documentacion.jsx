@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
 import { useDataContext } from '../hooks/useDataContext';
@@ -9,6 +9,8 @@ import ContentWrapper from '../components/ContentWrapper';
 import LoadingIcon from '../components/LoadingIcon';
 import IfRole from '../components/Auth/IfRole.jsx';
 import { CONSTANTS } from '../util/constants.js';
+import CustomModal from '../components/CustomModal.jsx';
+import { Button } from 'react-bootstrap';
 
 const Documentacion = () => {
   const { config, configLoading } = useConfig();
@@ -33,6 +35,7 @@ const Documentacion = () => {
 
 const DocumentacionContent = ({ reqConfig }) => {
   const { data, dataLoading, dataError, postData, deleteDataWithBody } = useDataContext();
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const fileUploadRef = useRef();
 
   const handleSelectFiles = async (files) => {
@@ -60,15 +63,7 @@ const DocumentacionContent = ({ reqConfig }) => {
   };
 
   const handleDeleteFile = async (file) => {
-    if (window.confirm(`¿Estás seguro de que quieres eliminar ${file.file_name}?`)) {
-      try {
-        await deleteDataWithBody(`${reqConfig.baseUrl}/${file.file_id}`, {
-          file_path: file.file_path
-        });
-      } catch (err) {
-        console.error("Error al eliminar archivo:", err);
-      }
-    }
+    setDeleteTarget(file);
   };
 
   return (
@@ -83,13 +78,39 @@ const DocumentacionContent = ({ reqConfig }) => {
 
         {dataLoading ? (<LoadingIcon />) : (
           <div className="mt-4">
-            {dataError && <p className="text-danger">❌ Error al cargar los archivos.</p>}
+            {dataError && <p className="text-danger">Error al cargar los archivos.</p>}
             {data?.length === 0 && <p>No hay documentos todavía.</p>}
             {data?.map((file, idx) => (
               <File key={idx} file={file} onDelete={handleDeleteFile} />
             ))}
           </div>
         )}
+
+        <CustomModal
+          title="Confirmar eliminación"
+          show={deleteTarget !== null}
+          onClose={() => setDeleteTarget(null)}
+        >
+          <p className='p-3'>¿Estás seguro de que quieres eliminar el archivo?</p>
+          <div className="d-flex justify-content-end gap-2 mt-3 p-3">
+            <Button variant="secondary" onClick={() => setDeleteTarget(null)}>Cancelar</Button>
+            <Button
+              variant="danger"
+              onClick={async () => {
+                try {
+                  await deleteDataWithBody(`${reqConfig.baseUrl}/${deleteTarget.file_id}`, {
+                    file_path: deleteTarget.file_path
+                  });
+                  setDeleteTarget(null);
+                } catch (err) {
+                  console.error("Error al eliminar:", err.message);
+                }
+              }}
+            >
+              Confirmar
+            </Button>
+          </div>
+        </CustomModal>
 
       </ContentWrapper>
     </CustomContainer>

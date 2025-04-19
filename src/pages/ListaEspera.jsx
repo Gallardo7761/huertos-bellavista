@@ -38,7 +38,7 @@ const ListaEspera = () => {
 
 const ListaEsperaContent = ({ reqConfig }) => {
   const { authStatus } = useAuth();
-  const { data, dataLoading, dataError } = useDataContext();
+  const { data, dataLoading, dataError, postData } = useDataContext();
 
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showPreUserFormModal, setShowPreUserFormModal] = useState(false);
@@ -70,16 +70,14 @@ const ListaEsperaContent = ({ reqConfig }) => {
 
   const handleRegisterSubmit = async (formData) => {
     try {
-      const requestRes = await fetch(reqConfig.requestUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: 0, status: 0 })
+      const request = await postData(reqConfig.requestUrl, {
+        type: 0,
+        status: 0
       });
-
-      const requestJson = await requestRes.json();
-      const requestId = requestJson.data?.request_id;
-
-      if (!requestRes.ok || !requestId) {
+  
+      const requestId = request?.request_id;
+  
+      if (!requestId) {
         setFeedbackModal({
           show: true,
           title: "Error",
@@ -89,26 +87,23 @@ const ListaEsperaContent = ({ reqConfig }) => {
         });
         return;
       }
-
-      const preUserRes = await fetch(reqConfig.preUsersUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, request_id: requestId })
-      });
-
-      const preUserJson = await preUserRes.json();
-
-      if (!preUserRes.ok) {
+  
+      try {
+        await postData(reqConfig.preUsersUrl, {
+          ...formData,
+          request_id: requestId
+        });
+      } catch (err) {
         setFeedbackModal({
           show: true,
           title: "Error al registrar preusuario",
-          message: preUserJson.message,
+          message: err.message,
           variant: "danger",
           buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
         });
         return;
       }
-
+  
       setFeedbackModal({
         show: true,
         title: "Solicitud enviada",
@@ -116,7 +111,7 @@ const ListaEsperaContent = ({ reqConfig }) => {
         variant: "success",
         buttons: [{ label: "Vale", variant: "success", onClick: closeFeedbackModal }]
       });
-
+  
       setShowPreUserFormModal(false);
     } catch (err) {
       console.error("Error al enviar la solicitud:", err);
@@ -128,7 +123,7 @@ const ListaEsperaContent = ({ reqConfig }) => {
         buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
       });
     }
-  };
+  };  
 
   const handleOpenFormModal = () => {
     setShowWelcomeModal(false);

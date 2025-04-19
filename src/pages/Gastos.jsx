@@ -17,6 +17,8 @@ import { GastosPDF } from '../components/Gastos/GastosPDF';
 import '../css/Ingresos.css';
 import { CONSTANTS } from '../util/constants';
 import { errorParser } from '../util/parsers/errorParser';
+import CustomModal from '../components/CustomModal';
+import { Button } from 'react-bootstrap';
 
 const PAGE_SIZE = 10;
 
@@ -46,6 +48,7 @@ const GastosContent = ({ reqConfig }) => {
   const [creatingGasto, setCreatingGasto] = useState(false);
   const [tempGasto, setTempGasto] = useState(null);
   const [error, setError] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const {
     filtered,
@@ -113,13 +116,7 @@ const GastosContent = ({ reqConfig }) => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("¿Estás seguro de que deseas eliminar el gasto?")) return;
-    try {
-      await deleteData(`${reqConfig.baseUrl}/${id}`);
-      setSearchTerm("");
-    } catch (err) {
-      setError(errorParser(err));
-    }
+    setDeleteTargetId(id);
   };
 
   const handleCancelCreate = () => {
@@ -176,6 +173,32 @@ const GastosContent = ({ reqConfig }) => {
         <PDFModal show={showPDFModal} onClose={() => setShowPDFModal(false)} title="Vista previa del PDF">
           <GastosPDF gastos={filtered} />
         </PDFModal>
+
+        <CustomModal
+          title="Confirmar eliminación"
+          show={deleteTargetId !== null}
+          onClose={() => setDeleteTargetId(null)}
+        >
+          <p className='p-3'>¿Estás seguro de que quieres eliminar el gasto?</p>
+          <div className="d-flex justify-content-end gap-2 mt-3 p-3">
+            <Button variant="secondary" onClick={() => setDeleteTargetId(null)}>Cancelar</Button>
+            <Button
+              variant="danger"
+              onClick={async () => {
+                try {
+                  await deleteData(`${reqConfig.baseUrl}/${deleteTargetId}`);
+                  setSearchTerm("");
+                  setDeleteTargetId(null);
+                } catch (err) {
+                  setError(errorParser(err));
+                }
+              }}
+            >
+              Confirmar
+            </Button>
+          </div>
+        </CustomModal>
+
       </ContentWrapper>
     </CustomContainer>
   );

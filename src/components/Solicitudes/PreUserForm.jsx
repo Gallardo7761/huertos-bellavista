@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
+import { useDataContext } from '../../hooks/useDataContext';
 
 const PreUserForm = ({ onSubmit, userType, plotNumber }) => {
+  const { getData } = useDataContext();
   const fetchedOnce = useRef(false);
 
   const [form, setForm] = useState({
@@ -24,16 +26,22 @@ const PreUserForm = ({ onSubmit, userType, plotNumber }) => {
     const fetchLastNumber = async () => {
       if (fetchedOnce.current) return;
       fetchedOnce.current = true;
+  
       try {
-        const res = await fetch("https://api.huertosbellavista.es/v1/members/latest-number");
-        const data = await res.json();
-        setForm((prev) => ({ ...prev, member_number: data.data.lastMemberNumber+1 }));
+        const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
+        if (error) throw new Error(error);
+  
+        setForm((prev) => ({
+          ...prev,
+          member_number: data.lastMemberNumber + 1
+        }));
       } catch (err) {
         console.error("Error al obtener el número de socio:", err);
       }
     };
-
+  
     fetchLastNumber();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

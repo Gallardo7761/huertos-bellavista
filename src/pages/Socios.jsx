@@ -15,9 +15,10 @@ import { SociosPDF } from '../components/Socios/SociosPDF';
 import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import CustomModal from '../components/CustomModal';
 import IngresoCard from '../components/Ingresos/IngresoCard';
-import { errorParser } from '../util/parsers/errorParser'; 
+import { errorParser } from '../util/parsers/errorParser';
 
 import '../css/Socios.css';
+import { Button } from 'react-bootstrap';
 
 const PAGE_SIZE = 10;
 
@@ -55,6 +56,7 @@ const SociosContent = ({ reqConfig }) => {
   const [incomesLoading, setIncomesLoading] = useState(false);
   const [incomesError, setIncomesError] = useState(null);
   const [error, setError] = useState(null);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
 
   const {
     filtered,
@@ -133,7 +135,7 @@ const SociosContent = ({ reqConfig }) => {
       setError(errorParser(err));
     }
   };
-  
+
   const handleEditSubmit = async (updatedSocio, userId) => {
     try {
       await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio);
@@ -144,13 +146,7 @@ const SociosContent = ({ reqConfig }) => {
   };
 
   const handleDelete = async (userId) => {
-    if (!window.confirm(`¿Estás seguro de que deseas eliminar el socio?`)) return;
-    try {
-      await deleteData(`${reqConfig.baseUrl}/${userId}`);
-      setSearchTerm("");
-    } catch (err) {
-      setError(errorParser(err));
-    }
+    setDeleteTargetId(userId);
   };
 
   const handleViewIncomes = async (memberNumber) => {
@@ -247,9 +243,34 @@ const SociosContent = ({ reqConfig }) => {
         )}
         <div className="d-flex flex-wrap gap-3 p-3 justify-content-start">
           {incomes.map((income) => (
-            <IngresoCard key={income.income_id} income={income} 
+            <IngresoCard key={income.income_id} income={income}
               onUpdate={handleIncomeUpdate} className='from-members' />
           ))}
+        </div>
+      </CustomModal>
+
+      <CustomModal
+        title="Confirmar eliminación"
+        show={deleteTargetId !== null}
+        onClose={() => setDeleteTargetId(null)}
+      >
+        <p className='p-3'>¿Estás seguro de que quieres eliminar el ingreso?</p>
+        <div className="d-flex justify-content-end gap-2 mt-3 p-3">
+          <Button variant="secondary" onClick={() => setDeleteTargetId(null)}>Cancelar</Button>
+          <Button
+            variant="danger"
+            onClick={async () => {
+              try {
+                await deleteData(`${reqConfig.baseUrl}/${deleteTargetId}`);
+                setSearchTerm("");
+                setDeleteTargetId(null);
+              } catch (err) {
+                setError(errorParser(err));
+              }
+            }}
+          >
+            Confirmar
+          </Button>
         </div>
       </CustomModal>
 

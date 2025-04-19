@@ -18,7 +18,7 @@ const parseDate = (date) => {
   return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
 };
 
-const getTipoSolicitud = (tipo) => ['Alta', 'Baja', 'Añadir Colaborador', 'Quitar Colaborador'][tipo] ?? 'Desconocido';
+const getTipoSolicitud = (tipo) => ['Alta', 'Baja', 'Añadir Colaborador', 'Quitar Colaborador', 'Añadir parcela invernadero', 'Dejar parcela invernadero'][tipo] ?? 'Desconocido';
 const getEstadoSolicitud = (estado) => ['Pendiente', 'Aceptada', 'Rechazada'][estado] ?? 'Desconocido';
 
 const getPFP = (tipo) => {
@@ -64,6 +64,14 @@ const renderDescripcionSolicitud = (data, onProfile) => {
       return onProfile
         ? "Has solicitado quitar tu colaborador."
         : `El socio ${requested_by_name} quiere quitar su colaborador.`;
+    case 4:
+      return onProfile
+        ? "Has solicitado una parcela en el invernadero."
+        : `El socio ${requested_by_name} quiere una parcela en el invernadero.`;
+    case 5:
+      return onProfile
+        ? "Has solicitado dejar tu parcela del invernadero."
+        : `El socio ${requested_by_name} quiere dejar su parcela del invernadero.`;
     default:
       return "Tipo de solicitud desconocido.";
   }

@@ -56,7 +56,7 @@ const Perfil = () => {
 };
 
 const PerfilContent = ({ config }) => {
-  const { data, dataLoading, dataError, getData } = useDataContext();
+  const { data, dataLoading, dataError, postData, getData } = useDataContext();
 
   const usuario = data;
 
@@ -81,28 +81,25 @@ const PerfilContent = ({ config }) => {
   useEffect(() => {
     const checkStates = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const headers = { Authorization: `Bearer ${token}` };
-
         const endpoints = [
           { url: '/v1/members/hasCollaborator', setter: setHasCollaborator, key: 'hasCollaborator' },
           { url: '/v1/requests/hasCollaboratorRequest', setter: setHasCollaboratorRequest, key: 'hasCollaboratorRequest' },
           { url: '/v1/members/hasGreenhouse', setter: setHasGreenHouse, key: 'hasGreenhouse' },
           { url: '/v1/requests/hasGreenhouseRequest', setter: setHasGreenHouseRequest, key: 'hasGreenhouseRequest' }
         ];
-
+  
         for (const { url, setter, key } of endpoints) {
-          const res = await fetch(config.apiConfig.baseUrl + url, { headers });
-          const json = await res.json();
-          setter(json?.data?.[key] ?? false);
+          const { data, error } = await getData(config.apiConfig.baseUrl + url);
+          if (error) throw new Error(error);
+          setter(data?.[key] ?? false);
         }
       } catch (err) {
         console.error("Error cargando estados:", err.message);
       }
     };
-
+  
     if (config) checkStates();
-  }, [config]);
+  }, [config, getData]);  
 
   useEffect(() => {
     const loadIncomes = async () => {
@@ -138,19 +135,11 @@ const PerfilContent = ({ config }) => {
 
   const handleRequestUnregister = async () => {
     try {
-      const res = await fetch(config.requestUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: CONSTANTS.REQUEST_TYPE_UNREGISTER,
-          status: CONSTANTS.REQUEST_PENDING,
-          requested_by: usuario.user_id
-        })
+      await postData(config.requestUrl, {
+        type: CONSTANTS.REQUEST_TYPE_UNREGISTER,
+        status: CONSTANTS.REQUEST_PENDING,
+        requested_by: usuario.user_id
       });
-
-      const json = await res.json();
-
-      if (!res.ok) throw new Error(json.message || 'Error al crear la solicitud.');
 
       setFeedbackModal({
         title: 'Solicitud enviada',
@@ -168,19 +157,11 @@ const PerfilContent = ({ config }) => {
 
   const handleRequestGreenHouse = async () => {
     try {
-      const res = await fetch(config.requestUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: CONSTANTS.REQUEST_TYPE_ADD_GREENHOUSE,
-          status: CONSTANTS.REQUEST_PENDING,
-          requested_by: usuario.user_id
-        })
+      await postData(config.requestUrl, {
+        type: CONSTANTS.REQUEST_TYPE_ADD_GREENHOUSE,
+        status: CONSTANTS.REQUEST_PENDING,
+        requested_by: usuario.user_id
       });
-
-      const json = await res.json();
-
-      if (!res.ok) throw new Error(json.message || 'Error al crear la solicitud.');
 
       setFeedbackModal({
         title: 'Solicitud enviada',
@@ -194,23 +175,15 @@ const PerfilContent = ({ config }) => {
         variant: 'danger'
       });
     }
-  }
+  };
 
   const handleRemoveGreenHouse = async () => {
     try {
-      const res = await fetch(config.requestUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: CONSTANTS.REQUEST_TYPE_REMOVE_GREENHOUSE,
-          status: CONSTANTS.REQUEST_PENDING,
-          requested_by: usuario.user_id
-        })
+      await postData(config.requestUrl, {
+        type: CONSTANTS.REQUEST_TYPE_REMOVE_GREENHOUSE,
+        status: CONSTANTS.REQUEST_PENDING,
+        requested_by: usuario.user_id
       });
-
-      const json = await res.json();
-
-      if (!res.ok) throw new Error(json.message || 'Error al crear la solicitud.');
 
       setFeedbackModal({
         title: 'Solicitud enviada',
@@ -224,7 +197,7 @@ const PerfilContent = ({ config }) => {
         variant: 'danger'
       });
     }
-  }
+  };
 
   const mappedRequests = myRequests.map(r => ({
     ...r,
@@ -345,28 +318,19 @@ const PerfilContent = ({ config }) => {
             plotNumber={usuario.plot_number}
             onSubmit={async (formData) => {
               try {
-                const requestRes = await fetch(config.requestUrl, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    type: CONSTANTS.REQUEST_TYPE_ADD_COLLABORATOR,
-                    status: CONSTANTS.REQUEST_PENDING,
-                    requested_by: usuario.user_id
-                  })
+                const request = await postData(config.requestUrl, {
+                  type: CONSTANTS.REQUEST_TYPE_ADD_COLLABORATOR,
+                  status: CONSTANTS.REQUEST_PENDING,
+                  requested_by: usuario.user_id
                 });
 
-                const requestJson = await requestRes.json();
-                const requestId = requestJson.data?.request_id;
-                if (!requestRes.ok || !requestId) throw new Error("No se pudo crear la solicitud.");
+                const requestId = request?.request_id;
+                if (!requestId) throw new Error("No se pudo crear la solicitud.");
 
-                const preUserRes = await fetch(config.preUsersUrl, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ ...formData, request_id: requestId })
+                await postData(config.preUsersUrl, {
+                  ...formData,
+                  request_id: requestId
                 });
-
-                const preUserJson = await preUserRes.json();
-                if (!preUserRes.ok) throw new Error(preUserJson.message);
 
                 setFeedbackModal({
                   title: "Colaborador añadido",
@@ -398,18 +362,11 @@ const PerfilContent = ({ config }) => {
               variant="warning"
               onClick={async () => {
                 try {
-                  const res = await fetch(config.requestUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      type: CONSTANTS.REQUEST_TYPE_REMOVE_COLLABORATOR,
-                      status: CONSTANTS.REQUEST_PENDING,
-                      requested_by: usuario.user_id
-                    })
+                  await postData(config.requestUrl, {
+                    type: CONSTANTS.REQUEST_TYPE_REMOVE_COLLABORATOR,
+                    status: CONSTANTS.REQUEST_PENDING,
+                    requested_by: usuario.user_id
                   });
-
-                  const json = await res.json();
-                  if (!res.ok) throw new Error(json.message);
 
                   setFeedbackModal({
                     title: "Solicitud enviada",
