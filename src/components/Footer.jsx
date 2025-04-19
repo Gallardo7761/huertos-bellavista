@@ -20,7 +20,6 @@ const Footer = () => {
   return (
     <footer className="footer d-flex flex-column align-items-center gap-5 pt-5 px-4">
       <div className="footer-columns w-100" style={{ maxWidth: '900px' }}>
-        {/* Columna 1 - Contacto */}
         <div className="footer-column">
           <h4 className="footer-title">Datos de Contacto</h4>
           <div className="contact-info p-4">
@@ -32,22 +31,12 @@ const Footer = () => {
               <FontAwesomeIcon icon={faLocationDot} className="fa-icon" />
               Calle Cronos S/N, Bellavista, Sevilla, 41014
             </a>
-            <a href="mailto:huertoslasaludbellavista@gmail.com">
+            <a href="mailto:huertoslasaludbellavista@gmail.com" className="text-break d-block">
               <FontAwesomeIcon icon={faEnvelope} className="fa-icon" />
               huertoslasaludbellavista@gmail.com
             </a>
           </div>
         </div>
-
-        {/* Columna 2 - Enlaces (opcional, puedes meter aquí más cosillas) */}
-        {/* <div className="footer-column">
-          <h5>Enlaces útiles</h5>
-          <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/huertos">Huertos</a></li>
-            <li><a href="/contacto">Contacto</a></li>
-          </ul>
-        </div> */}
       </div>
 
       <div className="footer-bottom w-100 py-5 text-center">
