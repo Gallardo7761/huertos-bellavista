@@ -1,4 +1,3 @@
-// ✅ Ingresos.jsx con manejo de estado y errores estilo Anuncios
 import { useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
@@ -162,6 +161,7 @@ const IngresosContent = ({ reqConfig }) => {
               onCancel={handleCancelCreate}
               error={error}
               onClearError={() => setError(null)}
+              allIncomes={data}
             />
           )}
           renderCard={(income) => (
@@ -172,6 +172,7 @@ const IngresosContent = ({ reqConfig }) => {
               onDelete={() => handleDelete(income.income_id)}
               error={error}
               onClearError={() => setError(null)}
+              allIncomes={data}
             />
           )}
         />

@@ -42,7 +42,8 @@ const IngresoCard = ({
   className = '',
   editable = true,
   error,
-  onClearError
+  onClearError,
+  allIncomes = []
 }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(createMode);
@@ -64,6 +65,7 @@ const IngresoCard = ({
         amount: income.amount || 0,
         type: income.type ?? CONSTANTS.PAYMENT_TYPE_CASH,
         frequency: income.frequency ?? CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
+        display_name: income.display_name,
         member_number: income.member_number,
         created_at: income.created_at
       });
@@ -87,6 +89,10 @@ const IngresoCard = ({
   };
 
   const handleDelete = () => typeof onDelete === 'function' && onDelete(income.income_id);
+
+  const uniqueMembers = Array.from(
+    new Map(allIncomes.map(item => [item.member_number, item])).values()
+  );
 
   return (
     <MotionCard className={`ingreso-card shadow-sm rounded-4 border-0 h-100 ${className}`}>
@@ -133,31 +139,24 @@ const IngresoCard = ({
 
         <Card.Text className="mb-2">
           <FontAwesomeIcon icon={faUser} className="me-2" />
-          <strong>Socio Nº:</strong>{' '}
-          {createMode ? (
-            <Form.Control
+          <strong>Socio:</strong>{' '}
+          {createMode || editMode ? (
+            <Form.Select
               className="themed-input"
               size="sm"
-              type="number"
               value={formData.member_number}
               onChange={(e) => handleChange('member_number', parseInt(e.target.value))}
-              style={{ maxWidth: '150px', display: 'inline-block' }}
-            />
-          ) : editMode ? (
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>Este campo no se puede editar. Para cambiar el socio, elimina y vuelve a crear el ingreso.</Tooltip>}
+              style={{ maxWidth: '300px', display: 'inline-block' }}
             >
-              <Form.Control
-                className="themed-input"
-                disabled
-                size="sm"
-                type="number"
-                value={formData.member_number}
-                style={{ maxWidth: '150px', display: 'inline-block' }}
-              />
-            </OverlayTrigger>
-          ) : formData.member_number}
+              {uniqueMembers.map((m) => (
+                <option key={m.member_number} value={m.member_number}>
+                  {`${m.display_name} (${m.member_number})`}
+                </option>
+              ))}
+            </Form.Select>
+          ) : (
+            formData.display_name ? `${formData.display_name} (${formData.member_number})` : formData.member_number
+          )}
         </Card.Text>
 
         <Card.Text className="mb-2">
@@ -228,7 +227,8 @@ IngresoCard.propTypes = {
   className: PropTypes.string,
   editable: PropTypes.bool,
   error: PropTypes.string,
-  onClearError: PropTypes.func
+  onClearError: PropTypes.func,
+  allIncomes: PropTypes.array
 };
 
 export default IngresoCard;
