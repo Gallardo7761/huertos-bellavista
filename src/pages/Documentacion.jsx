@@ -77,7 +77,7 @@ const DocumentacionContent = ({ reqConfig }) => {
         </IfRole>
 
         {dataLoading ? (<LoadingIcon />) : (
-          <div className="mt-4">
+          <div className="mt-4 d-flex flex-wrap gap-3 justify-content-start">
             {dataError && <p className="text-danger">Error al cargar los archivos.</p>}
             {data?.length === 0 && <p>No hay documentos todavía.</p>}
             {data?.map((file, idx) => (

@@ -140,7 +140,7 @@ const IngresoCard = ({
         <Card.Text className="mb-2">
           <FontAwesomeIcon icon={faUser} className="me-2" />
           <strong>Socio:</strong>{' '}
-          {createMode || editMode ? (
+          {createMode ? (
             <Form.Select
               className="themed-input"
               size="sm"
@@ -154,8 +154,22 @@ const IngresoCard = ({
                 </option>
               ))}
             </Form.Select>
+          ) : editMode ? (
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Este campo no se puede editar. Para cambiar el socio, elimina y vuelve a crear el ingreso.</Tooltip>}
+            >
+              <Form.Control
+                className="themed-input"
+                disabled
+                size="sm"
+                type="text"
+                value={`${formData.display_name || 'Socio'} (${formData.member_number})`}
+                style={{ maxWidth: '300px', display: 'inline-block' }}
+              />
+            </OverlayTrigger>
           ) : (
-            formData.display_name ? `${formData.display_name} (${formData.member_number})` : formData.member_number
+            `${formData.display_name} (${formData.member_number})`
           )}
         </Card.Text>
 

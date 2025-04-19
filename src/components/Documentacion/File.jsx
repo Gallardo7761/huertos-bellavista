@@ -1,6 +1,6 @@
 import { faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import '../../css/File.css';
 
 const File = ({ file, onDelete }) => {
@@ -33,7 +33,12 @@ const File = ({ file, onDelete }) => {
           alt={file.file_name}
           className="img-fluid mb-2"
         />
-        <p className="m-0 p-0 text-truncate">{file.file_name}</p>
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip>{file.file_name}</Tooltip>}
+        >
+          <p className="m-0 p-0 text-truncate">{file.file_name}</p>
+        </OverlayTrigger>
       </Card.Body>
 
       <Button

@@ -14,7 +14,8 @@ import AnunciosFilter from '../components/Anuncios/AnunciosFilter';
 
 import { errorParser } from '../util/parsers/errorParser';
 import CustomModal from '../components/CustomModal';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { EditorProvider } from 'react-simple-wysiwyg';
 
 const PAGE_SIZE = 10;
 
@@ -150,14 +151,16 @@ const AnunciosContent = ({ reqConfig }) => {
           items={filtered}
           creatingItem={creatingAnuncio}
           renderCreatingCard={() => (
-            <AnuncioCard
-              anuncio={tempAnuncio}
-              isNew
-              onCreate={handleCreateSubmit}
-              onCancel={handleCancelCreate}
-              error={error}
-              onClearError={() => setError(null)}
-            />
+            <EditorProvider>
+              <AnuncioCard
+                anuncio={tempAnuncio}
+                isNew
+                onCreate={handleCreateSubmit}
+                onCancel={handleCancelCreate}
+                error={error}
+                onClearError={() => setError(null)}
+              />
+            </EditorProvider>
           )}
           renderCard={(anuncio) => (
             <AnuncioCard

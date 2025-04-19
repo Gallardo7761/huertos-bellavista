@@ -5,6 +5,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import '../../css/AnuncioCard.css';
 import { renderErrorAlert } from '../../util/alertHelpers';
+import {
+  EditorProvider,
+  Editor,
+} from 'react-simple-wysiwyg';
+import {
+  Toolbar,
+  Separator,
+  BtnBold,
+  BtnItalic,
+  BtnUnderline,
+  BtnStrikeThrough,
+  BtnNumberedList,
+  BtnBulletList,
+  BtnLink,
+  BtnClearFormatting,
+} from 'react-simple-wysiwyg';
 
 const PRIORITY_CONFIG = {
   0: { label: 'BAJA', className: 'text-success' },
@@ -20,9 +36,10 @@ const formatDateTime = (iso) => {
   };
 };
 
-const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onCancel, showFullBody = false, error, onClearError  }) => {
+const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onCancel, error, onClearError }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(createMode);
+  const [showFullBody, setShowFullBody] = useState(false);
 
   const [formData, setFormData] = useState({
     body: anuncio.body || '',
@@ -64,8 +81,18 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
 
   const { date, time } = formatDateTime(anuncio.created_at);
   const priorityInfo = PRIORITY_CONFIG[formData.priority] || PRIORITY_CONFIG[1];
-  const isLongBody = formData.body.length > 300 && !showFullBody;
-  const displayBody = isLongBody ? `${formData.body.slice(0, 300)}...` : formData.body;
+  const isLongBody = formData.body.length > 300;
+  const displayBody = isLongBody && !showFullBody
+    ? `${formData.body.slice(0, 300)}...`
+    : formData.body;
+
+  const insertImage = () => {
+    const url = prompt('Introduce la URL de la imagen:');
+    if (url) {
+      const imgHTML = `<img src="${url}" alt="imagen" style="max-width: 100%;" />`;
+      handleChange('body', formData.body + imgHTML);
+    }
+  };
 
   return (
     <Card className="anuncio-card rounded-4 border-0 shadow-sm mb-4">
@@ -101,23 +128,49 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
       <Card.Body className="py-3">
         {(editMode || createMode) && renderErrorAlert(error)}
 
-        {editMode ? (
-          <Form.Group className="mb-3">
-            <Form.Control
-              className="themed-input"
-              as="textarea"
-              rows={4}
+        {editMode || createMode ? (
+          <EditorProvider>
+            <Editor
               value={formData.body}
               onChange={(e) => handleChange('body', e.target.value)}
-            />
-          </Form.Group>
+              containerProps={{ className: 'mb-2' }}
+            >
+              <Toolbar>
+                <BtnBold />
+                <BtnItalic />
+                <BtnUnderline />
+                <BtnStrikeThrough />
+                <BtnClearFormatting />
+                <Separator />
+                <BtnNumberedList />
+                <BtnBulletList />
+                <Separator />
+                <BtnLink />
+                <button
+                  type="button"
+                  onClick={insertImage}
+                  className="btn"
+                  title="Insertar imagen desde URL"
+                >
+                  🖼️
+                </button>
+              </Toolbar>
+            </Editor>
+          </EditorProvider>
         ) : (
           <>
-            <p className="mb-2">{displayBody}</p>
+            <div className="mb-2" dangerouslySetInnerHTML={{ __html: displayBody }} />
+
             {isLongBody && (
-              <a href={`/anuncio.html?id=${anuncio.announce_id}`} className="text-decoration-none fw-medium leer-mas-link">
-                Leer más →
-              </a>
+              <Button variant='info'
+                className="fw-medium text-dark mt-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowFullBody((prev) => !prev);
+                }}
+              >
+                {showFullBody ? 'Leer menos' : 'Leer más'}
+              </Button>
             )}
           </>
         )}

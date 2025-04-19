@@ -32,6 +32,7 @@
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.4.0",
+    "react-simple-wysiwyg": "^3.2.2",
     "vite-plugin-clean": "^2.0.1"
   },
   "devDependencies": {
