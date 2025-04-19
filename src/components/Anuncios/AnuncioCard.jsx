@@ -21,6 +21,7 @@ import {
   BtnLink,
   BtnClearFormatting,
 } from 'react-simple-wysiwyg';
+import DOMPurify from 'dompurify';
 
 const PRIORITY_CONFIG = {
   0: { label: 'BAJA', className: 'text-success' },
@@ -72,6 +73,8 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
 
   const handleSave = () => {
     if (onClearError) onClearError();
+    const sanitizedBody = DOMPurify.sanitize(formData.body);
+    formData.body = sanitizedBody;
     const updated = { ...anuncio, ...formData };
     if (createMode && typeof onCreate === 'function') return onCreate(updated);
     if (typeof onUpdate === 'function') return onUpdate(updated, anuncio.announce_id);
