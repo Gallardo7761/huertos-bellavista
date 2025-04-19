@@ -12,6 +12,7 @@
             "auth": {
                 "login": "/v1/login",
                 "validateToken": "/auth/v1/validate-token",
+                "refreshToken": "/auth/v1/refresh-token",
                 "changePassword": "/auth/v1/change-password"
             },
             "members": {

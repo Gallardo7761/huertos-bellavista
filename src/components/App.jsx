@@ -1,9 +1,9 @@
-import ThemeButton from './ThemeButton'
 import Header from './Header'
 import NavBar from './NavBar/NavBar'
 import Footer from './Footer'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import ProtectedRoute from './Auth/ProtectedRoute.jsx'
+import useSessionRenewal from '../hooks/useSessionRenewal'
 
 import Home from '../pages/Home'
 import Socios from '../pages/Socios'
@@ -21,6 +21,7 @@ import { CONSTANTS } from '../util/constants'
 import Perfil from '../pages/Perfil.jsx'
 
 function App() {
+  const { modal: sessionModal } = useSessionRenewal();
   const routesWithFooter = ["/", "/lista-espera", "/login", "/gestion/socios", "/gestion/ingresos", "/gestion/gastos", "/gestion/balance"];
 
   return (
@@ -74,6 +75,7 @@ function App() {
         <Route path="/*" element={<Building />} />
       </Routes>
       {routesWithFooter.includes(useLocation().pathname) ? <Footer /> : null}
+      {sessionModal}
     </>
   )
 }
