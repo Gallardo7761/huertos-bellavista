@@ -21,64 +21,43 @@ import { generateSecurePassword } from '../../util/passwordGenerator';
 import { DateParser } from '../../util/parsers/dateParser';
 import { renderErrorAlert } from '../../util/alertHelpers';
 import { useDataContext } from "../../hooks/useDataContext";
+import SpanishDateTimePicker from '../SpanishDateTimePicker';
+
+const renderDateField = (label, icon, dateValue, editMode, fieldKey, handleChange) => {
+  if (!editMode && !dateValue) return null;
+
+  return (
+    <ListGroup.Item className="d-flex justify-content-between align-items-center">
+      <span><FontAwesomeIcon icon={icon} className="me-2" />{label}</span>
+      {editMode ? (
+        <SpanishDateTimePicker
+          selected={dateValue ? new Date(dateValue) : null}
+          onChange={(date) =>
+            handleChange(fieldKey, date.toISOString().slice(0, 16))
+          }
+        />
+      ) : (
+        <strong>{DateParser.isoToStringWithTime(dateValue)}</strong>
+      )}
+    </ListGroup.Item>
+  );
+};
 
 const getFechas = (formData, editMode, handleChange) => {
   const { created_at, assigned_at, deactivated_at } = formData;
 
+  // Si no hay fechas y no está en modo edición, no muestres nada
   if (!editMode && !created_at && !assigned_at && !deactivated_at) return null;
 
   return (
     <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
-      <ListGroup.Item className="d-flex justify-content-between align-items-center">
-        <span><FontAwesomeIcon icon={faCalendar} className="me-2" />ALTA</span>
-        {editMode ? (
-          <Form.Control
-            type="datetime-local"
-            size="sm"
-            className="themed-input"
-            style={{ maxWidth: '200px' }}
-            value={created_at}
-            onChange={(e) => handleChange('created_at', e.target.value)}
-          />
-        ) : (
-          <strong>{DateParser.isoToStringWithTime(created_at)}</strong>
-        )}
-      </ListGroup.Item>
-
-      <ListGroup.Item className="d-flex justify-content-between align-items-center">
-        <span><FontAwesomeIcon icon={faCalendar} className="me-2" />ENTREGA</span>
-        {editMode ? (
-          <Form.Control
-            type="datetime-local"
-            size="sm"
-            className="themed-input"
-            style={{ maxWidth: '200px' }}
-            value={assigned_at}
-            onChange={(e) => handleChange('assigned_at', e.target.value)}
-          />
-        ) : (
-          <strong>{DateParser.isoToStringWithTime(assigned_at)}</strong>
-        )}
-      </ListGroup.Item>
-
-      <ListGroup.Item className="d-flex justify-content-between align-items-center">
-        <span><FontAwesomeIcon icon={faCalendar} className="me-2" />BAJA</span>
-        {editMode ? (
-          <Form.Control
-            type="datetime-local"
-            size="sm"
-            className="themed-input"
-            style={{ maxWidth: '200px' }}
-            value={deactivated_at}
-            onChange={(e) => handleChange('deactivated_at', e.target.value)}
-          />
-        ) : (
-          <strong>{DateParser.isoToStringWithTime(deactivated_at)}</strong>
-        )}
-      </ListGroup.Item>
+      {renderDateField("ALTA", faCalendar, created_at, editMode, "created_at", handleChange)}
+      {renderDateField("ENTREGA", faCalendar, assigned_at, editMode, "assigned_at", handleChange)}
+      {renderDateField("BAJA", faCalendar, deactivated_at, editMode, "deactivated_at", handleChange)}
     </ListGroup>
   );
 };
+
 
 const getBadgeColor = (estado) => estado === 1 ? 'success' : 'danger';
 const getHeaderColor = (estado) => estado === 1 ? 'bg-light-green' : 'bg-light-red';

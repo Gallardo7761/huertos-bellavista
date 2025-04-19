@@ -11,12 +11,20 @@ export const DateParser = {
         return `${day}/${month}/${year}`;
     },
 
-    isoToStringWithTime: (iso) => {
-        if (!iso) return 'NO';
-        const [datePart, timePart] = iso.split('T');
-        if (!datePart || !timePart) return 'NO';
-        const [year, month, day] = datePart.split('-');
-        const [hour, minute] = timePart.split(':');
-        return `${day}/${month}/${year} a las ${hour}:${minute}`;
-    }
+    isoToStringWithTime: (isoString) => {
+      if (!isoString) return '—';
+      
+      const date = new Date(isoString);
+      if (isNaN(date)) return '—'; // Para proteger aún más por si llega basura
+    
+      return new Intl.DateTimeFormat('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Europe/Madrid'
+      }).format(date);
+    }    
 };

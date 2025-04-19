@@ -21,6 +21,8 @@ import '../../css/IngresoCard.css';
 import { useTheme } from '../../hooks/useTheme';
 import { DateParser } from '../../util/parsers/dateParser';
 import { renderErrorAlert } from '../../util/alertHelpers';
+import { getNowAsLocalDatetime } from '../../util/date';
+import SpanishDateTimePicker from '../SpanishDateTimePicker';
 
 const MotionCard = _motion.create(Card);
 
@@ -55,7 +57,7 @@ const IngresoCard = ({
     type: income.type ?? CONSTANTS.PAYMENT_TYPE_CASH,
     frequency: income.frequency ?? CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
     member_number: income.member_number,
-    created_at: income.created_at
+    created_at: income.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
   });
 
   useEffect(() => {
@@ -67,9 +69,10 @@ const IngresoCard = ({
         frequency: income.frequency ?? CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
         display_name: income.display_name,
         member_number: income.member_number,
-        created_at: income.created_at
+        created_at: income.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [income, editMode]);
 
   const handleChange = (field, value) =>
@@ -109,9 +112,19 @@ const IngresoCard = ({
               />
             ) : formData.concept}
           </span>
+
           <small>
             <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
-            {DateParser.isoToStringWithTime(formData.created_at)}
+            {editMode ? (
+              <SpanishDateTimePicker
+                selected={new Date(formData.created_at)}
+                onChange={(date) =>
+                  handleChange('created_at', date.toISOString().slice(0, 16))
+                }
+              />
+            ) : (
+              DateParser.isoToStringWithTime(formData.created_at)
+            )}
           </small>
         </div>
 
@@ -169,7 +182,7 @@ const IngresoCard = ({
               />
             </OverlayTrigger>
           ) : (
-            `${formData.display_name} (${formData.member_number})`
+            formData.display_name ? `${formData.display_name} (${formData.member_number})` : formData.member_number
           )}
         </Card.Text>
 

@@ -22,6 +22,8 @@ import '../../css/IngresoCard.css';
 import { CONSTANTS } from '../../util/constants';
 import { DateParser } from '../../util/parsers/dateParser';
 import { renderErrorAlert } from '../../util/alertHelpers';
+import { getNowAsLocalDatetime } from '../../util/date';
+import SpanishDateTimePicker from '../SpanishDateTimePicker';
 
 const MotionCard = _motion.create(Card);
 
@@ -40,7 +42,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
     supplier: gasto.supplier || '',
     invoice: gasto.invoice || '',
     type: gasto.type ?? 0,
-    created_at: gasto.created_at
+    created_at: gasto.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
   });
 
   useEffect(() => {
@@ -51,9 +53,10 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
         supplier: gasto.supplier || '',
         invoice: gasto.invoice || '',
         type: gasto.type ?? 0,
-        created_at: gasto.created_at
+        created_at: gasto.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gasto, editMode]);
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
@@ -85,7 +88,16 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           </span>
           <small>
             <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
-            {DateParser.isoToStringWithTime(formData.created_at)}
+            {editMode ? (
+              <SpanishDateTimePicker
+                selected={new Date(formData.created_at)}
+                onChange={(date) =>
+                  handleChange('created_at', date.toISOString().slice(0, 16))
+                }
+              />
+            ) : (
+              DateParser.isoToStringWithTime(formData.created_at)
+            )}
           </small>
         </div>
 
