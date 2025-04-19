@@ -24,23 +24,40 @@ const useSessionRenewal = () => {
     const warningTime = expirationTime - now - 60000;
 
     if (warningTime > 0 && !alreadyWarned) {
-      const timeout = setTimeout(() => {
+      const warningTimeout = setTimeout(() => {
         setShowModal(true);
         setAlreadyWarned(true);
       }, warningTime);
 
-      return () => clearTimeout(timeout);
+      const logoutTimeout = setTimeout(() => {
+        logout();
+      }, expirationTime - now);
+
+      return () => {
+        clearTimeout(warningTimeout);
+        clearTimeout(logoutTimeout);
+      };
     }
-  }, [alreadyWarned]);
+  }, [alreadyWarned, config, logout]);
 
   const handleRenew = async () => {
+    const token = localStorage.getItem("token");
+    const decoded = parseJwt(token);
+    const now = Date.now();
+    const expTime = decoded?.exp * 1000;
+
+    if (!token || !decoded || now > expTime) {
+      logout();
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.auth.refresh}`,
         null,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -51,14 +68,17 @@ const useSessionRenewal = () => {
       setAlreadyWarned(false);
     } catch (err) {
       console.error("Error renovando sesión:", err);
-      setShowModal(false);
+      logout();
     }
   };
 
   const modal = showModal && (
     <NotificationModal
       show={true}
-      onClose={() => setShowModal(false)}
+      onClose={() => {
+        setShowModal(false);
+        logout();
+      }}
       title="¿Quieres seguir conectado?"
       message="Tu sesión está a punto de expirar. ¿Quieres renovarla 1 hora más?"
       variant="info"
