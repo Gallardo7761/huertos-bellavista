@@ -1,3 +1,4 @@
+// ✅ Ingresos.jsx con manejo de estado y errores estilo Anuncios
 import { useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
@@ -15,6 +16,7 @@ import IngresoCard from '../components/Ingresos/IngresoCard';
 import IngresosFilter from '../components/Ingresos/IngresosFilter';
 import { IngresosPDF } from '../components/Ingresos/IngresosPDF';
 import { CONSTANTS } from '../util/constants';
+import { errorParser } from '../util/parsers/errorParser';
 
 import '../css/Ingresos.css';
 
@@ -46,6 +48,7 @@ const IngresosContent = ({ reqConfig }) => {
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [creatingIngreso, setCreatingIngreso] = useState(false);
   const [tempIngreso, setTempIngreso] = useState(null);
+  const [error, setError] = useState(null);
 
   const {
     filtered,
@@ -65,37 +68,23 @@ const IngresosContent = ({ reqConfig }) => {
     },
     filterFn: (ingreso, filters) => {
       if (filters.todos) return true;
-
       const { banco, caja, semestral, anual } = filters;
-
-      const typeMatch =
-        (banco && ingreso.type === CONSTANTS.PAYMENT_TYPE_BANK) ||
-        (caja && ingreso.type === CONSTANTS.PAYMENT_TYPE_CASH);
-
-      const freqMatch =
-        (semestral && ingreso.frequency === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY) ||
-        (anual && ingreso.frequency === CONSTANTS.PAYMENT_FREQUENCY_YEARLY);
-
+      const typeMatch = (banco && ingreso.type === CONSTANTS.PAYMENT_TYPE_BANK) || (caja && ingreso.type === CONSTANTS.PAYMENT_TYPE_CASH);
+      const freqMatch = (semestral && ingreso.frequency === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY) || (anual && ingreso.frequency === CONSTANTS.PAYMENT_FREQUENCY_YEARLY);
       const typeFilters = [banco, caja].filter(Boolean).length;
       const freqFilters = [semestral, anual].filter(Boolean).length;
-
       if (typeFilters > 0 && freqFilters > 0) return typeMatch && freqMatch;
-      if (typeFilters > 0 && freqFilters === 0) return typeMatch;
-      if (freqFilters > 0 && typeFilters === 0) return freqMatch;
-
+      if (typeFilters > 0) return typeMatch;
+      if (freqFilters > 0) return freqMatch;
       return false;
     },
     searchFn: (ingreso, term) => {
       const normalized = term.toLowerCase();
-      return (
-        ingreso.concept?.toLowerCase().includes(normalized) ||
-        String(ingreso.member_number).includes(normalized)
-      );
+      return ingreso.concept?.toLowerCase().includes(normalized) || String(ingreso.member_number).includes(normalized);
     }
   });
 
   const handleCreate = () => {
-    const grid = document.querySelector('.cards-grid');
     setCreatingIngreso(true);
     setTempIngreso({
       income_id: null,
@@ -105,26 +94,36 @@ const IngresosContent = ({ reqConfig }) => {
       frequency: CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
       type: CONSTANTS.PAYMENT_TYPE_BANK
     });
-    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('.cards-grid')?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelCreate = () => {
+    setCreatingIngreso(false);
+    setTempIngreso(null);
+    setError(null);
   };
 
   const handleCreateSubmit = async (nuevo) => {
     try {
       await postData(reqConfig.rawUrl, nuevo);
+      setError(null);
       setCreatingIngreso(false);
       setTempIngreso(null);
     } catch (err) {
-      console.error("Error creando ingreso:", err);
+      setTempIngreso({ ...nuevo });
+      setError(errorParser(err));
     }
   };
 
-  const handleEditSubmit = async (editado) => {
+  const handleEditSubmit = async (editado, id) => {
     try {
-      await putData(`${reqConfig.rawUrl}/${editado.income_id}`, editado);
+      await putData(`${reqConfig.rawUrl}/${id}`, editado);
+      setError(null);
     } catch (err) {
-      console.error("Error actualizando ingreso:", err);
+      setError(errorParser(err));
     }
   };
+
 
   const handleDelete = async (id) => {
     if (!window.confirm("¿Estás seguro de que deseas eliminar el ingreso?")) return;
@@ -132,13 +131,8 @@ const IngresosContent = ({ reqConfig }) => {
       await deleteData(`${reqConfig.rawUrl}/${id}`);
       setSearchTerm("");
     } catch (err) {
-      console.error("Error eliminando ingreso:", err);
+      setError(errorParser(err));
     }
-  };
-
-  const handleCancelCreate = () => {
-    setCreatingIngreso(false);
-    setTempIngreso(null);
   };
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
@@ -150,7 +144,6 @@ const IngresosContent = ({ reqConfig }) => {
         <div className="d-flex justify-content-between align-items-center m-0 p-0">
           <h1 className="section-title">Lista de Ingresos</h1>
         </div>
-
         <hr className="section-divider" />
 
         <SearchToolbar
@@ -169,18 +162,19 @@ const IngresosContent = ({ reqConfig }) => {
               income={tempIngreso}
               isNew
               onCreate={handleCreateSubmit}
-              onUpdate={handleEditSubmit}
-              onDelete={handleDelete}
               onCancel={handleCancelCreate}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
           renderCard={(income) => (
             <IngresoCard
               key={income.income_id}
               income={income}
-              onUpdate={handleEditSubmit}
-              onDelete={handleDelete}
-              onCancel={handleCancelCreate}
+              onUpdate={(data, id) => handleEditSubmit(data, id)}
+              onDelete={() => handleDelete(income.income_id)}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
         />

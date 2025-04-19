@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Card, Badge, Button, Form
+  Card, Badge, Button, Form, OverlayTrigger, Tooltip
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +20,7 @@ import { CONSTANTS } from '../../util/constants';
 import '../../css/IngresoCard.css';
 import { useTheme } from '../../hooks/useTheme';
 import { DateParser } from '../../util/parsers/dateParser';
+import { renderErrorAlert } from '../../util/alertHelpers';
 
 const MotionCard = _motion.create(Card);
 
@@ -39,11 +40,12 @@ const IngresoCard = ({
   onDelete,
   onCancel,
   className = '',
-  editable = true // <--- nueva prop
+  editable = true,
+  error,
+  onClearError
 }) => {
   const createMode = isNew;
-  const [editMode, setEditMode] = useState(isNew);
-  const [error, setError] = useState(null);
+  const [editMode, setEditMode] = useState(createMode);
   const { theme } = useTheme();
 
   const [formData, setFormData] = useState({
@@ -55,31 +57,36 @@ const IngresoCard = ({
     created_at: income.created_at
   });
 
+  useEffect(() => {
+    if (!editMode) {
+      setFormData({
+        concept: income.concept || '',
+        amount: income.amount || 0,
+        type: income.type ?? CONSTANTS.PAYMENT_TYPE_CASH,
+        frequency: income.frequency ?? CONSTANTS.PAYMENT_FREQUENCY_YEARLY,
+        member_number: income.member_number,
+        created_at: income.created_at
+      });
+    }
+  }, [income, editMode]);
+
   const handleChange = (field, value) =>
     setFormData(prev => ({ ...prev, [field]: value }));
 
-  const handleDelete = () => typeof onDelete === 'function' && onDelete(income.income_id);
   const handleCancel = () => {
+    if (onClearError) onClearError();
     if (isNew && typeof onCancel === 'function') return onCancel();
     setEditMode(false);
-    setError(null);
   };
 
   const handleSave = () => {
-    if (!formData.concept.trim()) return setError("El concepto es obligatorio.");
-    if (formData.amount <= 0) return setError("El importe debe ser mayor que 0.");
-    if (!formData.member_number) return setError("Falta el número de socio.");
-    setError(null);
-
-    const newIncome = {
-      ...income,
-      ...formData
-    };
-
+    if (onClearError) onClearError();
+    const newIncome = { ...income, ...formData };
     if (createMode && typeof onCreate === 'function') return onCreate(newIncome);
-    if (typeof onUpdate === 'function') onUpdate(newIncome, income.income_id);
-    setEditMode(false);
+    if (typeof onUpdate === 'function') return onUpdate(newIncome, income.income_id);
   };
+
+  const handleDelete = () => typeof onDelete === 'function' && onDelete(income.income_id);
 
   return (
     <MotionCard className={`ingreso-card shadow-sm rounded-4 border-0 h-100 ${className}`}>
@@ -102,14 +109,14 @@ const IngresoCard = ({
           </small>
         </div>
 
-        {editable && !createMode && (
+        {editable && !createMode && !editMode && (
           <AnimatedDropdown
             className='end-0'
             icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}
           >
             {({ closeDropdown }) => (
               <>
-                <div className="dropdown-item d-flex align-items-center" onClick={() => { setEditMode(true); closeDropdown(); }}>
+                <div className="dropdown-item d-flex align-items-center" onClick={() => { setEditMode(true); onClearError && onClearError(); closeDropdown(); }}>
                   <FontAwesomeIcon icon={faEdit} className="me-2" />Editar
                 </div>
                 <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
@@ -122,12 +129,12 @@ const IngresoCard = ({
       </Card.Header>
 
       <Card.Body>
-        {error && <div className="alert alert-danger py-1 px-2 small" role="alert">{error}</div>}
+        {(editMode || createMode) && renderErrorAlert(error)}
 
         <Card.Text className="mb-2">
           <FontAwesomeIcon icon={faUser} className="me-2" />
           <strong>Socio Nº:</strong>{' '}
-          {editMode ? (
+          {createMode ? (
             <Form.Control
               className="themed-input"
               size="sm"
@@ -136,6 +143,20 @@ const IngresoCard = ({
               onChange={(e) => handleChange('member_number', parseInt(e.target.value))}
               style={{ maxWidth: '150px', display: 'inline-block' }}
             />
+          ) : editMode ? (
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Este campo no se puede editar. Para cambiar el socio, elimina y vuelve a crear el ingreso.</Tooltip>}
+            >
+              <Form.Control
+                className="themed-input"
+                disabled
+                size="sm"
+                type="number"
+                value={formData.member_number}
+                style={{ maxWidth: '150px', display: 'inline-block' }}
+              />
+            </OverlayTrigger>
           ) : formData.member_number}
         </Card.Text>
 
@@ -205,7 +226,9 @@ IngresoCard.propTypes = {
   onDelete: PropTypes.func,
   onCancel: PropTypes.func,
   className: PropTypes.string,
-  editable: PropTypes.bool
+  editable: PropTypes.bool,
+  error: PropTypes.string,
+  onClearError: PropTypes.func
 };
 
 export default IngresoCard;

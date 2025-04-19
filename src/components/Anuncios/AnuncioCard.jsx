@@ -4,6 +4,7 @@ import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import '../../css/AnuncioCard.css';
+import { renderErrorAlert } from '../../util/alertHelpers';
 
 const PRIORITY_CONFIG = {
   0: { label: 'BAJA', className: 'text-success' },
@@ -14,24 +15,19 @@ const PRIORITY_CONFIG = {
 const formatDateTime = (iso) => {
   const date = new Date(iso);
   return {
-    date: date.toLocaleDateString('es-ES', {
-      day: '2-digit', month: '2-digit', year: 'numeric'
-    }),
-    time: date.toLocaleTimeString('es-ES', {
-      hour: '2-digit', minute: '2-digit', hour12: false
-    }),
+    date: date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+    time: date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false }),
   };
 };
 
-const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onCancel, showFullBody = false }) => {
+const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onCancel, showFullBody = false, error, onClearError  }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(createMode);
-  const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
     body: anuncio.body || '',
     priority: anuncio.priority ?? 1,
-    published_by: JSON.parse(localStorage.getItem('user'))?.user_id
+    published_by: JSON.parse(localStorage.getItem('user'))?.user_id,
   });
 
   useEffect(() => {
@@ -39,32 +35,32 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
       setFormData({
         body: anuncio.body || '',
         priority: anuncio.priority ?? 1,
-        published_by: JSON.parse(localStorage.getItem('user'))?.user_id
+        published_by: JSON.parse(localStorage.getItem('user'))?.user_id,
       });
     }
   }, [anuncio, editMode]);
 
-  const handleEdit = () => setEditMode(true);
+  const handleEdit = () => {
+    if (onClearError) onClearError();
+    setEditMode(true);
+  };
+
   const handleDelete = () => typeof onDelete === 'function' && onDelete(anuncio.announce_id);
+
   const handleCancel = () => {
+    if (onClearError) onClearError();
     if (createMode && onCancel) return onCancel();
     setEditMode(false);
-    setError(null);
   };
 
   const handleSave = () => {
-    if (!formData.body.trim()) {
-      setError("El contenido no puede estar vacío.");
-      return;
-    }
-    setError(null);
+    if (onClearError) onClearError();
     const updated = { ...anuncio, ...formData };
     if (createMode && typeof onCreate === 'function') return onCreate(updated);
-    if (typeof onUpdate === 'function') onUpdate(updated, anuncio.announce_id);
-    setEditMode(false);
+    if (typeof onUpdate === 'function') return onUpdate(updated, anuncio.announce_id);
   };
 
-  const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+  const handleChange = (field, value) => setFormData((prev) => ({ ...prev, [field]: value }));
 
   const { date, time } = formatDateTime(anuncio.created_at);
   const priorityInfo = PRIORITY_CONFIG[formData.priority] || PRIORITY_CONFIG[1];
@@ -72,22 +68,21 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
   const displayBody = isLongBody ? `${formData.body.slice(0, 300)}...` : formData.body;
 
   return (
-    <Card className={`anuncio-card rounded-4 border-0 shadow-sm mb-4`}>      
+    <Card className="anuncio-card rounded-4 border-0 shadow-sm mb-4">
       <Card.Header className="d-flex justify-content-between align-items-center rounded-top-4 px-3 py-2">
         <div className="d-flex flex-column">
-          <span className="fw-bold">
-          📢&emsp;Anuncio #{anuncio.announce_id}
-          </span>
+          <span className="fw-bold">📢&emsp;Anuncio #{anuncio.announce_id}</span>
           <small className="muted">
-            Publicado el {date} a las {time} por{' #'}
-            <span className="fw-semibold">{anuncio.published_by}</span>
+            Publicado el {date} a las {time} por{' '}
+            <span className="fw-semibold">#{anuncio.published_by}</span>
           </small>
         </div>
         {!createMode && !editMode && (
           <AnimatedDropdown
-            className='end-0'
-            buttonStyle='bg-transparent border-0'
-            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>            
+            className="end-0"
+            buttonStyle="bg-transparent border-0"
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}
+          >
             {({ closeDropdown }) => (
               <>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleEdit(); closeDropdown(); }}>
@@ -104,11 +99,12 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
       </Card.Header>
 
       <Card.Body className="py-3">
-        {error && <div className="alert alert-danger py-1 px-2 small" role="alert">{error}</div>}
+        {(editMode || createMode) && renderErrorAlert(error)}
 
         {editMode ? (
           <Form.Group className="mb-3">
-            <Form.Control className="themed-input" 
+            <Form.Control
+              className="themed-input"
               as="textarea"
               rows={4}
               value={formData.body}
@@ -119,10 +115,9 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
           <>
             <p className="mb-2">{displayBody}</p>
             {isLongBody && (
-              <a
-                href={`/anuncio.html?id=${anuncio.announce_id}`}
-                className="text-decoration-none fw-medium leer-mas-link"
-              >Leer más →</a>
+              <a href={`/anuncio.html?id=${anuncio.announce_id}`} className="text-decoration-none fw-medium leer-mas-link">
+                Leer más →
+              </a>
             )}
           </>
         )}

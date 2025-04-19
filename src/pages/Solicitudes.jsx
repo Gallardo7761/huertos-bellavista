@@ -20,6 +20,8 @@ const Solicitudes = () => {
   const reqConfig = {
     baseUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.allWithPreUsers,
     rawUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.all,
+    acceptUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.accept,
+    rejectUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.reject,
     params: {}
   };
 
@@ -52,35 +54,34 @@ const SolicitudesContent = ({ reqConfig }) => {
   });
 
   const handleAccept = async (entry) => {
+    const url = reqConfig.acceptUrl.replace(":request_id", entry.request_id);
     try {
-      await putData(`${reqConfig.rawUrl}/${entry.request_id}`, {
-        ...entry,
-        status: 1
-      });
+      await putData(url, {});
       console.log("✅ Solicitud aceptada:", entry.request_id);
     } catch (err) {
       console.error("❌ Error al aceptar solicitud:", err.message);
     }
   };
-
+  
   const handleReject = async (entry) => {
-    try {  
-      // 1. Si tiene preusuario, eliminarlo
-      if (entry.pre_user_id) {
-        const preUserUrl = reqConfig.rawUrl.replace("requests", "pre_users") + `/${entry.pre_user_id}`;
-        await deleteData(preUserUrl);
-        console.log("🗑️ Preusuario eliminado:", entry.pre_user_id);
-      }
-  
-      // 2. Rechazar la solicitud
-      const requestUrl = `${reqConfig.rawUrl}/${entry.request_id}`;
-      await putData(requestUrl, { ...entry, status: 2 });
-  
+    const url = reqConfig.rejectUrl.replace(":request_id", entry.request_id);
+    try {
+      await putData(url, {});
       console.log("🛑 Solicitud rechazada:", entry.request_id);
     } catch (err) {
       console.error("❌ Error al rechazar solicitud:", err.message);
     }
   };  
+
+  const handleDelete = async (id) => {
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar esta solicitud manualmente?`)) return;
+    try {
+      await deleteData(`${reqConfig.rawUrl}/${id}`);
+      setSearchTerm("");
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
@@ -109,6 +110,7 @@ const SolicitudesContent = ({ reqConfig }) => {
               data={entry}
               onAccept={() => handleAccept(entry)}
               onReject={() => handleReject(entry)}
+              onDelete={handleDelete}
             />
           )}
         />

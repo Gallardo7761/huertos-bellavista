@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Card, ListGroup, Badge, Button, Form
 } from 'react-bootstrap';
@@ -19,6 +19,7 @@ import TipoSocioDropdown from './TipoSocioDropdown';
 import { getNowAsLocalDatetime } from '../../util/date';
 import { generateSecurePassword } from '../../util/passwordGenerator';
 import { DateParser } from '../../util/parsers/dateParser';
+import { renderErrorAlert } from '../../util/alertHelpers';
 
 const getFechas = (formData, editMode, handleChange) => {
   const { created_at, assigned_at, deactivated_at } = formData;
@@ -109,11 +110,11 @@ const getPFP = (tipo) => {
 
 const MotionCard = _motion.create(Card);
 
-const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel, onViewIncomes }) => {
+const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel, onViewIncomes, error, onClearError }) => {
   const createMode = isNew;
-  const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(isNew);
   const [showPassword, setShowPassword] = useState(false);
+  const [latestNumber, setLatestNumber] = useState(null);
 
   const [formData, setFormData] = useState({
     display_name: socio.display_name,
@@ -121,7 +122,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     email: socio.email || '',
     dni: socio.dni,
     phone: socio.phone,
-    member_number: socio.member_number,
+    member_number: socio.member_number || latestNumber,
     plot_number: socio.plot_number,
     notes: socio.notes || '',
     status: socio.status,
@@ -133,37 +134,70 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     password: createMode ? generateSecurePassword() : '',
   });
 
-  const handleEdit = () => setEditMode(true);
+  useEffect(() => {
+    if(!editMode) {
+      setFormData({
+        display_name: socio.display_name,
+        user_name: socio.user_name,
+        email: socio.email || '',
+        dni: socio.dni,
+        phone: socio.phone,
+        member_number: socio.member_number,
+        plot_number: socio.plot_number,
+        notes: socio.notes || '',
+        status: socio.status,
+        type: socio.type,
+        created_at: socio.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
+        assigned_at: socio.assigned_at?.slice(0, 16) || undefined,
+        deactivated_at: socio.deactivated_at?.slice(0, 16) || undefined,
+        global_role: 0,
+        password: createMode ? generateSecurePassword() : ''
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socio, editMode]);
+
+  useEffect(() => {
+    const fetchLastNumber = async () => {
+      try {
+        if(!(createMode || editMode)) return;
+        const res = await fetch("https://api.huertosbellavista.es/v1/members/latest-number");
+        const data = await res.json();
+        setLatestNumber(data.data.lastMemberNumber+1 );
+      } catch (err) {
+        console.error("Error al obtener el número de socio:", err);
+      }
+    };
+
+    fetchLastNumber();
+  }, [createMode, editMode]);
+
+  const handleEdit = () => {
+    if (onClearError) onClearError();
+    setEditMode(true);
+  };
+
   const handleDelete = () => typeof onDelete === "function" && onDelete(socio.user_id);
+  
   const handleCancel = () => {
-    if (isNew && onCancel) return onCancel();
+    if (onClearError) onClearError();
+    if (isNew && typeof onCancel === 'function') return onCancel();
     setEditMode(false);
-    setError(null);
   };
 
   const handleSave = () => {
-    const phoneRegex = /^[0-9]{9}$/;
-    if (!phoneRegex.test(formData.phone)) return setError("El teléfono no es válido.");
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) return setError("El email no es válido.");
-    if (!formData.display_name.trim() || !formData.member_number) return setError("El nombre y número de socio son obligatorios.");
-    setError(null);
-
-    const updatedSocio = {
-      ...socio,
-      ...formData
-    };
-
-    if (!createMode && !formData.password?.trim()) {
-      delete updatedSocio.password;
-    }
-
-    if (createMode && typeof onCreate === "function") return onCreate(updatedSocio);
-    if (typeof onUpdate === "function") onUpdate(updatedSocio, socio.user_id);
-    setEditMode(false);
+    if (onClearError) onClearError();
+    const newSocio = { ...socio, ...formData };
+    if (createMode && typeof onCreate === 'function') return onCreate(newSocio);
+    if (typeof onUpdate === 'function') return onUpdate(newSocio, socio.user_id);
   };
 
-  const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
+  const handleChange = (field, value) => {
+    if (["member_number"].includes(field)) {
+      value = value === "" ? latestNumber : parseInt(value);
+    }
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
 
   const handleViewIncomes = () => {
     onViewIncomes(socio.user_id);
@@ -195,7 +229,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           </div>
         </div>
 
-        {!createMode && (
+        {!createMode && !editMode && (
           <AnimatedDropdown
             className='end-0'
             buttonStyle='card-button'
@@ -219,13 +253,13 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
       </Card.Header>
 
       <Card.Body>
-        {error && <div className="alert alert-danger py-1 px-2 small" role="alert">{error}</div>}
+        {(editMode || createMode) && renderErrorAlert(error)}
 
         <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
           {[{
             label: 'DNI', icon: faIdCard, value: formData.dni, field: 'dni', type: 'text', maxWidth: '180px'
           }, {
-            label: 'SOCIO Nº', icon: faUser, value: formData.member_number, field: 'member_number', type: 'number', maxWidth: '100px'
+            label: 'SOCIO Nº', icon: faUser, value: formData.member_number || latestNumber, field: 'member_number', type: 'number', maxWidth: '100px'
           }, {
             label: 'HUERTO Nº', icon: faSunPlantWilt, value: formData.plot_number, field: 'plot_number', type: 'number', maxWidth: '100px'
           }, {

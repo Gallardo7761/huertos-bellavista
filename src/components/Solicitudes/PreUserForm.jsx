@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 
-const PreUserForm = ({ onSubmit }) => {
+const PreUserForm = ({ onSubmit, userType, plotNumber }) => {
   const fetchedOnce = useRef(false);
 
   const [form, setForm] = useState({
@@ -14,8 +14,8 @@ const PreUserForm = ({ onSubmit }) => {
     zip_code: '',
     city: '',
     member_number: '',
-    plot_number: 0,
-    type: 0,
+    plot_number: plotNumber,
+    type: userType,
     status: 1,
     role: 0
   });

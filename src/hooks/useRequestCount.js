@@ -20,7 +20,7 @@ const useRequestCount = () => {
             },
           }
         );
-        setCount(res.data.data.count); // OJO aquí, tiene que ser data.data.count
+        setCount(res.data.data.count);
       } catch (err) {
         console.error('❌ Error al obtener el número de solicitudes:', err.message);
       }

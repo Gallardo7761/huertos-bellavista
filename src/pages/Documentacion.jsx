@@ -71,8 +71,6 @@ const DocumentacionContent = ({ reqConfig }) => {
     }
   };
 
-  if (dataLoading) return <p><LoadingIcon /></p>;
-
   return (
     <CustomContainer className="py-4">
       <ContentWrapper>
@@ -83,13 +81,16 @@ const DocumentacionContent = ({ reqConfig }) => {
           <FileUpload ref={fileUploadRef} onFilesSelected={handleSelectFiles} />
         </IfRole>
 
-        <div className="mt-4">
-          {dataError && <p className="text-danger">❌ Error al cargar los archivos.</p>}
-          {data?.length === 0 && <p>No hay documentos todavía.</p>}
-          {data?.map((file, idx) => (
-            <File key={idx} file={file} onDelete={handleDeleteFile} />
-          ))}
-        </div>
+        {dataLoading ? (<LoadingIcon />) : (
+          <div className="mt-4">
+            {dataError && <p className="text-danger">❌ Error al cargar los archivos.</p>}
+            {data?.length === 0 && <p>No hay documentos todavía.</p>}
+            {data?.map((file, idx) => (
+              <File key={idx} file={file} onDelete={handleDeleteFile} />
+            ))}
+          </div>
+        )}
+
       </ContentWrapper>
     </CustomContainer>
   );

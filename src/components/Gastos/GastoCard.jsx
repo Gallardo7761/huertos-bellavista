@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Card, Badge, Button, Form
 } from 'react-bootstrap';
@@ -21,6 +21,7 @@ import { useTheme } from '../../hooks/useTheme';
 import '../../css/IngresoCard.css';
 import { CONSTANTS } from '../../util/constants';
 import { DateParser } from '../../util/parsers/dateParser';
+import { renderErrorAlert } from '../../util/alertHelpers';
 
 const MotionCard = _motion.create(Card);
 
@@ -28,10 +29,9 @@ const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? "Banco" : 
 const getTypeColor = (type, theme) => type === 0 ? "primary" : theme === "light" ? "dark" : "light";
 const getTypeTextColor = (type, theme) => type === 0 ? "light" : theme === "light" ? "light" : "dark";
 
-const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCancel }) => {
+const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCancel, error, onClearError }) => {
   const createMode = isNew;
-  const [editMode, setEditMode] = useState(isNew);
-  const [error, setError] = useState(null);
+  const [editMode, setEditMode] = useState(createMode);
   const { theme } = useTheme();
 
   const [formData, setFormData] = useState({
@@ -43,30 +43,34 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
     created_at: gasto.created_at
   });
 
+  useEffect(() => {
+    if(!editMode) {
+      setFormData({
+        concept: gasto.concept || '',
+        amount: gasto.amount || 0,
+        supplier: gasto.supplier || '',
+        invoice: gasto.invoice || '',
+        type: gasto.type ?? 0,
+        created_at: gasto.created_at
+      });
+    }
+  }, [gasto, editMode]);
+
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
   const handleDelete = () => typeof onDelete === 'function' && onDelete(gasto.expense_id);
+
   const handleCancel = () => {
+    if (onClearError) onClearError();
     if (isNew && typeof onCancel === 'function') return onCancel();
     setEditMode(false);
-    setError(null);
   };
 
   const handleSave = () => {
-    if (!formData.concept.trim()) return setError("El concepto es obligatorio.");
-    if (!formData.supplier.trim()) return setError("El proveedor es obligatorio.");
-    if (!formData.invoice.trim()) return setError("La factura es obligatoria.");
-    if (formData.amount <= 0) return setError("El importe debe ser mayor que 0.");
-    setError(null);
-
-    const newGasto = {
-      ...gasto,
-      ...formData
-    };
-
-    if (createMode && typeof onCreate === 'function') return onCreate(newGasto);
-    if (typeof onUpdate === 'function') onUpdate(newGasto, gasto.expense_id);
-    setEditMode(false);
+    if (onClearError) onClearError();
+    const newExpense = { ...gasto, ...formData };
+    if (createMode && typeof onCreate === 'function') return onCreate(newExpense);
+    if (typeof onUpdate === 'function') return onUpdate(newExpense, gasto.expense_id);
   };
 
   return (
@@ -84,7 +88,8 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
             {DateParser.isoToStringWithTime(formData.created_at)}
           </small>
         </div>
-        {!createMode && (
+
+        {!createMode && !editMode && (
           <AnimatedDropdown className='end-0' icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl text-dark" />}>
             {({ closeDropdown }) => (
               <>
@@ -101,7 +106,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
       </Card.Header>
 
       <Card.Body>
-        {error && <div className="alert alert-danger py-1 px-2 small" role="alert">{error}</div>}
+        {(editMode || createMode) && renderErrorAlert(error)}
 
         <Card.Text className="mb-2">
           <FontAwesomeIcon icon={faMoneyBillWave} className="me-2" />

@@ -187,7 +187,7 @@ const ListaEsperaContent = ({ reqConfig }) => {
       )}
 
       <CustomModal title="Solicitud de Huerto" show={showPreUserFormModal} onClose={() => setShowPreUserFormModal(false)}>
-        <PreUserForm onSubmit={handleRegisterSubmit} />
+        <PreUserForm userType={0} plotNumber={0} onSubmit={handleRegisterSubmit} />
       </CustomModal>
 
       <NotificationModal

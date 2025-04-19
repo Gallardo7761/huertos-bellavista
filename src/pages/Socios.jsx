@@ -15,6 +15,7 @@ import { SociosPDF } from '../components/Socios/SociosPDF';
 import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import CustomModal from '../components/CustomModal';
 import IngresoCard from '../components/Ingresos/IngresoCard';
+import { errorParser } from '../util/parsers/errorParser'; 
 
 import '../css/Socios.css';
 
@@ -53,7 +54,7 @@ const SociosContent = ({ reqConfig }) => {
   const [incomes, setIncomes] = useState([]);
   const [incomesLoading, setIncomesLoading] = useState(false);
   const [incomesError, setIncomesError] = useState(null);
-
+  const [error, setError] = useState(null);
 
   const {
     filtered,
@@ -94,9 +95,8 @@ const SociosContent = ({ reqConfig }) => {
   });
 
   const handleCreate = () => {
-    const grid = document.querySelector('.cards-grid');
     setCreatingSocio(true);
-    const nuevo = {
+    const socio = {
       user_id: null,
       user_name: "nuevo" + Date.now(),
       email: "",
@@ -111,43 +111,45 @@ const SociosContent = ({ reqConfig }) => {
       status: 1,
       type: 1
     };
-    nuevo.user_name = nuevo.display_name.split(" ")[0].toLowerCase() + nuevo.member_number;
-    setTempSocio(nuevo);
-    grid.scrollTo({ top: 0, behavior: 'smooth' });
+    setTempSocio(socio);
+    document.querySelector('.cards-grid').scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCancelCreate = () => {
     setCreatingSocio(false);
     setTempSocio(null);
+    setError(null);
   };
 
   const handleCreateSubmit = async (newSocio) => {
     try {
-      const usuario = newSocio.display_name.split(" ")[0].toLowerCase() + newSocio.member_number;
-      newSocio.user_name = usuario;
+      newSocio.user_name = newSocio.display_name.split(" ")[0].toLowerCase() + newSocio.member_number;
       await postData(reqConfig.baseUrl, newSocio);
+      setError(null);
       setCreatingSocio(false);
       setTempSocio(null);
     } catch (err) {
-      console.error("Error al crear socio:", err.message);
+      setTempSocio({ ...newSocio });
+      setError(errorParser(err));
     }
   };
-
+  
   const handleEditSubmit = async (updatedSocio, userId) => {
     try {
       await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio);
+      setError(null);
     } catch (err) {
-      console.error("Error al actualizar socio:", err.message);
+      setError(errorParser(err));
     }
   };
 
   const handleDelete = async (userId) => {
-    if (!window.confirm(`¿Estás seguro de que deseas eliminar el socio con ID ${userId}?`)) return;
+    if (!window.confirm(`¿Estás seguro de que deseas eliminar el socio?`)) return;
     try {
       await deleteData(`${reqConfig.baseUrl}/${userId}`);
       setSearchTerm("");
     } catch (err) {
-      console.error("Error al eliminar socio:", err.message);
+      setError(errorParser(err));
     }
   };
 
@@ -210,6 +212,8 @@ const SociosContent = ({ reqConfig }) => {
               isNew
               onCreate={handleCreateSubmit}
               onCancel={handleCancelCreate}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
           renderCard={(socio) => (
@@ -220,6 +224,8 @@ const SociosContent = ({ reqConfig }) => {
               onDelete={handleDelete}
               onCancel={handleCancelCreate}
               onViewIncomes={() => handleViewIncomes(socio.member_number)}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
         />

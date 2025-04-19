@@ -36,6 +36,24 @@
     color: var(--card-text-secondary);
 }
 
+.perfil-card .card-header button {
+    border: none;
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    background-color: transparent;
+    color: var(--card-button) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.perfil-card .card-header button:hover {
+    background-color: var(--header-btn-hover);
+}
+
 /* ================================
      LISTA DE DATOS
   ================================== */

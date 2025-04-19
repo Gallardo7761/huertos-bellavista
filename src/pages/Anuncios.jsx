@@ -12,6 +12,8 @@ import PaginatedCardGrid from '../components/PaginatedCardGrid';
 import AnuncioCard from '../components/Anuncios/AnuncioCard';
 import AnunciosFilter from '../components/Anuncios/AnunciosFilter';
 
+import { errorParser } from '../util/parsers/errorParser';
+
 const PAGE_SIZE = 10;
 
 const Anuncios = () => {
@@ -38,6 +40,7 @@ const AnunciosContent = ({ reqConfig }) => {
   const { data, dataLoading, dataError, postData, putData, deleteData } = useDataContext();
   const [creatingAnuncio, setCreatingAnuncio] = useState(false);
   const [tempAnuncio, setTempAnuncio] = useState(null);
+  const [error, setError] = useState(null);
 
   const {
     filtered,
@@ -99,18 +102,21 @@ const AnunciosContent = ({ reqConfig }) => {
   const handleCreateSubmit = async (nuevo) => {
     try {
       await postData(reqConfig.baseUrl, nuevo);
+      setError(null);
       setCreatingAnuncio(false);
       setTempAnuncio(null);
     } catch (err) {
-      console.error("Error al crear anuncio:", err.message);
+      setTempAnuncio({ ...nuevo });
+      setError(errorParser(err));
     }
   };
 
   const handleEditSubmit = async (editado, id) => {
     try {
       await putData(`${reqConfig.baseUrl}/${id}`, editado);
+      setError(null);
     } catch (err) {
-      console.error("Error al editar anuncio:", err.message);
+      setError(errorParser(err));
     }
   };
 
@@ -151,6 +157,8 @@ const AnunciosContent = ({ reqConfig }) => {
               isNew
               onCreate={handleCreateSubmit}
               onCancel={handleCancelCreate}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
           renderCard={(anuncio) => (
@@ -159,6 +167,8 @@ const AnunciosContent = ({ reqConfig }) => {
               anuncio={anuncio}
               onUpdate={(a, id) => handleEditSubmit(a, id)}
               onDelete={() => handleDelete(anuncio.announce_id)}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
         />

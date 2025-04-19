@@ -16,6 +16,7 @@ import { GastosPDF } from '../components/Gastos/GastosPDF';
 
 import '../css/Ingresos.css';
 import { CONSTANTS } from '../util/constants';
+import { errorParser } from '../util/parsers/errorParser';
 
 const PAGE_SIZE = 10;
 
@@ -44,6 +45,7 @@ const GastosContent = ({ reqConfig }) => {
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [creatingGasto, setCreatingGasto] = useState(false);
   const [tempGasto, setTempGasto] = useState(null);
+  const [error, setError] = useState(null);
 
   const {
     filtered,
@@ -77,7 +79,6 @@ const GastosContent = ({ reqConfig }) => {
   });
 
   const handleCreate = () => {
-    const grid = document.querySelector('.cards-grid');
     setCreatingGasto(true);
     setTempGasto({
       expense_id: null,
@@ -87,42 +88,44 @@ const GastosContent = ({ reqConfig }) => {
       invoice: '',
       type: 0
     });
-    grid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelector('.cards-grid')?.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCreateSubmit = async (nuevo) => {
     try {
       await postData(reqConfig.baseUrl, nuevo);
+      setError(null);
       setCreatingGasto(false);
       setTempGasto(null);
     } catch (err) {
-      console.error("Error creando gasto:", err.message);
+      setTempGasto({ ...nuevo });
+      setError(errorParser(err));
     }
   };
 
-  const handleEditSubmit = async (editado) => {
+  const handleEditSubmit = async (editado, id) => {
     try {
-      await putData(`${reqConfig.baseUrl}/${editado.expense_id}`, editado);
+      await putData(`${reqConfig.baseUrl}/${id}`, editado);
+      setError(null);
     } catch (err) {
-      console.error("Error actualizando gasto:", err.message);
+      setError(errorParser(err));
     }
   };
 
   const handleDelete = async (id) => {
-    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar este gasto?");
-    if (!confirmed) return;
-
+    if (!window.confirm("¿Estás seguro de que deseas eliminar el gasto?")) return;
     try {
       await deleteData(`${reqConfig.baseUrl}/${id}`);
       setSearchTerm("");
     } catch (err) {
-      console.error("Error eliminando gasto:", err.message);
+      setError(errorParser(err));
     }
   };
 
   const handleCancelCreate = () => {
     setCreatingGasto(false);
     setTempGasto(null);
+    setError(null);
   };
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
@@ -153,9 +156,9 @@ const GastosContent = ({ reqConfig }) => {
               gasto={tempGasto}
               isNew
               onCreate={handleCreateSubmit}
-              onUpdate={handleEditSubmit}
-              onDelete={handleDelete}
               onCancel={handleCancelCreate}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
           renderCard={(gasto) => (
@@ -164,7 +167,8 @@ const GastosContent = ({ reqConfig }) => {
               gasto={gasto}
               onUpdate={handleEditSubmit}
               onDelete={handleDelete}
-              onCancel={handleCancelCreate}
+              error={error}
+              onClearError={() => setError(null)}
             />
           )}
         />

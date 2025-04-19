@@ -29,7 +29,9 @@
                 "hasCollaborator": "/v1/members/number/:member_number/has-collaborator",
                 "hasCollaboratorRequest": "/v1/members/number/:member_number/has-collaborator-request",
                 "hasGreenhouse": "/v1/members/number/:member_number/has-greenhouse",
-                "hasGreenhouseRequest": "/v1/members/number/:member_number/has-greenhouse-request"
+                "hasGreenhouseRequest": "/v1/members/number/:member_number/has-greenhouse-request",
+                "changeType": "/v1/members/number/:user_id/type",
+                "changeStatus": "/v1/members/number/:user_id/status"
             },
             "incomes": {
                 "all": "/raw/v1/incomes",
@@ -54,7 +56,9 @@
                 "allWithPreUsers": "/v1/requests-full",
                 "byIdWithPreUser": "/v1/requests-full/:request_id",
                 "countPending": "/v1/requests/count",
-                "myRequests": "/v1/requests/my-requests"
+                "myRequests": "/v1/requests/my-requests",
+                "accept": "/v1/requests/:request_id/accept",
+                "reject": "/v1/requests/:request_id/reject"
             },
             "pre_users": {
                 "all": "/raw/v1/pre_users",

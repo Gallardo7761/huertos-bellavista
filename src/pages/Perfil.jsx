@@ -12,7 +12,8 @@ import {
   faUser, faIdCard, faEnvelope, faPhone, faHashtag,
   faSeedling, faUserShield, faCalendar,
   faUserSlash, faUserPlus,
-  faTrash
+  faArrowRightFromBracket,
+  faCog
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../css/Perfil.css';
@@ -24,6 +25,9 @@ import CustomModal from '../components/CustomModal';
 import PreUserForm from '../components/Solicitudes/PreUserForm';
 import NotificationModal from '../components/NotificationModal';
 import { Button, Col, Row } from 'react-bootstrap';
+import AnimatedDropdown from '../components/AnimatedDropdown';
+
+import { CONSTANTS } from '../util/constants';
 
 const parseDate = (date) => {
   if (!date) return 'NO';
@@ -69,6 +73,37 @@ const PerfilContent = ({ config }) => {
   const [feedbackModal, setFeedbackModal] = useState(null);
   const closeFeedback = () => setFeedbackModal(null);
 
+  const [hasCollaborator, setHasCollaborator] = useState(false);
+  const [hasCollaboratorRequest, setHasCollaboratorRequest] = useState(false);
+  const [hasGreenHouse, setHasGreenHouse] = useState(false);
+  const [hasGreenHouseRequest, setHasGreenHouseRequest] = useState(false);
+
+  useEffect(() => {
+    const checkStates = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const endpoints = [
+          { url: '/v1/members/hasCollaborator', setter: setHasCollaborator, key: 'hasCollaborator' },
+          { url: '/v1/requests/hasCollaboratorRequest', setter: setHasCollaboratorRequest, key: 'hasCollaboratorRequest' },
+          { url: '/v1/members/hasGreenhouse', setter: setHasGreenHouse, key: 'hasGreenhouse' },
+          { url: '/v1/requests/hasGreenhouseRequest', setter: setHasGreenHouseRequest, key: 'hasGreenhouseRequest' }
+        ];
+
+        for (const { url, setter, key } of endpoints) {
+          const res = await fetch(config.apiConfig.baseUrl + url, { headers });
+          const json = await res.json();
+          setter(json?.data?.[key] ?? false);
+        }
+      } catch (err) {
+        console.error("Error cargando estados:", err.message);
+      }
+    };
+
+    if (config) checkStates();
+  }, [config]);
+
   useEffect(() => {
     const loadIncomes = async () => {
       try {
@@ -107,8 +142,8 @@ const PerfilContent = ({ config }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 1,
-          status: 0,
+          type: CONSTANTS.REQUEST_TYPE_UNREGISTER,
+          status: CONSTANTS.REQUEST_PENDING,
           requested_by: usuario.user_id
         })
       });
@@ -131,7 +166,65 @@ const PerfilContent = ({ config }) => {
     }
   };
 
-  
+  const handleRequestGreenHouse = async () => {
+    try {
+      const res = await fetch(config.requestUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: CONSTANTS.REQUEST_TYPE_ADD_GREENHOUSE,
+          status: CONSTANTS.REQUEST_PENDING,
+          requested_by: usuario.user_id
+        })
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) throw new Error(json.message || 'Error al crear la solicitud.');
+
+      setFeedbackModal({
+        title: 'Solicitud enviada',
+        message: 'Se ha enviado la solicitud de invernadero correctamente.',
+        variant: 'success'
+      });
+    } catch (err) {
+      setFeedbackModal({
+        title: 'Error',
+        message: err.message,
+        variant: 'danger'
+      });
+    }
+  }
+
+  const handleRemoveGreenHouse = async () => {
+    try {
+      const res = await fetch(config.requestUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: CONSTANTS.REQUEST_TYPE_REMOVE_GREENHOUSE,
+          status: CONSTANTS.REQUEST_PENDING,
+          requested_by: usuario.user_id
+        })
+      });
+
+      const json = await res.json();
+
+      if (!res.ok) throw new Error(json.message || 'Error al crear la solicitud.');
+
+      setFeedbackModal({
+        title: 'Solicitud enviada',
+        message: 'Se ha enviado la solicitud de baja de invernadero correctamente.',
+        variant: 'success'
+      });
+    } catch (err) {
+      setFeedbackModal({
+        title: 'Error',
+        message: err.message,
+        variant: 'danger'
+      });
+    }
+  }
 
   const mappedRequests = myRequests.map(r => ({
     ...r,
@@ -149,9 +242,44 @@ const PerfilContent = ({ config }) => {
         <Row className='gap-2 justify-content-center'>
           <Col xs={12} md={4} className="mb-4">
             <Card className="shadow-sm rounded-4 perfil-card">
-              <Card.Header className="bg-secondary text-white rounded-top-4">
-                <Card.Title className="mb-0">Tus datos</Card.Title>
-                <small>Te uniste el {parseDate(usuario.created_at)}</small>
+              <Card.Header className="bg-secondary text-white rounded-top-4 justify-content-between d-flex align-items-center">
+                <div className="m-0 p-0">
+                  <Card.Title className="mb-0">Tu perfil</Card.Title>
+                  <small>Te uniste el {parseDate(usuario.created_at)}</small>
+                </div>
+                <AnimatedDropdown
+                  className="end-0"
+                  buttonStyle="card-button"
+                  icon={<FontAwesomeIcon icon={faCog} className="fa-xl" />}>
+                  {({ closeDropdown }) => (
+                    <>
+                      {!hasGreenHouse && !hasGreenHouseRequest && (
+                        <div className="dropdown-item d-flex align-items-center" onClick={() => { handleRequestGreenHouse(); closeDropdown(); }}>
+                          <FontAwesomeIcon icon={faSeedling} className="me-2" />Solicitar invernadero
+                        </div>
+                      )}
+                      {!hasCollaborator && !hasCollaboratorRequest && (
+                        <div className="dropdown-item d-flex align-items-center" onClick={() => { setShowAddCollaboratorModal(true); closeDropdown(); }}>
+                          <FontAwesomeIcon icon={faUserPlus} className="me-2" />Añadir un colaborador
+                        </div>
+                      )}
+                      <hr className="dropdown-divider" />
+                      {hasGreenHouse && !hasGreenHouseRequest && (
+                        <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleRemoveGreenHouse(); closeDropdown(); }}>
+                          <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />Dejar invernadero
+                        </div>
+                      )}
+                      {hasCollaborator && !hasCollaboratorRequest && (
+                        <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { setShowRemoveCollaboratorModal(true); closeDropdown(); }}>
+                          <FontAwesomeIcon icon={faUserSlash} className="me-2" />Quitar colaborador
+                        </div>
+                      )}
+                      <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleRequestUnregister(); closeDropdown(); }}>
+                        <FontAwesomeIcon icon={faUserSlash} className="me-2" />Darse de baja
+                      </div>
+                    </>
+                  )}
+                </AnimatedDropdown>
               </Card.Header>
 
               <Card.Body>
@@ -195,23 +323,6 @@ const PerfilContent = ({ config }) => {
             <h2 className='section-title'>Mis Solicitudes</h2>
             <hr className="section-divider" />
 
-            <div className="d-flex flex-wrap gap-3 mb-3">
-              <Button variant="danger" onClick={handleRequestUnregister}>
-                <FontAwesomeIcon icon={faUserSlash} className="me-2" />
-                Baja
-              </Button>
-
-              <Button variant="success" onClick={() => setShowAddCollaboratorModal(true)}>
-                <FontAwesomeIcon icon={faUserPlus} className="me-2" />
-                Colaborador
-              </Button>
-
-              <Button variant="warning" onClick={() => setShowRemoveCollaboratorModal(true)}>
-                <FontAwesomeIcon icon={faTrash} className="me-2" />
-                Colaborador
-              </Button>
-            </div>
-
             {requestsLoading && <p className="text-center my-3"><LoadingIcon /></p>}
             {requestsError && <p className="text-danger text-center my-3">{requestsError}</p>}
             {!requestsLoading && myRequests.length === 0 && <p className="text-center">No tienes solicitudes registradas.</p>}
@@ -230,12 +341,18 @@ const PerfilContent = ({ config }) => {
           onClose={() => setShowAddCollaboratorModal(false)}
         >
           <PreUserForm
+            userType={3}
+            plotNumber={usuario.plot_number}
             onSubmit={async (formData) => {
               try {
                 const requestRes = await fetch(config.requestUrl, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ type: 2, status: 0 })
+                  body: JSON.stringify({
+                    type: CONSTANTS.REQUEST_TYPE_ADD_COLLABORATOR,
+                    status: CONSTANTS.REQUEST_PENDING,
+                    requested_by: usuario.user_id
+                  })
                 });
 
                 const requestJson = await requestRes.json();
@@ -284,7 +401,11 @@ const PerfilContent = ({ config }) => {
                   const res = await fetch(config.requestUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ type: 3, status: 0, requested_by: usuario.user_id })
+                    body: JSON.stringify({
+                      type: CONSTANTS.REQUEST_TYPE_REMOVE_COLLABORATOR,
+                      status: CONSTANTS.REQUEST_PENDING,
+                      requested_by: usuario.user_id
+                    })
                   });
 
                   const json = await res.json();

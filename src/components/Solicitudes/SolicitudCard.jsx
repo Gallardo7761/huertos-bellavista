@@ -1,8 +1,9 @@
-import { Card, ListGroup, Badge, Button } from 'react-bootstrap';
+import { Card, ListGroup, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser, faIdCard, faEnvelope, faPhone, faHome, faMapMarkerAlt, faHashtag,
-  faSeedling, faUserShield, faCalendar
+  faSeedling, faUserShield, faCalendar,
+  faTrash, faEllipsisVertical
 } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import { motion as _motion } from 'framer-motion';
@@ -37,12 +38,13 @@ const renderDescripcionSolicitud = (data, onProfile) => {
   const { request_type, request_status, requested_by_name, pre_display_name } = data;
 
   switch (request_type) {
-    case 1: // Baja
+    case 0:
+      return `${requested_by_name} quiere darse de alta.`;
+    case 1:
       return onProfile
         ? "Has solicitado darte de baja."
         : `El socio ${requested_by_name} quiere darse de baja.`;
-
-    case 2: // Añadir colaborador
+    case 2:
       if (onProfile) {
         switch (request_status) {
           case 0: return "Has solicitado añadir un colaborador.";
@@ -58,22 +60,21 @@ const renderDescripcionSolicitud = (data, onProfile) => {
           default: return "Solicitud de colaborador desconocida.";
         }
       }
-
-    case 3: // Quitar colaborador
+    case 3:
       return onProfile
         ? "Has solicitado quitar tu colaborador."
         : `El socio ${requested_by_name} quiere quitar su colaborador.`;
-
     default:
       return "Tipo de solicitud desconocido.";
   }
 };
 
+const SolicitudCard = ({ data, onAccept, onReject, onDelete, editable = true, onProfile = false }) => {
+  const handleDelete = () => typeof onDelete === "function" && onDelete(data.request_id);
 
-const SolicitudCard = ({ data, onAccept, onReject, editable = true, onProfile = false }) => {
   return (
     <MotionCard className="solicitud-card shadow-sm rounded-4 h-100">
-      <Card.Header className={`rounded-top-4 d-flex justify-content-between align-items-center`}>
+      <Card.Header className="rounded-top-4 d-flex justify-content-between align-items-center">
         <div className="d-flex align-items-center">
           <img src={getPFP(data.pre_type)} width="36" className="rounded me-3" alt="PFP" />
           <div>
@@ -83,6 +84,19 @@ const SolicitudCard = ({ data, onAccept, onReject, editable = true, onProfile = 
             <small className='state-small'>Estado: <strong>{getEstadoSolicitud(data.request_status)}</strong></small>
           </div>
         </div>
+
+        {!onProfile && (
+          <AnimatedDropdown
+            className="end-0"
+            buttonStyle="card-button"
+            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}>
+            {({ closeDropdown }) => (
+              <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
+                <FontAwesomeIcon icon={faTrash} className="me-2" />Eliminar
+              </div>
+            )}
+          </AnimatedDropdown>
+        )}
       </Card.Header>
 
       <Card.Body>
@@ -92,17 +106,6 @@ const SolicitudCard = ({ data, onAccept, onReject, editable = true, onProfile = 
             Fecha de solicitud: <strong>{parseDate(data.request_created_at)}</strong>
           </ListGroup.Item>
         </ListGroup>
-        {data.request_type === 1 && (
-          <ListGroup variant="flush" className="border rounded-3">
-            <ListGroup.Item>
-              {onProfile ? (
-                <span>{`Has solicitado darte de baja.`}</span>
-              ) : (
-                <span>{`El socio ${data.requested_by_name} quiere darse de baja.`}</span>
-              )}
-            </ListGroup.Item>
-          </ListGroup>
-        )}
 
         <ListGroup variant="flush" className="border rounded-3 mb-3">
           <ListGroup.Item>
@@ -110,22 +113,9 @@ const SolicitudCard = ({ data, onAccept, onReject, editable = true, onProfile = 
           </ListGroup.Item>
         </ListGroup>
 
-        {data.request_type === 3 && (
-          <ListGroup variant="flush" className="border rounded-3">
-            <ListGroup.Item>
-              {onProfile ? (
-                <span>{`Has solicitado quitar tu colaborador.`}</span>
-              ) : (
-                <span>{`El socio ${data.requested_by_name} quiere quitar su colaborador.`}</span>
-              )}
-            </ListGroup.Item>
-          </ListGroup>
-        )}
-
-        {data.pre_display_name ? (
+        {data.pre_display_name && (
           <>
             <Card.Subtitle className="card-subtitle mt-3 mb-2">Datos del futuro socio</Card.Subtitle>
-
             <ListGroup variant="flush" className="border rounded-3">
               <ListGroup.Item><FontAwesomeIcon icon={faUser} className="me-2" />Nombre: <strong>{data.pre_display_name}</strong></ListGroup.Item>
               <ListGroup.Item><FontAwesomeIcon icon={faIdCard} className="me-2" />DNI: <strong>{data.pre_dni}</strong></ListGroup.Item>
@@ -138,8 +128,6 @@ const SolicitudCard = ({ data, onAccept, onReject, editable = true, onProfile = 
               <ListGroup.Item><FontAwesomeIcon icon={faUserShield} className="me-2" />Rol: <strong>{['Usuario', 'Admin', 'Desarrollador'][data.pre_role]}</strong></ListGroup.Item>
             </ListGroup>
           </>
-        ) : (
-          null
         )}
 
         {editable && data.request_status === 0 && (
@@ -157,6 +145,7 @@ SolicitudCard.propTypes = {
   data: PropTypes.object.isRequired,
   onAccept: PropTypes.func,
   onReject: PropTypes.func,
+  onDelete: PropTypes.func,
   editable: PropTypes.bool,
   onProfile: PropTypes.bool
 };
