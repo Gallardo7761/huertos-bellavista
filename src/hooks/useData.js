@@ -71,6 +71,29 @@ export const useData = (config) => {
     return response.data.data;
   };
 
+  const postDataValidated = async (endpoint, payload) => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        ...(payload instanceof FormData ? {} : { "Content-Type": "application/json" }),
+      };
+      const response = await axios.post(endpoint, payload, { headers });
+      return { data: response.data.data, errors: null };
+    } catch (err) {
+      const raw = err.response?.data?.message;
+      let parsed = {};
+  
+      try {
+        parsed = JSON.parse(raw); // Esto solo si el backend lanza ValidationException con GSON.toJson(errors)
+      } catch {
+        // No es un JSON válido (por ejemplo, un mensaje de error general)
+        return { data: null, errors: { general: raw || err.message } };
+      }
+  
+      return { data: null, errors: parsed };
+    }
+  };  
+
   const putData = async (endpoint, payload) => {
     const response = await axios.put(endpoint, payload, {
       headers: getAuthHeaders(),
@@ -102,6 +125,7 @@ export const useData = (config) => {
     dataError,
     getData,
     postData,
+    postDataValidated,
     putData,
     deleteData,
     deleteDataWithBody,

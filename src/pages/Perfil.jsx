@@ -45,7 +45,12 @@ const Perfil = () => {
     myIncomesUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.incomes.myIncomes}`,
     requestUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.all,
     preUsersUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.all,
-    myRequestsUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.myRequests}`
+    preUserValidationUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.validation,
+    myRequestsUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.myRequests}`,
+    hasCollaboratorUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.hasCollaborator}`,
+    hasCollaboratorRequestUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.hasCollaboratorRequest}`,
+    hasGreenHouseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.hasGreenHouse}`,
+    hasGreenHouseRequestUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.hasGreenHouseRequest}`
   };
 
   return (
@@ -56,7 +61,7 @@ const Perfil = () => {
 };
 
 const PerfilContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, getData } = useDataContext();
+  const { data, dataLoading, dataError, postData, getData, postDataValidated } = useDataContext();
 
   const usuario = data;
 
@@ -78,28 +83,31 @@ const PerfilContent = ({ config }) => {
   const [hasGreenHouse, setHasGreenHouse] = useState(false);
   const [hasGreenHouseRequest, setHasGreenHouseRequest] = useState(false);
 
-  useEffect(() => {
-    const checkStates = async () => {
-      try {
-        const endpoints = [
-          { url: '/v1/members/hasCollaborator', setter: setHasCollaborator, key: 'hasCollaborator' },
-          { url: '/v1/requests/hasCollaboratorRequest', setter: setHasCollaboratorRequest, key: 'hasCollaboratorRequest' },
-          { url: '/v1/members/hasGreenhouse', setter: setHasGreenHouse, key: 'hasGreenhouse' },
-          { url: '/v1/requests/hasGreenhouseRequest', setter: setHasGreenHouseRequest, key: 'hasGreenhouseRequest' }
-        ];
-  
-        for (const { url, setter, key } of endpoints) {
-          const { data, error } = await getData(config.apiConfig.baseUrl + url);
-          if (error) throw new Error(error);
-          setter(data?.[key] ?? false);
-        }
-      } catch (err) {
-        console.error("Error cargando estados:", err.message);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const checkStates = async () => {
+    try {
+      const endpoints = [
+        { url: config.hasCollaboratorUrl, setter: setHasCollaborator, key: 'hasCollaborator' },
+        { url: config.hasCollaboratorRequestUrl, setter: setHasCollaboratorRequest, key: 'hasCollaboratorRequest' },
+        { url: config.hasGreenHouseUrl, setter: setHasGreenHouse, key: 'hasGreenHouse' },
+        { url: config.hasGreenHouseRequestUrl, setter: setHasGreenHouseRequest, key: 'hasGreenHouseRequest' }
+      ];
+
+      for (const { url, setter, key } of endpoints) {
+        const { data, error } = await getData(url);
+        if (error) throw new Error(error);
+        setter(data?.[key] ?? false);
       }
-    };
-  
+    } catch (err) {
+      console.error("Error cargando estados:", err.message);
+    }
+  };
+
+  useEffect(() => {
     if (config) checkStates();
-  }, [config, getData]);  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config, getData]);
 
   useEffect(() => {
     const loadIncomes = async () => {
@@ -140,7 +148,7 @@ const PerfilContent = ({ config }) => {
         status: CONSTANTS.REQUEST_PENDING,
         requested_by: usuario.user_id
       });
-
+      checkStates();
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de baja correctamente.',
@@ -162,7 +170,7 @@ const PerfilContent = ({ config }) => {
         status: CONSTANTS.REQUEST_PENDING,
         requested_by: usuario.user_id
       });
-
+      checkStates();
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de invernadero correctamente.',
@@ -184,7 +192,7 @@ const PerfilContent = ({ config }) => {
         status: CONSTANTS.REQUEST_PENDING,
         requested_by: usuario.user_id
       });
-
+      checkStates();
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de baja de invernadero correctamente.',
@@ -311,12 +319,24 @@ const PerfilContent = ({ config }) => {
         <CustomModal
           title="Añadir colaborador"
           show={showAddCollaboratorModal}
-          onClose={() => setShowAddCollaboratorModal(false)}
+          onClose={() => {
+            setShowAddCollaboratorModal(false);
+            setValidationErrors({});
+          }}
         >
           <PreUserForm
             userType={3}
             plotNumber={usuario.plot_number}
+            errors={validationErrors}
             onSubmit={async (formData) => {
+              setValidationErrors({});
+
+              const { _, errors } = await postDataValidated(config.preUserValidationUrl, formData);
+              if (errors) {
+                setValidationErrors(errors);
+                return;
+              }
+
               try {
                 const request = await postData(config.requestUrl, {
                   type: CONSTANTS.REQUEST_TYPE_ADD_COLLABORATOR,
@@ -332,23 +352,21 @@ const PerfilContent = ({ config }) => {
                   request_id: requestId
                 });
 
+                checkStates();
+                setValidationErrors({});
+                setShowAddCollaboratorModal(false);
                 setFeedbackModal({
                   title: "Colaborador añadido",
                   message: "Tu solicitud de colaborador ha sido enviada correctamente.",
                   variant: "success"
                 });
-
-                setShowAddCollaboratorModal(false);
               } catch (err) {
-                setFeedbackModal({
-                  title: "Error",
-                  message: err.message,
-                  variant: "danger"
-                });
+                setValidationErrors({ general: err.message });
               }
             }}
           />
         </CustomModal>
+
 
         <CustomModal
           title="Eliminar colaborador"
@@ -367,6 +385,7 @@ const PerfilContent = ({ config }) => {
                     status: CONSTANTS.REQUEST_PENDING,
                     requested_by: usuario.user_id
                   });
+                  checkStates();
 
                   setFeedbackModal({
                     title: "Solicitud enviada",

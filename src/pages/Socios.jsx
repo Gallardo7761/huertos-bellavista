@@ -96,6 +96,10 @@ const SociosContent = ({ reqConfig }) => {
     }
   });
 
+  const listaEsperaOrdenada = filtered
+    .filter(s => s.type === 0 && s.status !== 0)
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
   const handleCreate = () => {
     setCreatingSocio(true);
     const socio = {
@@ -212,18 +216,26 @@ const SociosContent = ({ reqConfig }) => {
               onClearError={() => setError(null)}
             />
           )}
-          renderCard={(socio) => (
-            <SocioCard
-              key={socio.user_id}
-              socio={socio}
-              onUpdate={handleEditSubmit}
-              onDelete={handleDelete}
-              onCancel={handleCancelCreate}
-              onViewIncomes={() => handleViewIncomes(socio.member_number)}
-              error={error}
-              onClearError={() => setError(null)}
-            />
-          )}
+          renderCard={(socio) => {
+            const position = socio.type === 0
+              ? listaEsperaOrdenada.findIndex(s => s.user_id === socio.user_id) + 1
+              : null;
+          
+            return (
+              <SocioCard
+                key={socio.user_id}
+                socio={socio}
+                onUpdate={handleEditSubmit}
+                onDelete={handleDelete}
+                onCancel={handleCancelCreate}
+                onViewIncomes={() => handleViewIncomes(socio.member_number)}
+                error={error}
+                onClearError={() => setError(null)}
+                positionIfWaitlist={position}
+              />
+            );
+          }}
+          
         />
       </ContentWrapper>
 

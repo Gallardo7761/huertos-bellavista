@@ -111,7 +111,7 @@ const getPFP = (tipo) => {
 
 const MotionCard = _motion.create(Card);
 
-const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel, onViewIncomes, error, onClearError }) => {
+const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCancel, onViewIncomes, error, onClearError, positionIfWaitlist }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(isNew);
   const [showPassword, setShowPassword] = useState(false);
@@ -137,7 +137,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   });
 
   useEffect(() => {
-    if(!editMode) {
+    if (!editMode) {
       setFormData({
         display_name: socio.display_name,
         user_name: socio.user_name,
@@ -156,25 +156,25 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
         password: createMode ? generateSecurePassword() : ''
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socio, editMode]);
 
   useEffect(() => {
     const fetchLastNumber = async () => {
       try {
         if (!(createMode || editMode)) return;
-  
+
         const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
         if (error) throw new Error(error);
-  
+
         setLatestNumber(data.lastMemberNumber + 1);
       } catch (err) {
         console.error("Error al obtener el número de socio:", err);
       }
     };
-  
+
     fetchLastNumber();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createMode, editMode]);
 
   const handleEdit = () => {
@@ -183,7 +183,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
   };
 
   const handleDelete = () => typeof onDelete === "function" && onDelete(socio.user_id);
-  
+
   const handleCancel = () => {
     if (onClearError) onClearError();
     if (isNew && typeof onCancel === 'function') return onCancel();
@@ -259,6 +259,16 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
       <Card.Body>
         {(editMode || createMode) && renderErrorAlert(error)}
+
+        {!editMode && positionIfWaitlist && socio.type === 0 && (
+          <div className="text-center">
+            <Badge bg="info">
+              <h6 className='text-dark m-0 p-0'>
+                Posición en la lista de espera: <strong>{positionIfWaitlist}</strong>
+              </h6>
+            </Badge>
+          </div>
+        )}
 
         <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
           {[{
@@ -349,7 +359,11 @@ SocioCard.propTypes = {
   onCancel: PropTypes.func,
   onCreate: PropTypes.func,
   onUpdate: PropTypes.func,
-  onDelete: PropTypes.func
+  onDelete: PropTypes.func,
+  onViewIncomes: PropTypes.func,
+  error: PropTypes.string,
+  onClearError: PropTypes.func,
+  positionIfWaitlist: PropTypes.number
 };
 
 export default SocioCard;

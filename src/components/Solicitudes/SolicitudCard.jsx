@@ -39,7 +39,7 @@ const renderDescripcionSolicitud = (data, onProfile) => {
 
   switch (request_type) {
     case 0:
-      return `${requested_by_name} quiere darse de alta.`;
+      return `${requested_by_name || pre_display_name} quiere darse de alta.`;
     case 1:
       return onProfile
         ? "Has solicitado darte de baja."

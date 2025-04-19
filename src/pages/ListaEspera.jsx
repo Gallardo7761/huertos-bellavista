@@ -26,6 +26,7 @@ const ListaEspera = () => {
     baseUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.members.limitedWaitlist,
     requestUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.all,
     preUsersUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.all,
+    preUserValidationUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.validation,
     params: {}
   };
 
@@ -38,20 +39,12 @@ const ListaEspera = () => {
 
 const ListaEsperaContent = ({ reqConfig }) => {
   const { authStatus } = useAuth();
-  const { data, dataLoading, dataError, postData } = useDataContext();
+  const { data, dataLoading, dataError, postDataValidated, postData } = useDataContext();
 
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [showPreUserFormModal, setShowPreUserFormModal] = useState(false);
-
-  const [feedbackModal, setFeedbackModal] = useState({
-    show: false,
-    title: '',
-    message: '',
-    variant: 'info',
-    buttons: []
-  });
-
-  const closeFeedbackModal = () => setFeedbackModal(prev => ({ ...prev, show: false }));
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     if (authStatus !== 'authenticated' && authStatus !== 'unauthenticated') return;
@@ -69,63 +62,34 @@ const ListaEsperaContent = ({ reqConfig }) => {
   }, [authStatus]);
 
   const handleRegisterSubmit = async (formData) => {
-    try {
-      const request = await postData(reqConfig.requestUrl, {
-        type: 0,
-        status: 0
-      });
-  
-      const requestId = request?.request_id;
-  
-      if (!requestId) {
-        setFeedbackModal({
-          show: true,
-          title: "Error",
-          message: "No se pudo registrar la solicitud.",
-          variant: "danger",
-          buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
-        });
-        return;
-      }
-  
-      try {
-        await postData(reqConfig.preUsersUrl, {
-          ...formData,
-          request_id: requestId
-        });
-      } catch (err) {
-        setFeedbackModal({
-          show: true,
-          title: "Error al registrar preusuario",
-          message: err.message,
-          variant: "danger",
-          buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
-        });
-        return;
-      }
-  
-      setFeedbackModal({
-        show: true,
-        title: "Solicitud enviada",
-        message: "Tu solicitud se ha enviado correctamente. Te notificaremos por email cuando haya una respuesta.",
-        variant: "success",
-        buttons: [{ label: "Vale", variant: "success", onClick: closeFeedbackModal }]
-      });
-  
-      setShowPreUserFormModal(false);
-    } catch (err) {
-      console.error("Error al enviar la solicitud:", err);
-      setFeedbackModal({
-        show: true,
-        title: "Error inesperado",
-        message: "Ocurrió un error al enviar la solicitud. Intenta más tarde.",
-        variant: "danger",
-        buttons: [{ label: "Cerrar", variant: "danger", onClick: closeFeedbackModal }]
-      });
+    setValidationErrors({});
+
+    const { _, errors } = await postDataValidated(reqConfig.preUserValidationUrl, formData);
+
+    if (errors) {
+      setValidationErrors(errors);
+      return;
     }
-  };  
+
+    try {
+      const request = await postData(reqConfig.requestUrl, { type: 0, status: 0 });
+      const requestId = request?.request_id;
+      if (!requestId) throw new Error("No se pudo registrar la solicitud.");
+
+      await postData(reqConfig.preUsersUrl, {
+        ...formData,
+        request_id: requestId
+      });
+
+      setShowPreUserFormModal(false);
+      setShowConfirmationModal(true);
+    } catch (err) {
+      setValidationErrors({ general: err.message });
+    }
+  };
 
   const handleOpenFormModal = () => {
+    setValidationErrors({});
     setShowWelcomeModal(false);
     setShowPreUserFormModal(true);
   };
@@ -141,59 +105,73 @@ const ListaEsperaContent = ({ reqConfig }) => {
   if (dataError) return <p className="text-danger text-center my-5">{dataError}</p>;
 
   return (
-    <>
-      <CustomContainer>
-        <ContentWrapper>
-          <div className="d-flex align-items-center m-0 p-0 justify-content-between">
-            <h1 className="section-title">Lista de Espera</h1>
-            <IfNotAuthenticated>
-              <Button variant="danger" onClick={() => setShowPreUserFormModal(true)}>
-                <FontAwesomeIcon icon={faPencil} className="me-2" />
-                Apuntarme
-              </Button>
-            </IfNotAuthenticated>
-          </div>
-          <hr className="section-divider" />
-          <List datos={mapped} config={{ title: 'display_name', subtitle: 'created_at', showIndex: true }} />
-        </ContentWrapper>
-      </CustomContainer>
-
-      {authStatus === 'unauthenticated' && (
-        <Modal show={showWelcomeModal} onHide={() => setShowWelcomeModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>¿Quieres unirte?</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <p>
-              Te puedes apuntar a la lista de espera clicando en el botón de abajo. Una persona de la directiva revisará tu solicitud y se te notificará por el medio de contacto que elijas si entras o no.
-            </p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="danger" onClick={() => setShowWelcomeModal(false)}>
-              Cerrar
-            </Button>
-            <Button variant="success" onClick={handleOpenFormModal}>
+    <CustomContainer>
+      <ContentWrapper>
+        <div className="d-flex align-items-center m-0 p-0 justify-content-between">
+          <h1 className="section-title">Lista de Espera</h1>
+          <IfNotAuthenticated>
+            <Button variant="danger" onClick={handleOpenFormModal}>
+              <FontAwesomeIcon icon={faPencil} className="me-2" />
               Apuntarme
             </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
+          </IfNotAuthenticated>
+        </div>
+        <hr className="section-divider" />
+        <List datos={mapped} config={{ title: 'display_name', subtitle: 'created_at', showIndex: true }} />
 
-      <CustomModal title="Solicitud de Huerto" show={showPreUserFormModal} onClose={() => setShowPreUserFormModal(false)}>
-        <PreUserForm userType={0} plotNumber={0} onSubmit={handleRegisterSubmit} />
-      </CustomModal>
+        {authStatus === 'unauthenticated' && (
+          <Modal show={showWelcomeModal} onHide={() => setShowWelcomeModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>¿Quieres unirte?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>
+                Puedes apuntarte a la lista de espera clicando en el botón de abajo. Una persona de la directiva revisará tu solicitud y se te notificará por email si entras o no.
+              </p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="danger" onClick={() => setShowWelcomeModal(false)}>
+                Cerrar
+              </Button>
+              <Button variant="success" onClick={handleOpenFormModal}>
+                Apuntarme
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
 
-      <NotificationModal
-        show={feedbackModal.show}
-        onClose={closeFeedbackModal}
-        title={feedbackModal.title}
-        message={feedbackModal.message}
-        variant={feedbackModal.variant}
-        buttons={feedbackModal.buttons}
-      />
-    </>
+        <CustomModal
+          title="Solicitud de Huerto"
+          show={showPreUserFormModal}
+          onClose={() => {
+            setShowPreUserFormModal(false);
+            setValidationErrors({});
+          }}
+        >
+          <PreUserForm
+            userType={0}
+            plotNumber={0}
+            onSubmit={handleRegisterSubmit}
+            errors={validationErrors}
+          />
+        </CustomModal>
+
+        <NotificationModal
+          show={showConfirmationModal}
+          onClose={() => setShowConfirmationModal(false)}
+          title="Solicitud enviada"
+          message="Tu solicitud ha sido enviada correctamente. Te notificaremos por email si entras o no."
+          variant="success"
+          buttons={[
+            {
+              label: 'Aceptar',
+              variant: 'success',
+              onClick: () => setShowConfirmationModal(false)
+            }
+          ]}
+        />
+      </ContentWrapper>
+    </CustomContainer>
   );
 };
 
