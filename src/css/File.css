@@ -8,7 +8,7 @@
     text-align: center;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     color: var(--text-color);
-    background-color: var(--bg-color);
+    background-color: var(--file-card-bg);
     cursor: pointer;
     overflow: hidden;
   }
@@ -36,6 +36,6 @@
   }
   
   .file-card .delete-btn:hover {
-    color: var(--priority-high); /* usa el danger contextual, pero ya nombrado */
+    color: var(--bs-danger); /* usa el danger contextual, pero ya nombrado */
   }
   
