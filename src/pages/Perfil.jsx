@@ -368,11 +368,11 @@ const PerfilContent = ({ config }) => {
 
 
           <Col xs={12} md={7}>
-            <h2 className='section-title'>Mis ingresos</h2>
+            <h2 className='section-title'>Mis pagos</h2>
             <hr className="section-divider" />
             {incomesLoading && <p className="text-center my-3"><LoadingIcon /></p>}
             {incomesError && <p className="text-danger text-center my-3">{incomesError}</p>}
-            {!incomesLoading && incomes.length === 0 && <p className="text-center">No hay ingresos registrados.</p>}
+            {!incomesLoading && incomes.length === 0 && <p className="text-center">No hay pagos registrados.</p>}
             <div className="d-flex flex-wrap gap-3 mb-4">
               {incomes.map(income => (
                 <IngresoCard key={income.income_id} income={income} editable={false} />
