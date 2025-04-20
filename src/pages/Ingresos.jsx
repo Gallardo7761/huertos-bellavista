@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useConfig } from '../hooks/useConfig';
 import { DataProvider } from '../context/DataContext';
 import { useDataContext } from '../hooks/useDataContext';
@@ -31,6 +31,7 @@ const Ingresos = () => {
   const reqConfig = {
     baseUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.incomes.allWithNames,
     rawUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.incomes.all,
+    membersUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.members.all,
     params: {
       _sort: 'created_at',
       _order: 'desc'
@@ -45,12 +46,26 @@ const Ingresos = () => {
 };
 
 const IngresosContent = ({ reqConfig }) => {
-  const { data, dataLoading, dataError, postData, putData, deleteData } = useDataContext();
+  const { data, dataLoading, dataError, getData, postData, putData, deleteData } = useDataContext();
   const [showPDFModal, setShowPDFModal] = useState(false);
   const [creatingIngreso, setCreatingIngreso] = useState(false);
   const [tempIngreso, setTempIngreso] = useState(null);
   const [error, setError] = useState(null);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [members, setMembers] = useState([]);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      try {
+        const membersData = await getData(reqConfig.membersUrl, { params: { _sort: 'name', _order: 'asc' } });
+        setMembers(membersData.data);
+      } catch (err) {
+        setError(errorParser(err));
+      }
+    };
+
+    fetchMembers();
+  }, [reqConfig.membersUrl, getData]);
 
   const {
     filtered,
@@ -82,7 +97,9 @@ const IngresosContent = ({ reqConfig }) => {
     },
     searchFn: (ingreso, term) => {
       const normalized = term.toLowerCase();
-      return ingreso.concept?.toLowerCase().includes(normalized) || String(ingreso.member_number).includes(normalized);
+      return ingreso.concept?.toLowerCase().includes(normalized) || 
+             String(ingreso.member_number).includes(normalized) ||
+             ingreso.display_name?.toLowerCase().includes(normalized);
     }
   });
 
@@ -161,7 +178,7 @@ const IngresosContent = ({ reqConfig }) => {
               onCancel={handleCancelCreate}
               error={error}
               onClearError={() => setError(null)}
-              allIncomes={data}
+              members={members}
             />
           )}
           renderCard={(income) => (
@@ -172,7 +189,6 @@ const IngresosContent = ({ reqConfig }) => {
               onDelete={() => handleDelete(income.income_id)}
               error={error}
               onClearError={() => setError(null)}
-              allIncomes={data}
             />
           )}
         />

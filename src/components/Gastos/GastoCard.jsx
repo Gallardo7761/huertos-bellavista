@@ -83,7 +83,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <span className="fw-bold">
             <FontAwesomeIcon icon={faFileInvoice} className="me-2" />
             {editMode ? (
-              <Form.Control className="themed-input"  size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value)} />
+              <Form.Control className="themed-input"  size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value.toUpperCase())} />
             ) : formData.concept}
           </span>
           <small>

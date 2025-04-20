@@ -45,7 +45,7 @@ const IngresoCard = ({
   editable = true,
   error,
   onClearError,
-  allIncomes = []
+  members = []
 }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(createMode);
@@ -94,8 +94,8 @@ const IngresoCard = ({
   const handleDelete = () => typeof onDelete === 'function' && onDelete(income.income_id);
 
   const uniqueMembers = Array.from(
-    new Map(allIncomes.map(item => [item.member_number, item])).values()
-  );
+    new Map(members.map(item => [item.member_number, item])).values()
+  ).sort((a, b) => a.member_number - b.member_number);
 
   return (
     <MotionCard className={`ingreso-card shadow-sm rounded-4 border-0 h-100 ${className}`}>
@@ -108,7 +108,7 @@ const IngresoCard = ({
                 className="themed-input"
                 size="sm"
                 value={formData.concept}
-                onChange={(e) => handleChange('concept', e.target.value)}
+                onChange={(e) => handleChange('concept', e.target.value.toUpperCase())}
               />
             ) : formData.concept}
           </span>
@@ -255,7 +255,7 @@ IngresoCard.propTypes = {
   editable: PropTypes.bool,
   error: PropTypes.string,
   onClearError: PropTypes.func,
-  allIncomes: PropTypes.array
+  members: PropTypes.array
 };
 
 export default IngresoCard;

@@ -11,8 +11,10 @@ export const ConfigProvider = ({ children }) => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch("/config/settings.json");
-        if (!response.ok) throw new Error("Error al cargar settings.json");
+        const response = import.meta.env.MODE === 'production'
+          ? await fetch("/config/settings.prod.json")
+          : await fetch("/config/settings.dev.json");
+        if (!response.ok) throw new Error("Error al cargar settings.*.json");
         const json = await response.json();
         setConfig(json);
       } catch (err) {

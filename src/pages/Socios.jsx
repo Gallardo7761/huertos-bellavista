@@ -69,6 +69,7 @@ const SociosContent = ({ reqConfig }) => {
     pageSize: PAGE_SIZE,
     filterFn: (socio, filters) => {
       if (filters.todos) return true;
+      if (!filters.inactivos && socio.status === 0) return false;
       return (
         (filters.listaEspera && socio.type === 0) ||
         (filters.hortelanos && socio.type === 1) ||

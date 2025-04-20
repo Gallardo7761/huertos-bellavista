@@ -2,12 +2,6 @@
     "apiConfig": {
         "baseUrl": "https://api.huertosbellavista.es",
         "coreUrl": "https://api.miarma.net",
-        "ports": {
-            "auth_logic": 10000,
-            "auth_data": 10001,
-            "huertos_logic": 10004,
-            "huertos_data": 10005
-        },
         "endpoints": {
             "auth": {
                 "login": "/v1/login",

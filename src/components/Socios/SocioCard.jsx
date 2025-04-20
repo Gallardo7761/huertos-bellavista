@@ -180,6 +180,12 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     if (["member_number"].includes(field)) {
       value = value === "" ? latestNumber : parseInt(value);
     }
+    if(field === "display_name") {
+      value = value.toUpperCase();
+    }
+    if(field === "dni") {
+      value = value.toUpperCase();
+    }
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

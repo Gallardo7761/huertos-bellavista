@@ -1,0 +1,72 @@
+{
+    "apiConfig": {
+        "baseUrl": "http://localhost",
+        "coreUrl": "http://localhost",
+        "endpoints": {
+            "auth": {
+                "login": "/huertos/login",
+                "validateToken": "/auth/validate-token",
+                "refreshToken": "/auth/refresh-token",
+                "changePassword": "/auth/change-password"
+            },
+            "members": {
+                "all": "/huertos/raw/members",
+                "byId": "/huertos/raw/members/:user_id",
+                "profile": "/huertos/members/profile",
+                "byMemberNumber": "/huertos/members/number/:member_number",
+                "byPlotNumber": "/huertos/members/plot/:plot_number",
+                "byDni": "/huertos/members/dni/:dni",
+                "payments": "/huertos/members/number/:member_number/incomes",
+                "hasPaid": "/huertos/members/number/:member_number/has-paid",
+                "waitlist": "/huertos/members/waitlist",
+                "limitedWaitlist": "/huertos/members/waitlist/limited",
+                "lastMemberNumber": "/huertos/members/latest-number",
+                "hasCollaborator": "/huertos/members/number/:member_number/has-collaborator",
+                "hasCollaboratorRequest": "/huertos/members/number/:member_number/has-collaborator-request",
+                "hasGreenHouse": "/huertos/members/number/:member_number/has-greenhouse",
+                "hasGreenHouseRequest": "/huertos/members/number/:member_number/has-greenhouse-request",
+                "changeType": "/huertos/members/number/:user_id/type",
+                "changeStatus": "/huertos/members/number/:user_id/status"
+            },
+            "incomes": {
+                "all": "/huertos/raw/incomes",
+                "allWithNames": "/huertos/incomes/with-names",
+                "byId": "/huertos/raw/incomes/:income_id",
+                "myIncomes": "/huertos/incomes/my-incomes"
+            },
+            "expenses": {
+                "all": "/huertos/raw/expenses",
+                "byId": "/huertos/raw/expenses/:expense_id"
+            },
+            "balance": {
+                "all": "/huertos/raw/balance"
+            },
+            "announces": {
+                "all": "/huertos/raw/announces",
+                "byId": "/huertos/raw/announces/:announce_id"
+            },
+            "requests": {
+                "all": "/huertos/raw/requests",
+                "byId": "/huertos/raw/requests/:request_id",
+                "allWithPreUsers": "/huertos/requests-full",
+                "byIdWithPreUser": "/huertos/requests-full/:request_id",
+                "countPending": "/huertos/requests/count",
+                "myRequests": "/huertos/requests/my-requests",
+                "accept": "/huertos/requests/:request_id/accept",
+                "reject": "/huertos/requests/:request_id/reject"
+            },
+            "pre_users": {
+                "all": "/huertos/raw/pre_users",
+                "byId": "/huertos/raw/pre_users/:pre_user_id",
+                "validation": "/huertos/pre_users/validate"
+            },
+            "files": {
+                "all": "/core/files",
+                "byId": "/core/files/:file_id",
+                "upload": "/core/files/upload",
+                "download": "/core/files/download/:file_id",
+                "userFiles": "/core/files/myfiles"
+            }
+        }
+    }
+}
