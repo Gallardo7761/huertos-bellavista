@@ -6,14 +6,16 @@ import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
 import LoadingIcon from '../components/LoadingIcon';
 
-import { Card, ListGroup } from 'react-bootstrap';
+import { Card, ListGroup, Form, FloatingLabel } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser, faIdCard, faEnvelope, faPhone, faHashtag,
   faSeedling, faUserShield, faCalendar,
   faUserSlash, faUserPlus,
   faArrowRightFromBracket,
-  faCog
+  faCog,
+  faEyeSlash,
+  faEye
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../css/Perfil.css';
@@ -26,7 +28,7 @@ import PreUserForm from '../components/Solicitudes/PreUserForm';
 import NotificationModal from '../components/NotificationModal';
 import { Button, Col, Row } from 'react-bootstrap';
 import AnimatedDropdown from '../components/AnimatedDropdown';
-
+import { useAuth } from '../hooks/useAuth';
 import { CONSTANTS } from '../util/constants';
 
 const parseDate = (date) => {
@@ -40,17 +42,30 @@ const Perfil = () => {
 
   if (configLoading || !config) return <p className="text-center my-5"><LoadingIcon /></p>;
 
+  const buildUrl = (base, endpoint, params = {}) => {
+    if (!endpoint) return null;
+    let url = base + endpoint;
+    for (const [key, value] of Object.entries(params)) {
+      url = url.replace(`:${key}`, value);
+    }
+    return url;
+  };
+
+  const memberNumber = JSON.parse(localStorage.getItem('user'))?.member_number;
+
   const reqConfig = {
     baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.profile}`,
-    myIncomesUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.incomes.myIncomes}`,
-    requestUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.requests.all,
-    preUsersUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.all,
-    preUserValidationUrl: config.apiConfig.baseUrl + config.apiConfig.endpoints.pre_users.validation,
-    myRequestsUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.myRequests}`,
-    hasCollaboratorUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.hasCollaborator}`,
-    hasCollaboratorRequestUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.hasCollaboratorRequest}`,
-    hasGreenHouseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.hasGreenHouse}`,
-    hasGreenHouseRequestUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.requests.hasGreenHouseRequest}`
+    myIncomesUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.incomes.myIncomes),
+    requestUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.requests.all),
+    preUsersUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.pre_users.all),
+    preUserValidationUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.pre_users.validation),
+    myRequestsUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.requests.myRequests),
+    hasCollaboratorUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasCollaborator, { member_number: memberNumber }),
+    hasCollaboratorRequestUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasCollaboratorRequest, { member_number: memberNumber }),
+    hasGreenHouseUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasGreenHouse, { member_number: memberNumber }),
+    hasGreenHouseRequestUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasGreenHouseRequest, { member_number: memberNumber }),
+    changePasswordUrl: buildUrl(config.apiConfig.coreUrl, config.apiConfig.endpoints.auth.changePassword),
+    loginValidateUrl: buildUrl(config.apiConfig.coreUrl, config.apiConfig.endpoints.auth.loginValidate),
   };
 
   return (
@@ -62,6 +77,7 @@ const Perfil = () => {
 
 const PerfilContent = ({ config }) => {
   const { data, dataLoading, dataError, postData, getData, postDataValidated } = useDataContext();
+  const { logout } = useAuth();
 
   const usuario = data;
 
@@ -85,6 +101,16 @@ const PerfilContent = ({ config }) => {
 
   const [validationErrors, setValidationErrors] = useState({});
 
+  const [newPasswordData, setNewPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmNewPassword: ""
+  });
+
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const checkStates = async () => {
     try {
       const endpoints = [
@@ -95,7 +121,8 @@ const PerfilContent = ({ config }) => {
       ];
 
       for (const { url, setter, key } of endpoints) {
-        const { data, error } = await getData(url);
+        let replacedUrl = url.replace(':member_number', usuario.member_number);
+        const { data, error } = await getData(replacedUrl);
         if (error) throw new Error(error);
         setter(data?.[key] ?? false);
       }
@@ -105,9 +132,9 @@ const PerfilContent = ({ config }) => {
   };
 
   useEffect(() => {
-    if (config) checkStates();
+    if (config && usuario) checkStates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config, getData]);
+  }, [config, usuario]);
 
   useEffect(() => {
     const loadIncomes = async () => {
@@ -152,13 +179,15 @@ const PerfilContent = ({ config }) => {
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de baja correctamente.',
-        variant: 'success'
+        variant: 'success',
+        onClick: closeFeedback
       });
     } catch (err) {
       setFeedbackModal({
         title: 'Error',
         message: err.message,
-        variant: 'danger'
+        variant: 'danger',
+        onClick: closeFeedback
       });
     }
   };
@@ -174,13 +203,15 @@ const PerfilContent = ({ config }) => {
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de invernadero correctamente.',
-        variant: 'success'
+        variant: 'success',
+        onClick: closeFeedback
       });
     } catch (err) {
       setFeedbackModal({
         title: 'Error',
         message: err.message,
-        variant: 'danger'
+        variant: 'danger',
+        onClick: closeFeedback
       });
     }
   };
@@ -196,16 +227,66 @@ const PerfilContent = ({ config }) => {
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de baja de invernadero correctamente.',
-        variant: 'success'
+        variant: 'success',
+        onClick: closeFeedback
       });
     } catch (err) {
       setFeedbackModal({
         title: 'Error',
         message: err.message,
-        variant: 'danger'
+        variant: 'danger',
+        onClick: closeFeedback
       });
     }
   };
+
+  const handleChange = (e) => {
+    setNewPasswordData({
+      ...newPasswordData,
+      [e.target.name]: e.target.value
+    });
+  }
+
+  const handleChangePassword = async () => {
+    try {
+      const validOldPassword = await postData(config.loginValidateUrl, {
+        userId: usuario.user_id,
+        password: newPasswordData.currentPassword
+      });
+      if (!validOldPassword.valid) throw new Error("La contraseña actual es incorrecta.");
+      if (newPasswordData.newPassword !== newPasswordData.confirmNewPassword) throw new Error("Las contraseñas no coinciden.");
+      if (newPasswordData.newPassword.length < 8) throw new Error("La nueva contraseña debe tener al menos 8 caracteres.");
+
+      const response = await postData(config.changePasswordUrl, {
+        userId: usuario.user_id,
+        newPassword: newPasswordData.newPassword
+      });
+
+      if(!response) throw new Error("Error al cambiar la contraseña.");
+      setNewPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: ""
+      });
+
+      setFeedbackModal({
+        title: 'Contraseña cambiada',
+        message: 'Tu contraseña ha sido cambiada correctamente.',
+        variant: 'success',
+        onClick: () => {
+          closeFeedback();
+          logout();
+        }
+      });
+    } catch (err) {
+      setFeedbackModal({
+        title: 'Error',
+        message: err.message,
+        variant: 'danger',
+        onClick: closeFeedback
+      });
+    }
+  }
 
   const mappedRequests = myRequests.map(r => ({
     ...r,
@@ -273,7 +354,7 @@ const PerfilContent = ({ config }) => {
                     <FontAwesomeIcon icon={faHashtag} className="me-2" />Socio Nº: <strong>{usuario.member_number}</strong> | Huerto Nº: <strong>{usuario.plot_number}</strong>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo de socio: <strong>{['Lista de Espera', 'Hortelano', 'Hortelano + Invernadero', 'Colaborador'][usuario.type]}</strong>
+                    <FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo de socio: <strong>{['Lista de Espera', 'Hortelano', 'Hortelano + Invernadero', 'Colaborador', 'Subvencion', 'Desarrollador'][usuario.type]}</strong>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <FontAwesomeIcon icon={faUserShield} className="me-2" />Rol en huertos: <strong>{['Usuario', 'Admin', 'Desarrollador'][usuario.role]}</strong> | Global: <strong>{['Usuario', 'Admin'][usuario.global_role]}</strong>
@@ -288,22 +369,19 @@ const PerfilContent = ({ config }) => {
 
 
           <Col xs={12} md={7}>
-            <h2 className='section-title'>Mis Ingresos</h2>
+            <h2 className='section-title'>Mis ingresos</h2>
             <hr className="section-divider" />
-
             {incomesLoading && <p className="text-center my-3"><LoadingIcon /></p>}
             {incomesError && <p className="text-danger text-center my-3">{incomesError}</p>}
             {!incomesLoading && incomes.length === 0 && <p className="text-center">No hay ingresos registrados.</p>}
-
             <div className="d-flex flex-wrap gap-3 mb-4">
               {incomes.map(income => (
                 <IngresoCard key={income.income_id} income={income} editable={false} />
               ))}
             </div>
 
-            <h2 className='section-title'>Mis Solicitudes</h2>
+            <h2 className='section-title'>Mis solicitudes</h2>
             <hr className="section-divider" />
-
             {requestsLoading && <p className="text-center my-3"><LoadingIcon /></p>}
             {requestsError && <p className="text-danger text-center my-3">{requestsError}</p>}
             {!requestsLoading && myRequests.length === 0 && <p className="text-center">No tienes solicitudes registradas.</p>}
@@ -313,6 +391,90 @@ const PerfilContent = ({ config }) => {
                 <SolicitudCard key={request.request_id} data={request} editable={false} onProfile={true} />
               ))}
             </div>
+
+            <h2 className='section-title'>Cambio de contraseña</h2>
+            <hr className="section-divider" />
+            <Form onSubmit={(e) => { e.preventDefault(); handleChangePassword(); }} className="d-flex flex-column gap-3">
+              <div className="d-flex flex-column gap-3">
+                {/* Contraseña actual */}
+                <FloatingLabel controlId="floatingPassword" label={<><FontAwesomeIcon icon={faUser} className="me-2" />Contraseña actual</>}>
+                  <Form.Control
+                    required
+                    onChange={handleChange}
+                    type={showOld ? "text" : "password"}
+                    placeholder=""
+                    name="currentPassword"
+                    className="rounded-4"
+                  />
+                  <Button
+                    variant="link"
+                    className="show-button position-absolute end-0 top-50 translate-middle-y me-2"
+                    onClick={() => setShowOld(!showOld)}
+                    aria-label="Mostrar contraseña"
+                    tabIndex={-1}
+                    style={{ zIndex: 2 }}
+                  >
+                    <FontAwesomeIcon icon={showOld ? faEyeSlash : faEye} className='fa-lg' />
+                  </Button>
+                </FloatingLabel>
+
+                {/* Nueva contraseña */}
+                <FloatingLabel controlId="floatingNewPassword" label={<><FontAwesomeIcon icon={faUser} className="me-2" />Nueva contraseña</>}>
+                  <Form.Control
+                    required
+                    onChange={handleChange}
+                    type={showNew ? "text" : "password"}
+                    placeholder=""
+                    name="newPassword"
+                    className="rounded-4"
+                  />
+                  <Button
+                    variant="link"
+                    className="show-button position-absolute end-0 top-50 translate-middle-y me-2"
+                    onClick={() => setShowNew(!showNew)}
+                    aria-label="Mostrar contraseña"
+                    tabIndex={-1}
+                    style={{ zIndex: 2 }}
+                  >
+                    <FontAwesomeIcon icon={showNew ? faEyeSlash : faEye} className='fa-lg' />
+                  </Button>
+                </FloatingLabel>
+
+                {/* Confirmar nueva contraseña */}
+                <FloatingLabel controlId="floatingConfirmPassword" label={<><FontAwesomeIcon icon={faUser} className="me-2" />Confirmar nueva contraseña</>}>
+                  <Form.Control
+                    required
+                    onChange={handleChange}
+                    type={showConfirm ? "text" : "password"}
+                    placeholder=""
+                    name="confirmNewPassword"
+                    className="rounded-4"
+                  />
+                  <Button
+                    variant="link"
+                    className="show-button position-absolute end-0 top-50 translate-middle-y me-2"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    aria-label="Mostrar contraseña"
+                    tabIndex={-1}
+                    style={{ zIndex: 2 }}
+                  >
+                    <FontAwesomeIcon icon={showConfirm ? faEyeSlash : faEye} className='fa-lg' />
+                  </Button>
+                </FloatingLabel>
+              </div>
+              <Button
+                disabled={newPasswordData.newPassword !== newPasswordData.confirmNewPassword ||
+                  newPasswordData.newPassword === '' || newPasswordData.confirmNewPassword === '' ||
+                  newPasswordData.currentPassword === ''
+                }
+                onClick={(e) => { e.preventDefault(); handleChangePassword(); }}
+                className='w-25'
+                type='submit'
+                variant="primary"
+              >
+                Cambiar contraseña
+              </Button>
+            </Form>
           </Col>
         </Row>
 
@@ -358,10 +520,17 @@ const PerfilContent = ({ config }) => {
                 setFeedbackModal({
                   title: "Colaborador añadido",
                   message: "Tu solicitud de colaborador ha sido enviada correctamente.",
-                  variant: "success"
+                  variant: "success",
+                  onClick: closeFeedback
                 });
               } catch (err) {
-                setValidationErrors({ general: err.message });
+                setValidationErrors({});
+                setFeedbackModal({
+                  title: "Error",
+                  message: err.message,
+                  variant: "danger",
+                  onClick: closeFeedback
+                });
               }
             }}
           />
@@ -390,14 +559,16 @@ const PerfilContent = ({ config }) => {
                   setFeedbackModal({
                     title: "Solicitud enviada",
                     message: "Se ha solicitado la eliminación del colaborador.",
-                    variant: "success"
+                    variant: "success",
+                    onClick: closeFeedback
                   });
                   setShowRemoveCollaboratorModal(false);
                 } catch (err) {
                   setFeedbackModal({
                     title: "Error",
                     message: err.message,
-                    variant: "danger"
+                    variant: "danger",
+                    onClick: closeFeedback
                   });
                 }
               }}
@@ -414,7 +585,7 @@ const PerfilContent = ({ config }) => {
             title={feedbackModal.title}
             message={feedbackModal.message}
             variant={feedbackModal.variant}
-            buttons={[{ label: "Aceptar", variant: feedbackModal.variant, onClick: closeFeedback }]}
+            buttons={[{ label: "Aceptar", variant: feedbackModal.variant, onClick: feedbackModal.onClick }]}
           />
         )}
 

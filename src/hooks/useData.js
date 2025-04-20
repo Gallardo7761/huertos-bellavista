@@ -7,7 +7,6 @@ export const useData = (config) => {
   const [dataError, setError] = useState(null);
   const configRef = useRef();
 
-  // Actualizamos configRef cuando cambia config
   useEffect(() => {
     if (config?.baseUrl) {
       configRef.current = config;
@@ -39,7 +38,6 @@ export const useData = (config) => {
     }
   }, []);
 
-  // Siempre que cambie config, hacemos fetch
   useEffect(() => {
     if (config?.baseUrl) {
       fetchData();
@@ -67,7 +65,7 @@ export const useData = (config) => {
       ...(payload instanceof FormData ? {} : { "Content-Type": "application/json" }),
     };
     const response = await axios.post(endpoint, payload, { headers });
-    await fetchData(); // Refresca tras crear
+    await fetchData();
     return response.data.data;
   };
 
@@ -84,9 +82,8 @@ export const useData = (config) => {
       let parsed = {};
   
       try {
-        parsed = JSON.parse(raw); // Esto solo si el backend lanza ValidationException con GSON.toJson(errors)
+        parsed = JSON.parse(raw);
       } catch {
-        // No es un JSON válido (por ejemplo, un mensaje de error general)
         return { data: null, errors: { general: raw || err.message } };
       }
   
@@ -98,7 +95,7 @@ export const useData = (config) => {
     const response = await axios.put(endpoint, payload, {
       headers: getAuthHeaders(),
     });
-    await fetchData(); // Refresca tras editar
+    await fetchData();
     return response.data.data;
   };
 
@@ -106,7 +103,7 @@ export const useData = (config) => {
     const response = await axios.delete(endpoint, {
       headers: getAuthHeaders(),
     });
-    await fetchData(); // Refresca tras borrar
+    await fetchData();
     return response.data.data;
   };
 

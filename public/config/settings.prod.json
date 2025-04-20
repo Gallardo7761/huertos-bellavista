@@ -7,7 +7,8 @@
                 "login": "/v1/login",
                 "validateToken": "/auth/v1/validate-token",
                 "refreshToken": "/auth/v1/refresh-token",
-                "changePassword": "/auth/v1/change-password"
+                "changePassword": "/auth/v1/change-password",
+                "loginValidate": "/auth/v1/login/validate"
             },
             "members": {
                 "all": "/raw/v1/members",

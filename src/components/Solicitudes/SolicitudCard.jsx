@@ -39,7 +39,13 @@ const renderDescripcionSolicitud = (data, onProfile) => {
 
   switch (request_type) {
     case 0:
-      return `${requested_by_name || pre_display_name} quiere darse de alta.`;
+      if (requested_by_name) {
+        return `El socio ${requested_by_name} quiere darse de alta.`;
+      } else if(pre_display_name) {
+        return `El socio ${pre_display_name} quiere darse de alta.`
+      } else {
+        return `Se ha aceptado esta solicitud de alta`;
+      }
     case 1:
       return onProfile
         ? "Has solicitado darte de baja."

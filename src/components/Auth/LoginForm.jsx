@@ -56,7 +56,9 @@ const LoginForm = () => {
             <ContentWrapper>
                 <div className="login-card card shadow p-5 rounded-5 mx-auto col-12 col-md-8 col-lg-6 col-xl-5 d-flex flex-column gap-4">
                     <h1 className="text-center">Inicio de sesión</h1>
-
+                    <Alert dismissible variant="info" className="py-2 mb-0">
+                        <p className='text-dark m-0 p-0'>Los socios que lleven registrados desde antes del <strong>20/04/25</strong> mantienen su contraseña antigua.</p>
+                    </Alert>
                     <Form className="d-flex flex-column gap-5" onSubmit={handleSubmit}>
                         <div className="d-flex flex-column gap-3">
                             <FloatingLabel
@@ -93,9 +95,9 @@ const LoginForm = () => {
                                     value={formState.keepLoggedIn}
                                     onChange={(e) => { formState.keepLoggedIn = e.target.checked; setFormState({ ...formState }) }}
                                 />
-                                <Link disabled to="#" className="muted">
+                                {/*<Link disabled to="#" className="muted">
                                     Olvidé mi contraseña
-                                </Link>
+                                </Link>*/}
                             </div>
                         </div>
 

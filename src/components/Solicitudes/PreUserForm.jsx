@@ -60,9 +60,15 @@ const PreUserForm = ({ onSubmit, userType, plotNumber, errors = {} }) => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
+    let updatedValue = value;
+  
+    if (name === 'display_name' || name === 'dni') {
+      updatedValue = value.toUpperCase();
+    }
+  
     setForm((prev) => ({
       ...prev,
-      [name]: type === 'number' ? parseInt(value) || '' : value
+      [name]: type === 'number' ? parseInt(updatedValue) || '' : updatedValue
     }));
   };
 
