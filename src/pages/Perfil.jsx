@@ -121,8 +121,7 @@ const PerfilContent = ({ config }) => {
       ];
 
       for (const { url, setter, key } of endpoints) {
-        let replacedUrl = url.replace(':member_number', usuario.member_number);
-        const { data, error } = await getData(replacedUrl);
+        const { data, error } = await getData(url);
         if (error) throw new Error(error);
         setter(data?.[key] ?? false);
       }
