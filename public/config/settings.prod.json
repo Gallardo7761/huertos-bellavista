@@ -30,7 +30,7 @@
             },
             "incomes": {
                 "all": "/raw/v1/incomes",
-                "allWithNames": "/raw/v1/incomes/with-names",
+                "allWithNames": "/raw/v1/incomes-with-names",
                 "byId": "/raw/v1/incomes/:income_id",
                 "myIncomes": "/v1/incomes/my-incomes"
             },
