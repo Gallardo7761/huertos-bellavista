@@ -30,7 +30,7 @@
             },
             "incomes": {
                 "all": "/huertos/raw/incomes",
-                "allWithNames": "/huertos/incomes/with-names",
+                "allWithNames": "/huertos/raw/incomes/with-names",
                 "byId": "/huertos/raw/incomes/:income_id",
                 "myIncomes": "/huertos/incomes/my-incomes"
             },
