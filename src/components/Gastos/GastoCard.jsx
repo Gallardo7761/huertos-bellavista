@@ -5,9 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCalendarAlt,
   faMoneyBillWave,
-  faFileInvoice,
   faTruck,
   faReceipt,
   faTrash,
@@ -31,6 +29,15 @@ const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? "Banco" : 
 const getTypeColor = (type, theme) => type === 0 ? "primary" : theme === "light" ? "dark" : "light";
 const getTypeTextColor = (type, theme) => type === 0 ? "light" : theme === "light" ? "light" : "dark";
 
+const getPFP = (tipo) => {
+  const base = '/images/icons/';
+  const map = {
+    0: 'cash.svg',
+    1: 'bank.svg'
+  };
+  return base + (map[tipo] || 'farmer.svg');
+};
+
 const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCancel, error, onClearError }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(createMode);
@@ -46,7 +53,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
   });
 
   useEffect(() => {
-    if(!editMode) {
+    if (!editMode) {
       setFormData({
         concept: gasto.concept || '',
         amount: gasto.amount || 0,
@@ -56,7 +63,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
         created_at: gasto.created_at?.slice(0, 16) || (isNew ? getNowAsLocalDatetime() : ''),
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gasto, editMode]);
 
   const handleChange = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
@@ -79,26 +86,32 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
   return (
     <MotionCard className="ingreso-card shadow-sm rounded-4 border-0 h-100">
       <Card.Header className="d-flex justify-content-between align-items-center rounded-top-4 bg-light-green">
-        <div className="d-flex flex-column">
-          <span className="fw-bold">
-            <FontAwesomeIcon icon={faFileInvoice} className="me-2" />
-            {editMode ? (
-              <Form.Control className="themed-input"  size="sm" value={formData.concept} onChange={(e) => handleChange('concept', e.target.value.toUpperCase())} />
-            ) : formData.concept}
-          </span>
-          <small>
-            <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
-            {editMode ? (
-              <SpanishDateTimePicker
-                selected={new Date(formData.created_at)}
-                onChange={(date) =>
-                  handleChange('created_at', date.toISOString().slice(0, 16))
-                }
-              />
-            ) : (
-              DateParser.isoToStringWithTime(formData.created_at)
-            )}
-          </small>
+        <div className="d-flex align-items-center">
+          <img src={getPFP(formData.type)} width={36} alt="Tipo de gasto" className='me-3' />
+          <div className="d-flex flex-column">
+            <span className="fw-bold">
+              {editMode ? (
+                <Form.Control
+                  className="themed-input"
+                  size="sm"
+                  value={formData.concept}
+                  onChange={(e) => handleChange('concept', e.target.value.toUpperCase())}
+                />
+              ) : formData.concept}
+            </span>
+            <small>
+              {editMode ? (
+                <SpanishDateTimePicker
+                  selected={new Date(formData.created_at)}
+                  onChange={(date) =>
+                    handleChange('created_at', date.toISOString().slice(0, 16))
+                  }
+                />
+              ) : (
+                DateParser.isoToStringWithTime(formData.created_at)
+              )}
+            </small>
+          </div>
         </div>
 
         {!createMode && !editMode && (
@@ -117,6 +130,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
         )}
       </Card.Header>
 
+
       <Card.Body>
         {(editMode || createMode) && renderErrorAlert(error)}
 
@@ -124,7 +138,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <FontAwesomeIcon icon={faMoneyBillWave} className="me-2" />
           <strong>Importe:</strong>{' '}
           {editMode ? (
-            <Form.Control className="themed-input"  size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
+            <Form.Control className="themed-input" size="sm" type="number" step="0.01" value={formData.amount} onChange={(e) => handleChange('amount', parseFloat(e.target.value))} style={{ maxWidth: '150px', display: 'inline-block' }} />
           ) : `${formData.amount.toFixed(2)} €`}
         </Card.Text>
 
@@ -132,7 +146,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <FontAwesomeIcon icon={faTruck} className="me-2" />
           <strong>Proveedor:</strong>{' '}
           {editMode ? (
-            <Form.Control className="themed-input"  size="sm" type="text" value={formData.supplier} onChange={(e) => handleChange('supplier', e.target.value)} />
+            <Form.Control className="themed-input" size="sm" type="text" value={formData.supplier} onChange={(e) => handleChange('supplier', e.target.value)} />
           ) : formData.supplier}
         </Card.Text>
 
@@ -140,7 +154,7 @@ const GastoCard = ({ gasto, isNew = false, onCreate, onUpdate, onDelete, onCance
           <FontAwesomeIcon icon={faReceipt} className="me-2" />
           <strong>Factura:</strong>{' '}
           {editMode ? (
-            <Form.Control className="themed-input"  size="sm" type="text" value={formData.invoice} onChange={(e) => handleChange('invoice', e.target.value)} />
+            <Form.Control className="themed-input" size="sm" type="text" value={formData.invoice} onChange={(e) => handleChange('invoice', e.target.value)} />
           ) : formData.invoice}
         </Card.Text>
 

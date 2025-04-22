@@ -15,12 +15,13 @@ import {
   faArrowRightFromBracket,
   faCog,
   faEyeSlash,
-  faEye
+  faEye,
+  faKey
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../css/Perfil.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import IngresoCard from '../components/Ingresos/IngresoCard';
 import SolicitudCard from '../components/Solicitudes/SolicitudCard';
 import CustomModal from '../components/CustomModal';
@@ -37,6 +38,19 @@ const parseDate = (date) => {
   return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
 };
 
+const getPFP = (tipo) => {
+  const base = '/images/icons/';
+  const map = {
+    1: 'farmer.svg',
+    2: 'green_house.svg',
+    0: 'list.svg',
+    3: 'join.svg',
+    4: 'subvencion4.svg',
+    5: 'programmer.svg'
+  };
+  return base + (map[tipo] || 'farmer.svg');
+};
+
 const Perfil = () => {
   const { config, configLoading } = useConfig();
 
@@ -51,8 +65,6 @@ const Perfil = () => {
     return url;
   };
 
-  const memberNumber = JSON.parse(localStorage.getItem('user'))?.member_number;
-
   const reqConfig = {
     baseUrl: `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.members.profile}`,
     myIncomesUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.incomes.myIncomes),
@@ -60,10 +72,6 @@ const Perfil = () => {
     preUsersUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.pre_users.all),
     preUserValidationUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.pre_users.validation),
     myRequestsUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.requests.myRequests),
-    hasCollaboratorUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasCollaborator, { member_number: memberNumber }),
-    hasCollaboratorRequestUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasCollaboratorRequest, { member_number: memberNumber }),
-    hasGreenHouseUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasGreenHouse, { member_number: memberNumber }),
-    hasGreenHouseRequestUrl: buildUrl(config.apiConfig.baseUrl, config.apiConfig.endpoints.members.hasGreenHouseRequest, { member_number: memberNumber }),
     changePasswordUrl: buildUrl(config.apiConfig.coreUrl, config.apiConfig.endpoints.auth.changePassword),
     loginValidateUrl: buildUrl(config.apiConfig.coreUrl, config.apiConfig.endpoints.auth.loginValidate),
   };
@@ -76,28 +84,21 @@ const Perfil = () => {
 };
 
 const PerfilContent = ({ config }) => {
-  const { data, dataLoading, dataError, postData, getData, postDataValidated } = useDataContext();
+  const { data, dataLoading, dataError, postData, postDataValidated } = useDataContext();
   const { logout } = useAuth();
 
-  const usuario = data;
-
-  const [incomes, setIncomes] = useState([]);
-  const [incomesLoading, setIncomesLoading] = useState(true);
-  const [incomesError, setIncomesError] = useState(null);
-
-  const [myRequests, setMyRequests] = useState([]);
-  const [requestsLoading, setRequestsLoading] = useState(true);
-  const [requestsError, setRequestsError] = useState(null);
+  const usuario = data?.member;
+  const myRequests = data?.requests ?? [];
+  const incomes = data?.payments ?? [];
+  const hasCollaborator = data?.hasCollaborator ?? false;
+  const hasCollaboratorRequest = data?.hasCollaboratorRequest ?? false;
+  const hasGreenHouse = data?.hasGreenHouse ?? false;
+  const hasGreenHouseRequest = data?.hasGreenHouseRequest ?? false;
 
   const [showAddCollaboratorModal, setShowAddCollaboratorModal] = useState(false);
   const [showRemoveCollaboratorModal, setShowRemoveCollaboratorModal] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(null);
   const closeFeedback = () => setFeedbackModal(null);
-
-  const [hasCollaborator, setHasCollaborator] = useState(false);
-  const [hasCollaboratorRequest, setHasCollaboratorRequest] = useState(false);
-  const [hasGreenHouse, setHasGreenHouse] = useState(false);
-  const [hasGreenHouseRequest, setHasGreenHouseRequest] = useState(false);
 
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -111,62 +112,6 @@ const PerfilContent = ({ config }) => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const checkStates = async () => {
-    try {
-      const endpoints = [
-        { url: config.hasCollaboratorUrl, setter: setHasCollaborator, key: 'hasCollaborator' },
-        { url: config.hasCollaboratorRequestUrl, setter: setHasCollaboratorRequest, key: 'hasCollaboratorRequest' },
-        { url: config.hasGreenHouseUrl, setter: setHasGreenHouse, key: 'hasGreenHouse' },
-        { url: config.hasGreenHouseRequestUrl, setter: setHasGreenHouseRequest, key: 'hasGreenHouseRequest' }
-      ];
-
-      for (const { url, setter, key } of endpoints) {
-        const { data, error } = await getData(url);
-        if (error) throw new Error(error);
-        setter(data?.[key] ?? false);
-      }
-    } catch (err) {
-      console.error("Error cargando estados:", err.message);
-    }
-  };
-
-  useEffect(() => {
-    if (config && usuario) checkStates();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config, usuario]);
-
-  useEffect(() => {
-    const loadIncomes = async () => {
-      try {
-        const { data: fetchedIncomes, error } = await getData(config.myIncomesUrl);
-        if (error) throw new Error(error);
-        setIncomes(fetchedIncomes);
-      } catch (err) {
-        setIncomesError(err.message);
-      } finally {
-        setIncomesLoading(false);
-      }
-    };
-
-    if (config) loadIncomes();
-  }, [config, getData]);
-
-  useEffect(() => {
-    const loadRequests = async () => {
-      try {
-        const { data: fetchedRequests, error } = await getData(config.myRequestsUrl);
-        if (error) throw new Error(error);
-        setMyRequests(fetchedRequests);
-      } catch (err) {
-        setRequestsError(err.message);
-      } finally {
-        setRequestsLoading(false);
-      }
-    };
-
-    if (config) loadRequests();
-  }, [config, getData]);
-
   const handleRequestUnregister = async () => {
     try {
       await postData(config.requestUrl, {
@@ -174,7 +119,6 @@ const PerfilContent = ({ config }) => {
         status: CONSTANTS.REQUEST_PENDING,
         requested_by: usuario.user_id
       });
-      checkStates();
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de baja correctamente.',
@@ -198,7 +142,6 @@ const PerfilContent = ({ config }) => {
         status: CONSTANTS.REQUEST_PENDING,
         requested_by: usuario.user_id
       });
-      checkStates();
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de invernadero correctamente.',
@@ -222,7 +165,6 @@ const PerfilContent = ({ config }) => {
         status: CONSTANTS.REQUEST_PENDING,
         requested_by: usuario.user_id
       });
-      checkStates();
       setFeedbackModal({
         title: 'Solicitud enviada',
         message: 'Se ha enviado la solicitud de baja de invernadero correctamente.',
@@ -261,7 +203,7 @@ const PerfilContent = ({ config }) => {
         newPassword: newPasswordData.newPassword
       });
 
-      if(!response) throw new Error("Error al cambiar la contraseña.");
+      if (!response) throw new Error("Error al cambiar la contraseña.");
       setNewPasswordData({
         currentPassword: "",
         newPassword: "",
@@ -303,15 +245,20 @@ const PerfilContent = ({ config }) => {
         <Row className='gap-2 justify-content-center'>
           <Col xs={12} md={4} className="mb-4">
             <Card className="shadow-sm rounded-4 perfil-card">
-              <Card.Header className="bg-secondary text-white rounded-top-4 justify-content-between d-flex align-items-center">
-                <div className="m-0 p-0">
-                  <Card.Title className="mb-0">Tu perfil</Card.Title>
-                  <small>Te uniste el {parseDate(usuario.created_at)}</small>
+              <Card.Header className="bg-secondary text-white rounded-top-4 d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center">
+                  <img src={getPFP(usuario.type)} alt="PFP" width={36} className="me-3" />
+                  <div className="m-0 p-0">
+                    <Card.Title className="mb-0">{`@${usuario.user_name}`}</Card.Title>
+                    <small>Te uniste el {parseDate(usuario.created_at)}</small>
+                  </div>
                 </div>
+
                 <AnimatedDropdown
                   className="end-0"
                   buttonStyle="card-button"
-                  icon={<FontAwesomeIcon icon={faCog} className="fa-xl" />}>
+                  icon={<FontAwesomeIcon icon={faCog} className="fa-xl" />}
+                >
                   {({ closeDropdown }) => (
                     <>
                       {!hasGreenHouse && !hasGreenHouseRequest && (
@@ -343,6 +290,7 @@ const PerfilContent = ({ config }) => {
                 </AnimatedDropdown>
               </Card.Header>
 
+
               <Card.Body>
                 <ListGroup variant="flush" className="border rounded-3">
                   <ListGroup.Item><FontAwesomeIcon icon={faUser} className="me-2" />Nombre: <strong>{usuario.display_name}</strong></ListGroup.Item>
@@ -353,13 +301,13 @@ const PerfilContent = ({ config }) => {
                     <FontAwesomeIcon icon={faHashtag} className="me-2" />Socio Nº: <strong>{usuario.member_number}</strong> | Huerto Nº: <strong>{usuario.plot_number}</strong>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo de socio: <strong>{['Lista de Espera', 'Hortelano', 'Hortelano + Invernadero', 'Colaborador', 'Subvencion', 'Desarrollador'][usuario.type]}</strong>
+                    <FontAwesomeIcon icon={faSeedling} className="me-2" />Tipo de socio: <strong>{['LISTA DE ESPERA', 'HORTELANO', 'HORTELANO + INVERNADERO', 'COLABORADOR', 'SUBVENCION', 'DESARROLLADOR'][usuario.type]}</strong>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <FontAwesomeIcon icon={faUserShield} className="me-2" />Rol en huertos: <strong>{['Usuario', 'Admin', 'Desarrollador'][usuario.role]}</strong> | Global: <strong>{['Usuario', 'Admin'][usuario.global_role]}</strong>
+                    <FontAwesomeIcon icon={faUserShield} className="me-2" />Rol en huertos: <strong>{['USUARIO', 'ADMIN', 'DESARROLLADOR'][usuario.role]}</strong>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <FontAwesomeIcon icon={faCalendar} className="me-2" />Estado: <strong>{usuario.status === 1 ? 'Activo' : 'Inactivo'}</strong>
+                    <FontAwesomeIcon icon={faCalendar} className="me-2" />Estado: <strong>{usuario.status === 1 ? 'ACTIVO' : 'INACTIVO'}</strong>
                   </ListGroup.Item>
                 </ListGroup>
               </Card.Body>
@@ -370,9 +318,7 @@ const PerfilContent = ({ config }) => {
           <Col xs={12} md={7}>
             <h2 className='section-title'>Mis pagos</h2>
             <hr className="section-divider" />
-            {incomesLoading && <p className="text-center my-3"><LoadingIcon /></p>}
-            {incomesError && <p className="text-danger text-center my-3">{incomesError}</p>}
-            {!incomesLoading && incomes.length === 0 && <p className="text-center">No hay pagos registrados.</p>}
+            {incomes.length === 0 && <p className="text-center">No hay pagos registrados.</p>}
             <div className="d-flex flex-wrap gap-3 mb-4">
               {incomes.map(income => (
                 <IngresoCard key={income.income_id} income={income} editable={false} />
@@ -381,9 +327,7 @@ const PerfilContent = ({ config }) => {
 
             <h2 className='section-title'>Mis solicitudes</h2>
             <hr className="section-divider" />
-            {requestsLoading && <p className="text-center my-3"><LoadingIcon /></p>}
-            {requestsError && <p className="text-danger text-center my-3">{requestsError}</p>}
-            {!requestsLoading && myRequests.length === 0 && <p className="text-center">No tienes solicitudes registradas.</p>}
+            {myRequests.length === 0 && <p className="text-center">No tienes solicitudes registradas.</p>}
 
             <div className="d-flex flex-wrap gap-3 mb-4">
               {mappedRequests.map(request => (
@@ -467,11 +411,12 @@ const PerfilContent = ({ config }) => {
                   newPasswordData.currentPassword === ''
                 }
                 onClick={(e) => { e.preventDefault(); handleChangePassword(); }}
-                className='w-25'
                 type='submit'
-                variant="primary"
+                variant="warning"
+                style={{ width: 'fit-content' }}
+                className='rounded-4'
               >
-                Cambiar contraseña
+                <FontAwesomeIcon icon={faKey} className="me-2" />  Cambiar contraseña
               </Button>
             </Form>
           </Col>
@@ -513,7 +458,6 @@ const PerfilContent = ({ config }) => {
                   request_id: requestId
                 });
 
-                checkStates();
                 setValidationErrors({});
                 setShowAddCollaboratorModal(false);
                 setFeedbackModal({
@@ -553,7 +497,6 @@ const PerfilContent = ({ config }) => {
                     status: CONSTANTS.REQUEST_PENDING,
                     requested_by: usuario.user_id
                   });
-                  checkStates();
 
                   setFeedbackModal({
                     title: "Solicitud enviada",

@@ -2,12 +2,12 @@ import AnimatedDropdown from '../AnimatedDropdown';
 import { Image } from 'react-bootstrap';
 
 const tipos = [
-  { value: 0, label: 'Lista de espera', icon: 'list.png' },
-  { value: 1, label: 'Hortelano', icon: 'farmer.png' },
-  { value: 2, label: 'Hortelano+Invernadero', icon: 'green_house.png' },
-  { value: 3, label: 'Colaborador', icon: 'join.png' },
-  { value: 4, label: 'Subvención', icon: 'subvencion4.png' },
-  { value: 5, label: 'Informático', icon: 'programmer.png' }
+  { value: 0, label: 'Lista de espera', icon: 'list.svg' },
+  { value: 1, label: 'Hortelano', icon: 'farmer.svg' },
+  { value: 2, label: 'Hortelano+Invernadero', icon: 'green_house.svg' },
+  { value: 3, label: 'Colaborador', icon: 'join.svg' },
+  { value: 4, label: 'Subvención', icon: 'subvencion4.svg' },
+  { value: 5, label: 'Informático', icon: 'programmer.svg' }
 ];
 
 const basePath = '/images/icons/';

@@ -9,9 +9,9 @@ import { AuthProvider } from './context/AuthContext'
 import { ConfigProvider } from './context/ConfigContext.jsx'
 
 /* CSS */
+import './css/index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import './css/index.css'
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 

@@ -79,14 +79,14 @@ const parseNull = (attr) => attr === null || attr === '' ? 'NO' : attr;
 const getPFP = (tipo) => {
   const base = '/images/icons/';
   const map = {
-    1: 'farmer.png',
-    2: 'green_house.png',
-    0: 'list.png',
-    3: 'join.png',
-    4: 'subvencion4.png',
-    5: 'programmer.png'
+    1: 'farmer.svg',
+    2: 'green_house.svg',
+    0: 'list.svg',
+    3: 'join.svg',
+    4: 'subvencion4.svg',
+    5: 'programmer.svg'
   };
-  return base + (map[tipo] || 'farmer.png');
+  return base + (map[tipo] || 'farmer.svg');
 };
 
 const MotionCard = _motion.create(Card);

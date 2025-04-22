@@ -526,3 +526,8 @@ button.custom-toggler {
   font-weight: bold;
   line-height: 1;
 }
+
+.light .card-header span.badge.bg-success {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}

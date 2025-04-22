@@ -5,10 +5,8 @@ import {
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCalendarAlt,
   faUser,
   faMoneyBillWave,
-  faFileInvoice,
   faTrash,
   faEdit,
   faTimes,
@@ -33,6 +31,15 @@ const getTypeColor = (type, theme) => type === CONSTANTS.PAYMENT_TYPE_BANK ? "pr
 const getTypeTextColor = (type, theme) => type === CONSTANTS.PAYMENT_TYPE_BANK ? "light" : theme === "light" ? "light" : "dark";
 const getFreqColor = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? "warning" : "danger";
 const getFreqTextColor = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? "dark" : "light";
+
+const getPFP = (tipo) => {
+  const base = '/images/icons/';
+  const map = {
+    0: 'cash.svg',
+    1: 'bank.svg'
+  };
+  return base + (map[tipo] || 'farmer.svg');
+};
 
 const IngresoCard = ({
   income,
@@ -99,52 +106,55 @@ const IngresoCard = ({
 
   return (
     <MotionCard className={`ingreso-card shadow-sm rounded-4 border-0 h-100 ${className}`}>
-      <Card.Header className="d-flex justify-content-between align-items-center rounded-top-4 bg-light-green">
-        <div className="d-flex flex-column">
-          <span className="fw-bold">
-            <FontAwesomeIcon icon={faFileInvoice} className="me-2" />
-            {editMode ? (
-              <Form.Control
-                className="themed-input"
-                size="sm"
-                value={formData.concept}
-                onChange={(e) => handleChange('concept', e.target.value.toUpperCase())}
-              />
-            ) : formData.concept}
-          </span>
+      <Card.Header className="rounded-top-4 bg-light-green">
+        <div className="d-flex justify-content-between align-items-center w-100">
+          <div className="d-flex align-items-center">
+            <img src={getPFP(formData.type)} width={36} alt="Ingreso" className='me-3' />
+            <div className="d-flex flex-column">
+              <span className="fw-bold">
+                {editMode ? (
+                  <Form.Control
+                    className="themed-input"
+                    size="sm"
+                    value={formData.concept}
+                    onChange={(e) => handleChange('concept', e.target.value.toUpperCase())}
+                  />
+                ) : formData.concept}
+              </span>
 
-          <small>
-            <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
-            {editMode ? (
-              <SpanishDateTimePicker
-                selected={new Date(formData.created_at)}
-                onChange={(date) =>
-                  handleChange('created_at', date.toISOString().slice(0, 16))
-                }
-              />
-            ) : (
-              DateParser.isoToStringWithTime(formData.created_at)
-            )}
-          </small>
+              <small>
+                {editMode ? (
+                  <SpanishDateTimePicker
+                    selected={new Date(formData.created_at)}
+                    onChange={(date) =>
+                      handleChange('created_at', date.toISOString().slice(0, 16))
+                    }
+                  />
+                ) : (
+                  DateParser.isoToStringWithTime(formData.created_at)
+                )}
+              </small>
+            </div>
+          </div>
+
+          {editable && !createMode && !editMode && (
+            <AnimatedDropdown
+              className='ms-3'
+              icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}
+            >
+              {({ closeDropdown }) => (
+                <>
+                  <div className="dropdown-item d-flex align-items-center" onClick={() => { setEditMode(true); onClearError && onClearError(); closeDropdown(); }}>
+                    <FontAwesomeIcon icon={faEdit} className="me-2" />Editar
+                  </div>
+                  <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
+                    <FontAwesomeIcon icon={faTrash} className="me-2" />Eliminar
+                  </div>
+                </>
+              )}
+            </AnimatedDropdown>
+          )}
         </div>
-
-        {editable && !createMode && !editMode && (
-          <AnimatedDropdown
-            className='end-0'
-            icon={<FontAwesomeIcon icon={faEllipsisVertical} className="fa-xl" />}
-          >
-            {({ closeDropdown }) => (
-              <>
-                <div className="dropdown-item d-flex align-items-center" onClick={() => { setEditMode(true); onClearError && onClearError(); closeDropdown(); }}>
-                  <FontAwesomeIcon icon={faEdit} className="me-2" />Editar
-                </div>
-                <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
-                  <FontAwesomeIcon icon={faTrash} className="me-2" />Eliminar
-                </div>
-              </>
-            )}
-          </AnimatedDropdown>
-        )}
       </Card.Header>
 
       <Card.Body>
@@ -182,7 +192,19 @@ const IngresoCard = ({
               />
             </OverlayTrigger>
           ) : (
-            formData.display_name ? `${formData.display_name} (${formData.member_number})` : formData.member_number
+            formData.display_name ? (
+              <>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>{formData.display_name}</Tooltip>}
+                >
+                  <span className="text-truncate d-inline-block" style={{ maxWidth: '200px', verticalAlign: 'middle' }}>
+                    {formData.display_name}
+                  </span>
+                </OverlayTrigger>
+                &nbsp;({formData.member_number})
+              </>
+            ) : formData.member_number
           )}
         </Card.Text>
 
