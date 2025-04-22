@@ -88,8 +88,10 @@ const SolicitudesContent = ({ reqConfig }) => {
   return (
     <CustomContainer>
       <ContentWrapper>
-        <div className="d-flex justify-content-between align-items-center m-0 p-0">
-          <h1 className='section-title'>Panel de Solicitudes</h1>
+        <div className="d-flex flex-column align-items-center m-0 p-0">
+          <h1 className='section-title me-auto'>Panel de Solicitudes</h1>
+          <h5 className='me-auto'>Es necesario asignarle manualmente una contraseña al socio en caso de 
+            aceptar su solicitud tanto de alta como de nuevo colaborador.</h5>
         </div>
 
         <hr className="section-divider" />

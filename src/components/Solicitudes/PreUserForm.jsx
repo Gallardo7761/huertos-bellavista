@@ -30,7 +30,8 @@ const PreUserForm = ({ onSubmit, userType, plotNumber, errors = {} }) => {
       fetchedOnce.current = true;
 
       try {
-        const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
+        //const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
+        const { data, error } = await getData("http://localhost/huertos/members/latest-number");
         if (error) throw new Error(error);
 
         setForm((prev) => ({
