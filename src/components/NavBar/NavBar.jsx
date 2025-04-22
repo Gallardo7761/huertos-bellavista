@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from "../../hooks/useAuth";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -28,30 +28,19 @@ import { CONSTANTS } from '../../util/constants.js';
 
 const NavBar = () => {
   const { user, logout } = useAuth();
-  const location = useLocation();
   const [showingUserDropdown, setShowingUserDropdown] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [isLg, setIsLg] = useState(window.innerWidth >= 992);
 
   useEffect(() => {
-    const collapse = document.querySelector(".navbar-collapse");
-    if (collapse?.classList.contains("show")) {
-      collapse.classList.remove("show");
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
-    if (expanded) {
-      const collapse = document.querySelector(".navbar-collapse");
-      if (collapse?.classList.contains("show")) {
-        collapse.classList.remove("show");
-      }
-    } else {
-      const collapse = document.querySelector(".navbar-collapse");
-      if (!collapse?.classList.contains("show")) {
-        collapse.classList.add("show");
-      }
-    }
-  }, [expanded]);
+    const handleResize = () => {
+      setIsLg(window.innerWidth >= 992 && window.innerWidth < 1200);
+    };
+  
+    handleResize(); // inicializar
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -87,7 +76,8 @@ const NavBar = () => {
               to="/"
               title="Inicio"
               href="/"
-              className={expanded ? "mt-3" : ""}
+              className={`text-truncate ${expanded ? "mt-3" : ""}`}
+              onClick={() => setExpanded(false)}
             >
               <FontAwesomeIcon icon={faHouse} className="me-2" />
               Inicio
@@ -96,7 +86,8 @@ const NavBar = () => {
               as={Link}
               to="/lista-espera"
               title="Lista de espera"
-              className={expanded ? "mt-3" : ""}
+              className={`text-truncate ${expanded ? "mt-3" : ""}`}
+              onClick={() => setExpanded(false)}
             >
               <FontAwesomeIcon icon={faList} className="me-2" />
               Lista de espera
@@ -107,7 +98,8 @@ const NavBar = () => {
                 as={Link}
                 to="/anuncios"
                 title="Anuncios"
-                className={expanded ? "mt-3" : ""}
+                className={`text-truncate ${expanded ? "mt-3" : ""}`}
+                onClick={() => setExpanded(false)}
               >
                 <FontAwesomeIcon icon={faBullhorn} className="me-2" />Anuncios
               </Nav.Link>
@@ -116,23 +108,24 @@ const NavBar = () => {
                 as={Link}
                 to="/documentacion"
                 title="Documentación"
-                className={expanded ? "mt-3" : ""}
+                className={`text-truncate ${expanded ? "mt-3" : ""}`}
+                onClick={() => setExpanded(false)}
               >
                 <FontAwesomeIcon icon={faFile} className="me-2" />Documentación
               </Nav.Link>
             </IfAuthenticated>
 
             <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
-              <NavGestion />
+              <NavGestion onNavigate={() => setExpanded(false)} externalExpanded={expanded} />
             </IfRole>
             <div className="d-lg-none mt-2 ms-2">
-              <ThemeButton />
+              <ThemeButton onlyIcon={isLg} />
             </div>
           </Nav>
         </Navbar.Collapse>
 
         <div className="d-none d-lg-block me-3">
-          <ThemeButton />
+          <ThemeButton onlyIcon={isLg} />
         </div>
 
         <Nav className="d-flex flex-md-row flex-column gap-2 ms-auto align-items-center">
