@@ -40,16 +40,16 @@ const renderDescripcionSolicitud = (data, onProfile) => {
   switch (request_type) {
     case 0:
       if (requested_by_name) {
-        return `El socio ${requested_by_name} quiere darse de alta.`;
+        return `${requested_by_name} quiere darse de alta.`;
       } else if(pre_display_name) {
-        return `El socio ${pre_display_name} quiere darse de alta.`
+        return `${pre_display_name} quiere darse de alta.`
       } else {
         return `Se ha aceptado esta solicitud de alta`;
       }
     case 1:
       return onProfile
         ? "Has solicitado darte de baja."
-        : `El socio ${requested_by_name} quiere darse de baja.`;
+        : `${requested_by_name} quiere darse de baja.`;
     case 2:
       if (onProfile) {
         switch (request_status) {
@@ -60,7 +60,7 @@ const renderDescripcionSolicitud = (data, onProfile) => {
         }
       } else {
         switch (request_status) {
-          case 0: return `El socio ${requested_by_name} quiere añadir a ${pre_display_name} como colaborador.`;
+          case 0: return `${requested_by_name} quiere añadir a ${pre_display_name} como colaborador.`;
           case 1: return `La solicitud de colaborador de ${requested_by_name} ha sido aceptada.`;
           case 2: return `La solicitud de colaborador de ${requested_by_name} ha sido rechazada.`;
           default: return "Solicitud de colaborador desconocida.";
@@ -69,15 +69,15 @@ const renderDescripcionSolicitud = (data, onProfile) => {
     case 3:
       return onProfile
         ? "Has solicitado quitar tu colaborador."
-        : `El socio ${requested_by_name} quiere quitar su colaborador.`;
+        : `${requested_by_name} quiere quitar su colaborador.`;
     case 4:
       return onProfile
         ? "Has solicitado una parcela en el invernadero."
-        : `El socio ${requested_by_name} quiere una parcela en el invernadero.`;
+        : `${requested_by_name} quiere una parcela en el invernadero.`;
     case 5:
       return onProfile
         ? "Has solicitado dejar tu parcela del invernadero."
-        : `El socio ${requested_by_name} quiere dejar su parcela del invernadero.`;
+        : `${requested_by_name} quiere dejar su parcela del invernadero.`;
     default:
       return "Tipo de solicitud desconocido.";
   }

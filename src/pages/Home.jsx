@@ -4,6 +4,7 @@ import '../css/Home.css';
 import Mapa3D from '../components/Mapa3D';
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
+import CustomCarousel from '../components/CustomCarousel';
 
 const Home = () => {
   return (
@@ -41,24 +42,32 @@ const Home = () => {
         <ContentWrapper>
           <h1 className="section-title">Un vistazo a los huertos...</h1>
           <hr className="section-divider" />
-          <div className="gallery-grid">
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <a href={`/images/huertos-${n}.jpg`} data-lightbox="huertos" data-title={`Huerto ${n}`} key={n}>
-                <img className="gallery-img" src={`/images/huertos-${n}.jpg`} alt={`Huerto ${n}`} />
-              </a>
-            ))}
-            <a href="/images/bg.png" data-lightbox="huertos" data-title="Huerto 7">
-              <img className="gallery-img" src="/images/bg.png" alt="Huerto 7" />
-            </a>
-          </div>
+          <CustomCarousel images={[
+            "/images/huertos-1.jpg",
+            "/images/huertos-2.jpg",
+            "/images/huertos-3.jpg",
+            "/images/huertos-4.jpg",
+            "/images/huertos-5.jpg",
+            "/images/huertos-6.jpg"
+          ]} />
         </ContentWrapper>
       </section>
 
       <section className="map-section">
         <ContentWrapper>
-          <h1 className="section-title">Dónde estamos</h1>
-          <hr className="section-divider" />
-          <Mapa3D />
+          <h1 className='section-title'>Dónde estamos</h1>
+          <hr className='section-divider' />
+          <div className="embed-responsive embed-responsive-16by9 col-sm-12">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d852.9089299216993!2d-5.964801462716831!3d37.32821983433692!3m2!1i1024!2i768!4f13.1!5e1!3m2!1ses!2ses!4v1719902018700!5m2!1ses!2ses"
+              style={{ width: '100%', height: '60vh', border: 0 }}
+              allowFullScreen={false}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación del huerto"
+              className='rounded-4'
+            ></iframe>
+          </div>
         </ContentWrapper>
       </section>
     </CustomContainer>

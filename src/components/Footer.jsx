@@ -32,7 +32,7 @@ const Footer = () => {
               Calle Cronos S/N, Bellavista, Sevilla, 41014
             </a>
             <a href="mailto:huertoslasaludbellavista@gmail.com" className="text-break d-block">
-              <FontAwesomeIcon icon={faEnvelope} className="fa-icon" />
+              <FontAwesomeIcon icon={faEnvelope} className="fa-icon me-2" />
               huertoslasaludbellavista@gmail.com
             </a>
           </div>

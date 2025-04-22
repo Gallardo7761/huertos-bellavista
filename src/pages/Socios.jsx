@@ -97,9 +97,9 @@ const SociosContent = ({ reqConfig }) => {
     }
   });
 
-  const listaEsperaOrdenada = filtered
+  const listaEsperaOrdenada = data ? data
     .filter(s => s.type === 0 && s.status !== 0)
-    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at)) : [];
 
   const handleCreate = () => {
     setCreatingSocio(true);

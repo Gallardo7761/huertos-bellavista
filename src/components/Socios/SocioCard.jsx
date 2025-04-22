@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
-  Card, ListGroup, Badge, Button, Form
+  Card, ListGroup, Badge, Button, Form,
+  Tooltip, OverlayTrigger
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -142,19 +143,24 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     const fetchLastNumber = async () => {
       try {
         if (!(createMode || editMode)) return;
-
+  
         const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
         if (error) throw new Error(error);
-
-        setLatestNumber(data.lastMemberNumber + 1);
+  
+        const nuevoNumero = data.lastMemberNumber + 1;
+        setLatestNumber(nuevoNumero);
+  
+        setFormData(prev => ({
+          ...prev,
+          member_number: prev.member_number || nuevoNumero
+        }));
       } catch (err) {
         console.error("Error al obtener el número de socio:", err);
       }
     };
-
+  
     fetchLastNumber();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createMode, editMode]);
+  }, [createMode, editMode, getData]);
 
   const handleEdit = () => {
     if (onClearError) onClearError();
@@ -180,10 +186,10 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     if (["member_number"].includes(field)) {
       value = value === "" ? latestNumber : parseInt(value);
     }
-    if(field === "display_name") {
+    if (field === "display_name") {
       value = value.toUpperCase();
     }
-    if(field === "dni") {
+    if (field === "dni") {
       value = value.toUpperCase();
     }
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -200,7 +206,21 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
           {editMode ? (
             <TipoSocioDropdown value={formData.type} onChange={(val) => handleChange('type', val)} />
           ) : (
-            <img src={getPFP(formData.type)} width="36" className="rounded me-3" alt="PFP" />
+            positionIfWaitlist && socio.type === 0 ? (
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip>
+                    Nº <strong>{positionIfWaitlist}</strong> en la lista de espera
+                  </Tooltip>
+                }>
+                <span className="me-3">
+                  <img src={getPFP(formData.type)} width="36" className="rounded" alt="PFP" />
+                </span>
+              </OverlayTrigger>
+            ) : (
+              <img src={getPFP(formData.type)} width="36" className="rounded me-3" alt="PFP" />
+            )
           )}
           <div className='d-flex flex-column gap-1'>
             <Card.Title className="m-0">
@@ -244,16 +264,6 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
       <Card.Body>
         {(editMode || createMode) && renderErrorAlert(error)}
-
-        {!editMode && positionIfWaitlist && socio.type === 0 && (
-          <div className="text-center">
-            <Badge bg="info">
-              <h6 className='text-dark m-0 p-0'>
-                Posición en la lista de espera: <strong>{positionIfWaitlist}</strong>
-              </h6>
-            </Badge>
-          </div>
-        )}
 
         <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
           {[{

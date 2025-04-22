@@ -54,7 +54,8 @@ const SolicitudesContent = ({ reqConfig }) => {
         entry.pre_email?.toLowerCase().includes(normalized) ||
         String(entry.pre_phone).includes(normalized)
       );
-    }
+    },
+    sortFn: (a, b) => a.request_status - b.request_status
   });
 
   const handleAccept = async (entry) => {

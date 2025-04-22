@@ -35,6 +35,8 @@
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.4.0",
     "react-simple-wysiwyg": "^3.2.2",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1",
     "vite-plugin-clean": "^2.0.1"
   },
   "devDependencies": {
