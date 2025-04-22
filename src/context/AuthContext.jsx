@@ -47,17 +47,40 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     const BASE_URL = config.apiConfig.baseUrl;
     const LOGIN_URL = `${BASE_URL}${config.apiConfig.endpoints.auth.login}`;
-
-    const res = await axios.post(LOGIN_URL, formData);
-    const { token, member, tokenTime } = res.data.data;
-
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(member));
-    localStorage.setItem("tokenTime", tokenTime);
-
-    setToken(token);
-    setUser(member);
-    setAuthStatus("authenticated");
+  
+    try {
+      const res = await axios.post(LOGIN_URL, formData);
+      const { token, member, tokenTime } = res.data.data;
+  
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(member));
+      localStorage.setItem("tokenTime", tokenTime);
+  
+      setToken(token);
+      setUser(member);
+      setAuthStatus("authenticated");
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err);
+  
+      let message = "Ha ocurrido un error inesperado.";
+  
+      if (err.response) {
+        const { status, data } = err.response;
+  
+        if (status === 400) {
+          message = "Usuario o contraseña incorrectos.";
+        } else if (status === 403) {
+          message = "Tu cuenta está inactiva o ha sido suspendida.";
+        } else if (status === 404) {
+          message = "Usuario no encontrado.";
+        } else if (data?.message) {
+          message = data.message;
+        }
+      }
+  
+      setError(message);
+      throw new Error(message);
+    }
   };
 
   const logout = () => {

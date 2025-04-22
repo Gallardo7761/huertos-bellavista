@@ -25,10 +25,9 @@ const Home = () => {
                 de las zonas comunes disponemos de árboles frutales.
               </p>
               <p>
-                Si te quieres unir a nuestra comunidad, no dudes en ponerte en contacto con nosotros a través de
-                nuestro correo electrónico para cualquier duda. Ten en cuenta que existe una lista de espera que puedes ver{' '}
-                <Link to="/lista-espera">aquí</Link> y si lo prefieres, puedes mandar una{' '}
-                <Link to="/alta">solicitud de alta</Link>.
+                Si quieres unirte a nuestra comunidad, tenemos una <strong>lista de espera</strong> y un sistema de 
+                <strong> solicitudes de alta</strong> que puedes ver {' '} <Link to="/lista-espera" className="link">aquí</Link>.
+                No dudes en ponerte en contacto con nosotros a través de nuestro correo electrónico para cualquier duda. 
               </p>
             </div>
             <div className="img-content gallery-img">

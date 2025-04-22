@@ -1,4 +1,5 @@
 import Slider from 'react-slick';
+import '../css/CustomCarousel.css';
 
 const CustomCarousel = ({ images }) => {
     const settings = {
@@ -9,18 +10,32 @@ const CustomCarousel = ({ images }) => {
         slidesToScroll: 1,
         arrows: true,
         autoplay: true,
-        autoplaySpeed: 3000
+        autoplaySpeed: 3000,
+        responsive: [
+            {
+                breakpoint: 768, // móviles
+                settings: {
+                    slidesToShow: 1,
+                    arrows: true,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    dots: false,
+                    infinite: true,
+                    speed: 500
+                }
+            }
+        ]
     };
 
     return (
         <div className="my-4">
             <Slider {...settings}>
                 {images.map((src, index) => (
-                    <div key={index} className='p-3'>
+                    <div key={index} className='carousel-img-wrapper'>
                         <img
                             src={src}
                             alt={`slide-${index}`}
-                            style={{ width: '100%', height: 'auto', borderRadius: '1rem' }}
+                            className="carousel-img"
                         />
                     </div>
                 ))}
