@@ -30,8 +30,7 @@ const PreUserForm = ({ onSubmit, userType, plotNumber, errors = {} }) => {
       fetchedOnce.current = true;
 
       try {
-        //const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
-        const { data, error } = await getData("http://localhost/huertos/members/latest-number");
+        const { data, error } = await getData("https://api.huertosbellavista.es/v1/members/latest-number");
         if (error) throw new Error(error);
 
         setForm((prev) => ({
@@ -51,8 +50,7 @@ const PreUserForm = ({ onSubmit, userType, plotNumber, errors = {} }) => {
     const trimmedName = form.display_name?.trim() ?? "";
 
     const nuevoUsername = trimmedName
-      ? trimmedName.split(' ')[0].toLowerCase() + form.member_number
-      : "";
+      ? trimmedName.split(' ')[0].toLowerCase() : "";
 
     if (form.user_name !== nuevoUsername) {
       setForm(prev => ({ ...prev, user_name: nuevoUsername }));

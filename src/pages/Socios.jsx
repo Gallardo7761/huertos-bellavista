@@ -267,7 +267,7 @@ const SociosContent = ({ reqConfig }) => {
         show={deleteTargetId !== null}
         onClose={() => setDeleteTargetId(null)}
       >
-        <p className='p-3'>¿Estás seguro de que quieres eliminar el ingreso?</p>
+        <p className='p-3'>¿Estás seguro de que quieres eliminar este socio?</p>
         <div className="d-flex justify-content-end gap-2 mt-3 p-3">
           <Button variant="secondary" onClick={() => setDeleteTargetId(null)}>Cancelar</Button>
           <Button
