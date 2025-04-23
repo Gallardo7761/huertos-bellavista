@@ -8,7 +8,7 @@ const CustomCarousel = ({ images }) => {
         speed: 500,
         slidesToShow: 2,
         slidesToScroll: 1,
-        arrows: true,
+        arrows: false,
         autoplay: true,
         autoplaySpeed: 3000,
         responsive: [
@@ -16,7 +16,7 @@ const CustomCarousel = ({ images }) => {
                 breakpoint: 768, // móviles
                 settings: {
                     slidesToShow: 1,
-                    arrows: true,
+                    arrows: false,
                     autoplay: true,
                     autoplaySpeed: 3000,
                     dots: false,

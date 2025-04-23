@@ -13,32 +13,29 @@ const useSessionRenewal = () => {
   const [alreadyWarned, setAlreadyWarned] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    const interval = setInterval(() => {
+      const token = localStorage.getItem("token");
+      const decoded = parseJwt(token);
 
-    const decoded = parseJwt(token);
-    if (!decoded?.exp) return;
+      if (!token || !decoded?.exp) return;
 
-    const expirationTime = decoded.exp * 1000;
-    const now = Date.now();
-    const warningTime = expirationTime - now - 60000;
+      const now = Date.now();
+      const expTime = decoded.exp * 1000;
+      const timeLeft = expTime - now;
 
-    if (warningTime > 0 && !alreadyWarned) {
-      const warningTimeout = setTimeout(() => {
+      if (timeLeft <= 60000 && timeLeft > 0 && !alreadyWarned) {
         setShowModal(true);
         setAlreadyWarned(true);
-      }, warningTime);
+      }
 
-      const logoutTimeout = setTimeout(() => {
+      if (timeLeft <= 0) {
+        clearInterval(interval);
         logout();
-      }, expirationTime - now);
+      }
+    }, 10000); // revisa cada 10 segundos
 
-      return () => {
-        clearTimeout(warningTimeout);
-        clearTimeout(logoutTimeout);
-      };
-    }
-  }, [alreadyWarned, config, logout]);
+    return () => clearInterval(interval);
+  }, [alreadyWarned, logout]);
 
   const handleRenew = async () => {
     const token = localStorage.getItem("token");
@@ -52,8 +49,8 @@ const useSessionRenewal = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.auth.refresh}`,
+      const response = await axios.get(
+        `${config.apiConfig.baseUrl}${config.apiConfig.endpoints.auth.refreshToken}`,
         null,
         {
           headers: {
