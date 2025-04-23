@@ -1,0 +1,32 @@
+.mail-toolbar-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: var(--search-bg);
+    box-shadow: 0 4px 12px var(--shadow-color);
+    border-bottom: 2px solid var(--search-border);
+    padding: 0.5rem 1rem;
+  }
+  
+  .mail-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .toolbar-icons {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.2rem;
+    color: var(--toolbar-btn-color);
+  }
+  
+  .toolbar-btn {
+    background: transparent;
+    border: none;
+    color: var(--toolbar-btn-color);
+    font-size: 1.2rem;
+  }
+  

@@ -19,6 +19,7 @@ import Documentacion from '../pages/Documentacion'
 
 import { CONSTANTS } from '../util/constants'
 import Perfil from '../pages/Perfil.jsx'
+import Correo from '../pages/Correo.jsx'
 
 function App() {
   const { modal: sessionModal } = useSessionRenewal();
@@ -70,6 +71,11 @@ function App() {
         <Route path="/perfil" element={
           <ProtectedRoute>
             <Perfil />
+          </ProtectedRoute>
+        } />
+        <Route path="/correo" element={
+          <ProtectedRoute>
+            <Correo />
           </ProtectedRoute>
         } />
         <Route path="/*" element={<Building />} />

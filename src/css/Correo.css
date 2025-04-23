@@ -1,0 +1,85 @@
+/* Layout general */
+.correo-page {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.split-wrapper {
+  display: flex;
+  height: 100%;
+}
+
+.split-wrapper > * {
+  overflow: hidden;
+}
+
+/* Gutter (barra de resize entre paneles) */
+.gutter {
+  background-color: var(--divider-color);
+  background-clip: content-box;
+  cursor: col-resize;
+  width: 8px;
+}
+
+.gutter:hover {
+  background-color: var(--highlight-border);
+}
+
+/* Panel de navegación (Sidebar + MailList) */
+.mail-nav-pane {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.mail-nav-inner {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--divider-color);
+  background-color: var(--card-bg);
+}
+
+/* MailList */
+.mail-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: var(--card-bg);
+}
+
+/* MailView */
+.mail-view {
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--bg-color);
+}
+
+/* ====================
+   Modo móvil (correo-mobile)
+==================== */
+@media screen and (max-width: 900px) {
+  .split-wrapper {
+    flex-direction: column;
+  }
+
+  .split-wrapper > * {
+    width: 100% !important;
+  }
+
+  .correo-page.viewing-mail .split-wrapper > :nth-child(1) {
+    display: none; /* Oculta panel de navegación */
+  }
+
+  .correo-page.viewing-mail .split-wrapper > :nth-child(2) {
+    display: block;
+  }
+}

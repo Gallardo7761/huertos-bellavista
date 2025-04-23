@@ -1,0 +1,32 @@
+.mail-view {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--bg-color);
+    overflow-y: auto;
+  }
+  
+  .mail-view .mail-header {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--divider-color);
+    padding-bottom: 1rem;
+  }
+  
+  .mail-view .mail-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text-color);
+  }
+  
+  .mail-view .mail-meta {
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  
+  .mail-view .mail-body {
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  

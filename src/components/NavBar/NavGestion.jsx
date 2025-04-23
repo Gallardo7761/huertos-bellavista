@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import AnimatedDropdown from '../../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faGear, faUsers, faMoneyBill, faWallet, faFileInvoice, faInbox
+  faGear, faUsers, faMoneyBill, faWallet, faFileInvoice, faInbox,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import useRequestCount from '../../hooks/useRequestCount';
 
@@ -42,6 +43,10 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
           {count > 0 && <span className="icon-badge">{count}</span>}
         </span>
         Solicitudes
+      </Link>
+      <hr className="dropdown-divider" />
+      <Link to="/correo" className="dropdown-item nav-link" onClick={onNavigate}>
+        <FontAwesomeIcon icon={faEnvelope} className="me-2" />Correo
       </Link>
     </AnimatedDropdown>
   );
