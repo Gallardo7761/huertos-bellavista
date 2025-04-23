@@ -4,7 +4,7 @@
   border-top: 3px solid var(--border-color);
   font-size: 1rem;
   box-shadow: 0 -2px 8px var(--shadow-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  
   position: relative;
   z-index: 1;
 }
@@ -74,7 +74,7 @@
 .footer-column ul li a {
   color: var(--fg-color);
   text-decoration: none;
-  transition: color 0.2s ease-in-out;
+  
 }
 
 .footer-column ul li a:hover {
@@ -93,7 +93,7 @@
   font-weight: 600;
   text-decoration: none;
   color: var(--fg-color);
-  transition: color 0.2s ease-in-out, text-shadow 0.2s ease-in-out;
+  
 }
 
 .footer-bottom a:hover {
@@ -111,7 +111,7 @@
   background-color: var(--contact-info-bg);
   color: var(--primary-color);
   box-shadow: 0 4px 10px var(--shadow-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  
 }
 
 .contact-info a {
@@ -121,7 +121,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  
 }
 
 .contact-info a:hover {

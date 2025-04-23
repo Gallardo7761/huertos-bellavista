@@ -26,9 +26,10 @@ const Footer = () => {
             <a
               href="https://www.google.com/maps?q=Calle+Cronos+S/N,+Bellavista,+Sevilla,+41014"
               target="_blank"
+              className='text-break d-block'
               rel="noopener noreferrer"
             >
-              <FontAwesomeIcon icon={faLocationDot} className="fa-icon" />
+              <FontAwesomeIcon icon={faLocationDot} className="fa-icon me-2 " />
               Calle Cronos S/N, Bellavista, Sevilla, 41014
             </a>
             <a href="mailto:huertoslasaludbellavista@gmail.com" className="text-break d-block">

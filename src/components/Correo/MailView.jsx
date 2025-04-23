@@ -1,21 +1,20 @@
 import React from 'react';
 import '../../css/MailView.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 
 export default function MailView({ email }) {
-  if (!email) return <div className="mail-view">Selecciona un correo</div>;
+  if (!email) return (
+    <div className='d-flex display-4 flex-column justify-content-center align-items-center vh-100 w-100'>
+      <FontAwesomeIcon icon={faEnvelopeOpenText} className="me-2" />
+      <h3 className='display-4'>
+        No hay correo seleccionado
+      </h3>
+    </div>
+  );
 
   return (
     <div className="mail-view">
-      {window.innerWidth < 900 && (
-        <button
-          onClick={() => {
-            document.querySelector('.correo-page')?.classList.remove('viewing-mail');
-          }}
-          style={{ marginBottom: '1rem', backgroundColor: 'var(--btn-bg)', color: 'var(--btn-text)', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer' }}
-        >
-          ← Volver
-        </button>
-      )}
       <div className="mail-header">
         <h2>{email.subject}</h2>
         <div className="mail-meta">

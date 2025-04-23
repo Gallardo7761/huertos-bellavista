@@ -3,58 +3,209 @@ import Split from 'react-split';
 import { useMediaQuery } from 'react-responsive';
 
 import Sidebar from '../components/Correo/Sidebar';
+import MailListMobile from '../components/Correo/MailListMobile';
 import MailList from '../components/Correo/MailList';
 import MailView from '../components/Correo/MailView';
-import MailToolbar from '../components/Correo/MailToolbar';
+import MobileToolbar from '../components/Correo/MobileToolbar';
+import ContentWrapper from '../components/ContentWrapper';
 
 import '../css/Correo.css';
 import '../css/CorreoMobile.css';
 
-const mockEmails = [{
-  id: 1,
-  subject: "Reunión de equipo mañana",
-  sender: "soporte@miarma.es",
-  preview: "Recordad que mañana tenemos la reunión de planificación...",
-  body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
-  date: "2025-04-22 12:00",
-},
-{
-  id: 2,
-  subject: "Oferta de colaboración",
-  sender: "contacto@empresa.com",
-  preview: "Nos gustaría proponeros una colaboración...",
-  body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
-  date: "2025-04-21 09:15",
-},];
+const mockEmails = [
+  {
+    id: 1,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 2,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 3,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 4,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 5,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 6,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 7,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 8,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 9,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 10,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 11,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 12,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 13,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 14,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 15,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 16,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 17,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 18,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+  {
+    id: 19,
+    subject: "Reunión de equipo mañana",
+    sender: "soporte@miarma.es",
+    preview: "Recordad que mañana tenemos la reunión de planificación...",
+    body: "Hola equipo,\n\nRecordad que mañana a las 10:00 tenemos reunión...",
+    date: "2025-04-22 12:00",
+  },
+  {
+    id: 20,
+    subject: "Oferta de colaboración",
+    sender: "contacto@empresa.com",
+    preview: "Nos gustaría proponeros una colaboración...",
+    body: "Estimados señores,\n\nNos gustaría proponer una colaboración...",
+    date: "2025-04-21 09:15",
+  },
+];
 
 export default function Correo() {
   const isMobile = useMediaQuery({ maxWidth: 900 });
-  const [selectedEmail, setSelectedEmail] = useState(mockEmails[0]);
-  const [showListMobile, setShowListMobile] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState(null);
+  const [viewingMail, setViewingMail] = useState(false);
 
   if (isMobile) {
     return (
-      <div className="correo-mobile">
-        <MailToolbar
-          onToggleList={() => setShowListMobile(!showListMobile)}
+      <ContentWrapper>
+        <MobileToolbar
+          isViewingMail={viewingMail}
+          onBack={() => setViewingMail(false)}
           onCompose={() => alert("Redactar...")}
+          className='mt-3 px-3 sticky-toolbar'
         />
-        <div className={`mail-drawer ${showListMobile ? 'open' : ''}`}>
-          <MailList
+        {!viewingMail ? (
+          <MailListMobile
             emails={mockEmails}
             onSelect={(mail) => {
               setSelectedEmail(mail);
-              setShowListMobile(false);
+              setViewingMail(true);
             }}
             selectedEmail={selectedEmail}
+            className="px-3"
           />
-        </div>
-        <MailView email={selectedEmail} />
-      </div>
+        ) : (
+          <MailView email={selectedEmail} />
+        )}
+      </ContentWrapper>
     );
   }
 
-  // Desktop layout con Sidebar + MailList juntos, y un splitter contra MailView
   return (
     <div className="correo-page">
       <Split

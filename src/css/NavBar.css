@@ -5,13 +5,13 @@
 .navbar {
   background-color: var(--navbar-bg) !important;
   box-shadow: var(--navbar-shadow);
-  transition: all 0.3s ease-in-out;
+  
   z-index: 1000;
 }
 
 .navbar-brand {
   color: var(--navbar-brand-color) !important;
-  transition: color 0.2s ease;
+  
 }
 
 .navbar-brand:hover {
@@ -25,7 +25,7 @@ a.nav-link,
   font-size: larger;
   border-radius: 8px;
   padding: 0.5rem 1rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  
   color: var(--navbar-link-color) !important;
 }
 
@@ -37,7 +37,7 @@ a.nav-link,
 
 hr {
   border-top: 1px solid var(--navbar-divider-color);
-  transition: border-top 0.2s ease;
+  
 }
 
 /* ================================

@@ -34,7 +34,7 @@ const renderDateField = (label, icon, dateValue, editMode, fieldKey, handleChang
         <SpanishDateTimePicker
           selected={dateValue ? new Date(dateValue) : null}
           onChange={(date) =>
-            handleChange(fieldKey, date.toISOString().slice(0, 16))
+            date ? handleChange(fieldKey, date.toISOString().slice(0, 16)) : handleChange(fieldKey, null)
           }
         />
       ) : (
@@ -113,7 +113,7 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
     assigned_at: socio.assigned_at?.slice(0, 16) || undefined,
     deactivated_at: socio.deactivated_at?.slice(0, 16) || undefined,
     global_role: 0,
-    password: createMode ? generateSecurePassword() : '',
+    password: createMode && !editMode ? generateSecurePassword() : null,
   });
 
   useEffect(() => {
@@ -267,22 +267,22 @@ const SocioCard = ({ socio, isNew = false, onCreate, onUpdate, onDelete, onCance
 
         <ListGroup className="mt-2 border-1 rounded-3 shadow-sm">
           {[{
-            label: 'DNI', icon: faIdCard, value: formData.dni, field: 'dni', type: 'text', maxWidth: '180px'
+            label: 'DNI', clazz: '', icon: faIdCard, value: formData.dni, field: 'dni', type: 'text', maxWidth: '180px'
           }, {
-            label: 'SOCIO Nº', icon: faUser, value: formData.member_number || latestNumber, field: 'member_number', type: 'number', maxWidth: '100px'
+            label: 'SOCIO Nº', clazz: '', icon: faUser, value: formData.member_number || latestNumber, field: 'member_number', type: 'number', maxWidth: '100px'
           }, {
-            label: 'HUERTO Nº', icon: faSunPlantWilt, value: formData.plot_number, field: 'plot_number', type: 'number', maxWidth: '100px'
+            label: 'HUERTO Nº', clazz: '', icon: faSunPlantWilt, value: formData.plot_number, field: 'plot_number', type: 'number', maxWidth: '100px'
           }, {
-            label: 'TLF.', icon: faPhone, value: formData.phone, field: 'phone', type: 'number', maxWidth: '200px'
+            label: 'TLF.', clazz: '', icon: faPhone, value: formData.phone, field: 'phone', type: 'number', maxWidth: '200px'
           }, {
-            label: 'EMAIL', icon: faAt, value: formData.email, field: 'email', type: 'text', maxWidth: '250px'
-          }].map(({ label, icon, value, field, type, maxWidth }) => (
+            label: 'EMAIL', clazz: 'text-truncate', icon: faAt, value: formData.email, field: 'email', type: 'text', maxWidth: '250px'
+          }].map(({ label, clazz, icon, value, field, type, maxWidth }) => (
             <ListGroup.Item key={field} className="d-flex justify-content-between align-items-center">
               <span><FontAwesomeIcon icon={icon} className="me-2" />{label}</span>
               {editMode ? (
                 <Form.Control className="themed-input" size="sm" type={type} value={value} onChange={(e) => handleChange(field, e.target.value)} style={{ maxWidth }} />
               ) : (
-                <strong>{parseNull(value)}</strong>
+                <strong className={clazz}>{parseNull(value)}</strong>
               )}
             </ListGroup.Item>
           ))}

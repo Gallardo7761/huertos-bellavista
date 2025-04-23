@@ -6,7 +6,7 @@
   background-color: var(--login-bg) !important;
   color: var(--text-color);
   box-shadow: 0 0 10px var(--shadow-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  
 }
 
 /* ================================
@@ -17,7 +17,7 @@ input.form-control {
   background-color: var(--input-bg);
   color: var(--input-text);
   border: 1px solid var(--input-border);
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  
 }
 
 /* ================================
@@ -44,7 +44,7 @@ input.form-control {
   font-weight: bold !important;
   background-color: var(--login-btn-bg) !important;
   color: var(--login-btn-text) !important;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  
 }
 
 .login-button:hover {

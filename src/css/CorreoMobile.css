@@ -1,8 +1,20 @@
 .correo-mobile {
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  height: 100vh;
+  overflow: hidden; /* IMPORTANTE */
+}
+
+.mail-list,
+.mail-view {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-inline: 0.75rem;
+}
+
+
+.correo-mobile .mail-toolbar-wrapper {
+  flex-shrink: 0;
 }
 
 .mail-drawer {
@@ -13,7 +25,7 @@
   height: calc(100% - 56px);
   background-color: var(--card-bg);
   transform: translateX(-100%);
-  transition: transform 0.3s ease;
+  
   z-index: 2000;
 }
 

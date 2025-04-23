@@ -41,15 +41,23 @@ const renderDescripcionSolicitud = (data, onProfile) => {
     case 0:
       if (requested_by_name) {
         return `${requested_by_name} quiere darse de alta.`;
-      } else if(pre_display_name) {
-        return `${pre_display_name} quiere darse de alta.`
+      } else if (request_status !== 1 && pre_display_name) {
+        return `${pre_display_name} quiere darse de alta.`;
+      } else if (request_status !== 1) {
+        return `Alguien quiere darse de alta.`;
       } else {
-        return `Se ha aceptado esta solicitud de alta`;
+        return `Se ha aceptado esta solicitud de alta.`;
       }
+
     case 1:
       return onProfile
         ? "Has solicitado darte de baja."
-        : `${requested_by_name} quiere darse de baja.`;
+        : requested_by_name
+          ? `${requested_by_name} quiere darse de baja.`
+          : request_status !== 1
+            ? `Alguien quiere darse de baja.`
+            : `Se ha aceptado esta solicitud de baja.`;
+
     case 2:
       if (onProfile) {
         switch (request_status) {
@@ -60,24 +68,46 @@ const renderDescripcionSolicitud = (data, onProfile) => {
         }
       } else {
         switch (request_status) {
-          case 0: return `${requested_by_name} quiere añadir a ${pre_display_name} como colaborador.`;
-          case 1: return `La solicitud de colaborador de ${requested_by_name} ha sido aceptada.`;
-          case 2: return `La solicitud de colaborador de ${requested_by_name} ha sido rechazada.`;
-          default: return "Solicitud de colaborador desconocida.";
+          case 0:
+            return requested_by_name
+              ? `${requested_by_name} quiere añadir a ${pre_display_name || "un colaborador"} como colaborador.`
+              : `Alguien quiere añadir a ${pre_display_name || "un colaborador"} como colaborador.`;
+          case 1:
+            return `La solicitud de colaborador de ${requested_by_name || "alguien"} ha sido aceptada.`;
+          case 2:
+            return `La solicitud de colaborador de ${requested_by_name || "alguien"} ha sido rechazada.`;
+          default:
+            return "Solicitud de colaborador desconocida.";
         }
       }
+
     case 3:
       return onProfile
         ? "Has solicitado quitar tu colaborador."
-        : `${requested_by_name} quiere quitar su colaborador.`;
+        : requested_by_name
+          ? `${requested_by_name} quiere quitar su colaborador.`
+          : request_status !== 1
+            ? `Alguien quiere quitar su colaborador.`
+            : `Se ha aceptado esta solicitud de baja de colaborador.`;
+
     case 4:
       return onProfile
         ? "Has solicitado una parcela en el invernadero."
-        : `${requested_by_name} quiere una parcela en el invernadero.`;
+        : requested_by_name
+          ? `${requested_by_name} quiere una parcela en el invernadero.`
+          : request_status !== 1
+            ? `Alguien quiere una parcela en el invernadero.`
+            : `Se ha aceptado esta solicitud de parcela en el invernadero.`;
+
     case 5:
       return onProfile
         ? "Has solicitado dejar tu parcela del invernadero."
-        : `${requested_by_name} quiere dejar su parcela del invernadero.`;
+        : requested_by_name
+          ? `${requested_by_name} quiere dejar su parcela del invernadero.`
+          : request_status !== 1
+            ? `Alguien quiere dejar su parcela del invernadero.`
+            : `Se ha aceptado esta solicitud de salida del invernadero.`;
+
     default:
       return "Tipo de solicitud desconocido.";
   }

@@ -3,7 +3,7 @@
   color: var(--item-text) !important;
   border: none !important;
   border-radius: 1rem !important;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  
 }
 
 .custom-list-item:hover {

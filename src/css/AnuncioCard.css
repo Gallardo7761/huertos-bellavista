@@ -2,7 +2,6 @@
   background-color: var(--card-bg) !important;
   color: var(--card-text);
   border: none !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -28,7 +27,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease;
 }
 
 .anuncio-card .card-header button:hover {
@@ -38,7 +36,6 @@
 .anuncio-card .leer-mas-link {
   font-weight: 600;
   color: var(--accent-color);
-  transition: color 0.2s ease;
 }
 
 .anuncio-card .leer-mas-link:hover {
@@ -103,7 +100,6 @@
   color: var(--input-text) !important;
   font-family: "Open Sans", sans-serif !important;
   font-size: 0.95rem !important;
-  transition: all 0.2s ease !important;
 }
 
 /* Estilo del área editable */
@@ -143,7 +139,6 @@
   color: var(--toolbar-btn-color) !important;
   border-radius: 6px !important;
   padding: 0.35rem !important;
-  transition: background-color 0.2s ease !important;
 }
 
 .rsw-toolbar button:hover {

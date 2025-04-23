@@ -34,22 +34,22 @@ function App() {
         <Route path="/lista-espera" element={<ListaEspera />} />
         <Route path="/login" element={<Login />} />
         <Route path="/gestion/socios" element={
-          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Socios />
           </ProtectedRoute>
         } />
         <Route path="/gestion/ingresos" element={
-          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Ingresos />
           </ProtectedRoute>
         } />
         <Route path="/gestion/gastos" element={
-          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Gastos />
           </ProtectedRoute>
         } />
         <Route path="/gestion/balance" element={
-          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Balance />
           </ProtectedRoute>
         } />
@@ -64,7 +64,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/gestion/solicitudes" element={
-          <ProtectedRoute minimumRole={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Solicitudes />
           </ProtectedRoute>
         } />
@@ -74,7 +74,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/correo" element={
-          <ProtectedRoute>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_DEV]}>
             <Correo />
           </ProtectedRoute>
         } />

@@ -18,11 +18,13 @@
   background-color: var(--divider-color);
   background-clip: content-box;
   cursor: col-resize;
-  width: 8px;
+  width: 1px !important;
 }
 
 .gutter:hover {
   background-color: var(--highlight-border);
+  width: 8px !important;
+  transition: width 0.2s ease-in-out;
 }
 
 /* Panel de navegación (Sidebar + MailList) */
@@ -39,28 +41,6 @@
   flex-direction: row;
   width: 100%;
   overflow: hidden;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  border-right: 1px solid var(--divider-color);
-  background-color: var(--card-bg);
-}
-
-/* MailList */
-.mail-list {
-  flex-grow: 1;
-  overflow-y: auto;
-  background-color: var(--card-bg);
-}
-
-/* MailView */
-.mail-view {
-  height: 100%;
-  overflow-y: auto;
-  background-color: var(--bg-color);
 }
 
 /* ====================
