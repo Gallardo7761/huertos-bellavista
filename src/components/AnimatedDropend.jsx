@@ -58,8 +58,20 @@ const AnimatedDropend = ({
 
   const triggerElement = trigger
     ? (typeof trigger === "function"
-      ? trigger({ onClick: toggle, ref: triggerRef })
-      : cloneElement(trigger, { onClick: toggle, ref: triggerRef }))
+      ? trigger({ 
+        onClick: e => {
+          e.stopPropagation();
+          toggle();
+        }, 
+        ref: triggerRef 
+      })
+      : cloneElement(trigger, { 
+        onClick: e => {
+          e.stopPropagation();
+          toggle();
+        }, 
+        ref: triggerRef 
+      }))
     : (
       <Button
         ref={triggerRef}

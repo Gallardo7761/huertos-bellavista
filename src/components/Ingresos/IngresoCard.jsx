@@ -35,8 +35,8 @@ const getFreqTextColor = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY
 const getPFP = (tipo) => {
   const base = '/images/icons/';
   const map = {
-    0: 'cash.svg',
-    1: 'bank.svg'
+    1: 'cash.svg',
+    0: 'bank.svg'
   };
   return base + (map[tipo] || 'farmer.svg');
 };

@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faGear, faUsers, faMoneyBill, faWallet, faFileInvoice,
   faEnvelope,
-  faBellConcierge
+  faBellConcierge,
+  faPeopleGroup
 } from '@fortawesome/free-solid-svg-icons';
 import useRequestCount from '../../hooks/useRequestCount';
 
@@ -29,8 +30,8 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
       {/* Submenú lateral: Asociación */}
       <AnimatedDropend
         trigger={
-          <Link to="#" className="nav-link dropdown-toggle">
-            <FontAwesomeIcon icon={faGear} className="me-2" />Asociación
+          <Link className="nav-link dropdown-toggle" role='button'>
+            <FontAwesomeIcon icon={faPeopleGroup} className="me-2" />Asociación
           </Link>
         }
       >
@@ -50,9 +51,9 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
 
       <Link to="/gestion/solicitudes" className="text-muted dropdown-item nav-link" onClick={onNavigate}>
         <FontAwesomeIcon icon={faBellConcierge} />
-        <span className="icon-with-badge me-2">
+        <span className="icon-with-badge">
           {count > 0 && <span className="icon-badge">{count}</span>}
-        </span>
+        </span>&nbsp;
         Solicitudes
       </Link>
 

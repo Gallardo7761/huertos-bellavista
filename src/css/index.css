@@ -514,7 +514,7 @@ button.custom-toggler {
 }
 
 .icon-with-badge {
-  position: relative;
+  position: absolute;
   display: inline-block;
 }
 
