@@ -62,11 +62,11 @@
                 "validation": "/v1/pre_users/validate"
             },
             "files": {
-                "all": "/v1/files",
-                "byId": "/v1/files/:file_id",
-                "upload": "/v1/files/upload",
-                "download": "/v1/files/download/:file_id",
-                "userFiles": "/v1/files/myfiles"
+                "all": "/raw/v1/files",
+                "byId": "/raw/v1/files/:file_id",
+                "upload": "/raw/v1/files/upload",
+                "download": "/raw/v1/files/download/:file_id",
+                "userFiles": "/raw/v1/files/myfiles"
             }
         }
     }

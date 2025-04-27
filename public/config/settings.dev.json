@@ -62,11 +62,11 @@
                 "validation": "/huertos/pre_users/validate"
             },
             "files": {
-                "all": "/core/files",
-                "byId": "/core/files/:file_id",
-                "upload": "/core/files/upload",
-                "download": "/core/files/download/:file_id",
-                "userFiles": "/core/files/myfiles"
+                "all": "/core/raw/files",
+                "byId": "/core/raw/files/:file_id",
+                "upload": "/core/raw/files/upload",
+                "download": "/core/raw/files/download/:file_id",
+                "userFiles": "/core/raw/files/myfiles"
             }
         }
     }
