@@ -80,9 +80,11 @@ const DocumentacionContent = ({ reqConfig }) => {
           <div className="mt-4 d-flex flex-wrap gap-3 justify-content-start">
             {dataError && <p className="text-danger">Error al cargar los archivos.</p>}
             {data?.length === 0 && <p>No hay documentos todavía.</p>}
-            {data?.map((file, idx) => (
-              <File key={idx} file={file} onDelete={handleDeleteFile} />
-            ))}
+            {data?.filter(file => file.context === CONSTANTS.CONTEXT_HUERTOS)
+              .map((file, idx) => (
+                <File key={idx} file={file} onDelete={handleDeleteFile} />
+              ))
+            }
           </div>
         )}
 
