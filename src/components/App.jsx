@@ -74,7 +74,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/correo" element={
-          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_DEV]}>
+          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
             <Correo />
           </ProtectedRoute>
         } />

@@ -1,19 +1,20 @@
 import React from 'react';
 import '../../css/MailListMobile.css';
 
-export default function MailListMobile({ emails, onSelect, selectedEmail, className }) {
+export default function MailListMobile({ emails, onSelect, selectedEmail, className = '' }) {
   return (
     <div className={`mail-list-mobile ${className}`}>
-      {emails.map((mail) => (
+      {emails.map((mail, index) => (
         <div
-          key={mail.id}
-          className={`mail-item-mobile rounded-4 mb-2 ${selectedEmail?.id === mail.id ? 'active' : ''}`}
-          onClick={() => onSelect(mail)}
+          key={index}
+          className={`mail-item-mobile rounded-4 mb-2 ${selectedEmail?.index === index ? 'active' : ''}`}
+          onClick={() => onSelect(mail, index)}
         >
-          <div className="subject">{mail.subject}</div>
-          <div className="preview">{mail.preview}</div>
+          <div className="subject">{mail.subject || "(Sin asunto)"}</div>
+          <div className="preview">{mail.content?.slice(0, 100) || "Sin contenido"}</div>
         </div>
       ))}
     </div>
   );
 }
+
