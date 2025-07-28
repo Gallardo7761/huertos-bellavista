@@ -1,72 +1,72 @@
 {
     "apiConfig": {
-        "baseUrl": "http://localhost",
-        "coreUrl": "http://localhost",
+        "baseUrl": "http://api.huertos.local",
+        "coreUrl": "http://api.miarma.local",
         "endpoints": {
             "auth": {
-                "login": "/huertos/login",
-                "validateToken": "/auth/validate-token",
-                "refreshToken": "/auth/refresh-token",
-                "changePassword": "/auth/change-password",
-                "loginValidate": "/auth/login/validate"
+                "login": "/v1/login",
+                "validateToken": "/auth/v1/validate-token",
+                "refreshToken": "/auth/v1/refresh-token",
+                "changePassword": "/auth/v1/change-password",
+                "loginValidate": "/auth/v1/login/validate"
             },
             "members": {
-                "all": "/huertos/raw/members",
-                "byId": "/huertos/raw/members/:user_id",
-                "profile": "/huertos/members/profile",
-                "byMemberNumber": "/huertos/members/number/:member_number",
-                "byPlotNumber": "/huertos/members/plot/:plot_number",
-                "byDni": "/huertos/members/dni/:dni",
-                "payments": "/huertos/members/number/:member_number/incomes",
-                "hasPaid": "/huertos/members/number/:member_number/has-paid",
-                "waitlist": "/huertos/members/waitlist",
-                "limitedWaitlist": "/huertos/members/waitlist/limited",
-                "lastMemberNumber": "/huertos/members/latest-number",
-                "hasCollaborator": "/huertos/members/number/:member_number/has-collaborator",
-                "hasCollaboratorRequest": "/huertos/members/number/:member_number/has-collaborator-request",
-                "hasGreenHouse": "/huertos/members/number/:member_number/has-greenhouse",
-                "hasGreenHouseRequest": "/huertos/members/number/:member_number/has-greenhouse-request",
-                "changeType": "/huertos/members/number/:user_id/type",
-                "changeStatus": "/huertos/members/number/:user_id/status"
+                "all": "/raw/v1/members",
+                "byId": "/raw/v1/members/:user_id",
+                "profile": "/v1/members/profile",
+                "byMemberNumber": "/v1/members/number/:member_number",
+                "byPlotNumber": "/v1/members/plot/:plot_number",
+                "byDni": "/v1/members/dni/:dni",
+                "payments": "/v1/members/number/:member_number/incomes",
+                "hasPaid": "/v1/members/number/:member_number/has-paid",
+                "waitlist": "/v1/members/waitlist",
+                "limitedWaitlist": "/v1/members/waitlist/limited",
+                "lastMemberNumber": "/v1/members/latest-number",
+                "hasCollaborator": "/v1/members/number/:member_number/has-collaborator",
+                "hasCollaboratorRequest": "/v1/members/number/:member_number/has-collaborator-request",
+                "hasGreenHouse": "/v1/members/number/:member_number/has-greenhouse",
+                "hasGreenHouseRequest": "/v1/members/number/:member_number/has-greenhouse-request",
+                "changeType": "/v1/members/number/:user_id/type",
+                "changeStatus": "/v1/members/number/:user_id/status"
             },
             "incomes": {
-                "all": "/huertos/raw/incomes",
-                "allWithNames": "/huertos/raw/incomes-with-names",
-                "byId": "/huertos/raw/incomes/:income_id",
-                "myIncomes": "/huertos/incomes/my-incomes"
+                "all": "/raw/v1/incomes",
+                "allWithNames": "/raw/v1/incomes-with-names",
+                "byId": "/raw/v1/incomes/:income_id",
+                "myIncomes": "/v1/incomes/my-incomes"
             },
             "expenses": {
-                "all": "/huertos/raw/expenses",
-                "byId": "/huertos/raw/expenses/:expense_id"
+                "all": "/raw/v1/expenses",
+                "byId": "/raw/v1/expenses/:expense_id"
             },
             "balance": {
-                "all": "/huertos/raw/balance"
+                "all": "/raw/v1/balance"
             },
             "announces": {
-                "all": "/huertos/raw/announces",
-                "byId": "/huertos/raw/announces/:announce_id"
+                "all": "/raw/v1/announces",
+                "byId": "/raw/v1/announces/:announce_id"
             },
             "requests": {
-                "all": "/huertos/raw/requests",
-                "byId": "/huertos/raw/requests/:request_id",
-                "allWithPreUsers": "/huertos/requests-full",
-                "byIdWithPreUser": "/huertos/requests-full/:request_id",
-                "countPending": "/huertos/requests/count",
-                "myRequests": "/huertos/requests/my-requests",
-                "accept": "/huertos/requests/:request_id/accept",
-                "reject": "/huertos/requests/:request_id/reject"
+                "all": "/raw/v1/requests",
+                "byId": "/raw/v1/requests/:request_id",
+                "allWithPreUsers": "/v1/requests-full",
+                "byIdWithPreUser": "/v1/requests-full/:request_id",
+                "countPending": "/v1/requests/count",
+                "myRequests": "/v1/requests/my-requests",
+                "accept": "/v1/requests/:request_id/accept",
+                "reject": "/v1/requests/:request_id/reject"
             },
             "pre_users": {
-                "all": "/huertos/raw/pre_users",
-                "byId": "/huertos/raw/pre_users/:pre_user_id",
-                "validation": "/huertos/pre_users/validate"
+                "all": "/raw/v1/pre_users",
+                "byId": "/raw/v1/pre_users/:pre_user_id",
+                "validation": "/v1/pre_users/validate"
             },
             "files": {
-                "all": "/core/raw/files",
-                "byId": "/core/raw/files/:file_id",
-                "upload": "/core/raw/files/upload",
-                "download": "/core/raw/files/download/:file_id",
-                "userFiles": "/core/raw/files/myfiles"
+                "all": "/raw/v1/files",
+                "byId": "/raw/v1/files/:file_id",
+                "upload": "/raw/v1/files/upload",
+                "download": "/raw/v1/files/download/:file_id",
+                "userFiles": "/raw/v1/files/myfiles"
             }
         }
     }

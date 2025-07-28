@@ -49,7 +49,7 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
         </Link>
       </AnimatedDropend>
 
-      <Link to="/gestion/solicitudes" className="text-muted dropdown-item nav-link" onClick={onNavigate}>
+      <Link to="/gestion/solicitudes" className="dropdown-item nav-link" onClick={onNavigate}>
         <FontAwesomeIcon icon={faBellConcierge} />
         <span className="icon-with-badge">
           {count > 0 && <span className="icon-badge">{count}</span>}
@@ -57,7 +57,7 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
         Solicitudes
       </Link>
 
-      <Link to="/correo" className="disabled text-muted dropdown-item nav-link" onClick={onNavigate}>
+      <Link to="/correo" className="dropdown-item nav-link" onClick={onNavigate}>
         <FontAwesomeIcon icon={faEnvelope} className="me-2" />Correo
       </Link>
     </AnimatedDropdown>
