@@ -67,6 +67,11 @@
                 "upload": "/raw/v1/files/upload",
                 "download": "/raw/v1/files/download/:file_id",
                 "userFiles": "/raw/v1/files/myfiles"
+            },
+            "mail": {
+                "all": "/v1/mails",
+                "byIndex": "/v1/mails/:index",
+                "send": "/v1/mails/send"
             }
         }
     }

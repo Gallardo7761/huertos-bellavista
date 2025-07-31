@@ -28,5 +28,210 @@
   color: var(--text-color);
   font-size: 1rem;
   line-height: 1.6;
-  white-space: pre-wrap;
+}
+
+/* Estilos mejorados para contenido HTML rico */
+.mail-content {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Enlaces */
+.mail-content a {
+  color: #0066cc;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.mail-content a:hover {
+  color: #004499;
+  text-decoration: underline;
+}
+
+.mail-content a:visited {
+  color: #551a8b;
+}
+
+/* Imágenes */
+.mail-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+  display: block;
+}
+
+/* Tablas */
+.mail-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  background-color: var(--bg-color);
+}
+
+.mail-content table th,
+.mail-content table td {
+  padding: 8px 12px;
+  border: 1px solid var(--divider-color);
+  text-align: left;
+}
+
+.mail-content table th {
+  background-color: var(--surface-color);
+  font-weight: 600;
+}
+
+/* Listas */
+.mail-content ul,
+.mail-content ol {
+  margin: 16px 0;
+  padding-left: 24px;
+}
+
+.mail-content li {
+  margin: 4px 0;
+}
+
+/* Párrafos y espaciado */
+.mail-content p {
+  margin: 16px 0;
+}
+
+.mail-content p:first-child {
+  margin-top: 0;
+}
+
+.mail-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Encabezados */
+.mail-content h1,
+.mail-content h2,
+.mail-content h3,
+.mail-content h4,
+.mail-content h5,
+.mail-content h6 {
+  color: var(--text-color);
+  margin: 24px 0 16px 0;
+  line-height: 1.4;
+}
+
+.mail-content h1:first-child,
+.mail-content h2:first-child,
+.mail-content h3:first-child {
+  margin-top: 0;
+}
+
+/* Citas */
+.mail-content blockquote {
+  margin: 16px 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--primary-color);
+  background-color: var(--surface-color);
+  font-style: italic;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Código */
+.mail-content code {
+  background-color: var(--surface-color);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+.mail-content pre {
+  background-color: var(--surface-color);
+  padding: 16px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.mail-content pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Divisores */
+.mail-content hr {
+  border: none;
+  border-top: 1px solid var(--divider-color);
+  margin: 24px 0;
+}
+
+/* Texto en negrita y cursiva */
+.mail-content strong,
+.mail-content b {
+  font-weight: 600;
+}
+
+.mail-content em,
+.mail-content i {
+  font-style: italic;
+}
+
+/* Adjuntos mejorados */
+.mail-attachments {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider-color);
+}
+
+.mail-attachments h5 {
+  margin: 0 0 12px 0;
+  color: var(--text-color);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mail-attachments ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mail-attachments li {
+  margin: 8px 0;
+  padding: 8px 12px;
+  background-color: var(--surface-color);
+  border-radius: 4px;
+  border: 1px solid var(--divider-color);
+}
+
+.mail-attachments a {
+  color: var(--text-color);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.mail-attachments a:hover {
+  color: var(--primary-color);
+}
+
+.mail-attachments .attachment-size {
+  color: var(--muted-color);
+  font-size: 0.9em;
+  margin-left: auto;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .mail-view {
+    padding: 1rem;
+  }
+  
+  .mail-content {
+    font-size: 0.9rem;
+  }
+  
+  .mail-content table {
+    font-size: 0.8rem;
+  }
 }

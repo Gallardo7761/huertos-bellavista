@@ -50,7 +50,7 @@ export const useData = (config) => {
         headers: getAuthHeaders(),
         params,
       });
-      return { data: response.data.data, error: null };
+      return { data: response.data, error: null };
     } catch (err) {
       return {
         data: null,

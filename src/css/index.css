@@ -535,3 +535,8 @@ button.custom-toggler {
   background-color: var(--primary-color) !important;
   color: white !important;
 }
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}

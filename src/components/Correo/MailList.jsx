@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../css/MailList.css';
 
-export default function MailList({ emails, onSelect, selectedEmail, className = '' }) {
+export default function MailList({ emails, onSelect, selectedEmail, className = '' }) {  
   return (
     <div className={`mail-list ${className}`}>
       {emails.map((mail, index) => (
@@ -11,7 +11,14 @@ export default function MailList({ emails, onSelect, selectedEmail, className = 
           onClick={() => onSelect(mail, index)}
         >
           <div className="subject">{mail.subject || "(Sin asunto)"}</div>
-          <div className="preview">{mail.content?.slice(0, 100) || "Sin contenido"}</div>
+          <div className="preview">
+            {!mail.content && "Sin contenido"}
+            {mail.content.includes("<") ? (
+              "Contenido HTML personalizado"
+            ) : (
+              mail.content?.slice(0, 100)
+            )}
+          </div>
         </div>
       ))}
     </div>
