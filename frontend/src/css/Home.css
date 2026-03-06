@@ -1,0 +1,88 @@
+/* ================================
+   ESPACIADO ENTRE SECCIONES
+================================== */
+
+.about-section,
+.gallery-section,
+.map-section {
+  margin-bottom: 4rem;
+}
+
+
+/* ================================
+   SECCIÓN - SOBRE NOSOTROS
+================================== */
+
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.text-content {
+  flex: 1 1 60%;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.img-content {
+  flex: 1 1 10%;
+}
+
+.about-img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow-soft);
+}
+
+
+/* ================================
+   SECCIÓN - GALERÍA
+================================== */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.gallery-img {
+  width: 100%;
+  border-radius: 10px;
+  
+  box-shadow: var(--box-shadow-soft);
+}
+
+.gallery-img:hover {
+  transform: scale(1.05);
+}
+
+
+/* ================================
+   SECCIÓN - MAPA
+================================== */
+
+.map-wrapper iframe {
+  width: 100%;
+  height: 60vh;
+  border: 0;
+  border-radius: 10px;
+  box-shadow: var(--box-shadow-soft);
+}
+
+
+/* ================================
+   RESPONSIVE - MOBILE
+================================== */
+
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+  }
+
+  .img-content {
+    flex: 1 1 100%;
+  }
+}

@@ -1,0 +1,69 @@
+{
+    "apiConfig": {
+        "baseUrl": "https://api.miarma.net/v2/huertos",
+        "coreUrl": "https://api.miarma.net/v2/core",
+        "endpoints": {
+            "auth": {
+                "login": "/auth/login",
+                "refreshToken": "/auth/refresh",
+                "changePassword": "/auth/change-password",
+                "validateToken": "/auth/validate"
+            },
+            "users": {
+                "all": "/users",
+                "byId": "/users/:userId",
+                "me": "/users/me",
+                "dropdown": "/users/dropdown",
+                "latestNumber": "/users/latest-number",
+                "waitlist": "/users/waitlist",
+                "waitlistLimited": "/users/waitlist/limited",
+                "byMemberNumber": "/users/number/:memberNumber",
+                "incomesPreview": "/users/number/:memberNumber/incomes",
+                "hasPaid": "/users/number/:memberNumber/has-paid",
+                "hasCollaborator": "/users/number/:memberNumber/has-collaborator",
+                "hasGreenhouse": "/users/number/:memberNumber/has-greenhouse",
+                "hasCollaboratorRequest": "/users/number/:memberNumber/has-collaborator-request",
+                "hasGreenhouseRequest": "/users/number/:memberNumber/has-greenhouse-request",
+                "byPlotNumber": "/users/plot/:plotNumber",
+                "byDni": "/users/dni/:dni"
+            },
+            "incomes": {
+                "all": "/incomes",
+                "withInfo": "/incomes/with-info",
+                "mine": "/incomes/mine",
+                "byId": "/incomes/:incomeId"
+            },
+            "expenses": {
+                "all": "/expenses",
+                "byId": "/expenses/:expenseId"
+            },
+            "balance": {
+                "all": "/balance",
+                "withTotals": "/balance/with-totals"
+            },
+            "announcements": {
+                "all": "/announcements",
+                "byId": "/announcements/:announceId"
+            },
+            "requests": {
+                "all": "/requests",
+                "byId": "/requests/:requestId",
+                "count": "/requests/count",
+                "mine": "/requests/mine",
+                "full": "/requests/full",
+                "fullById": "/requests/full/:requestId",
+                "accept": "/requests/:requestId/accept",
+                "reject": "/requests/:requestId/reject"
+            },
+            "files": {
+                "all": "/files",
+                "byId": "/files/:fileId"
+            },
+            "mail": {
+                "all": "/mails",
+                "byIndex": "/mails/:index",
+                "send": "/mails/send"
+            }
+        }
+    }
+}

@@ -1,0 +1,94 @@
+/* ================================
+   SOCIO CARD - BASE
+================================== */
+
+.socio-card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color);
+  border: none !important;
+  
+}
+
+.socio-card:hover {
+  /*transform: translateY(-5px);*/
+  box-shadow: 0 0.75rem 1.5rem var(--shadow-color);
+}
+
+.socio-card img {
+  object-fit: cover;
+}
+
+/* ================================
+   CARD HEADER
+================================== */
+
+.card-header.bg-light-red {
+  background-color: var(--alert-bg) !important;
+}
+
+.card-header.bg-light-red .card-button {
+  color: var(--alert-text) !important;
+}
+
+.card-header.bg-light-red .card-title {
+  color: var(--alert-text) !important;
+}
+
+.bg-light-green.card-header {
+  background-color: var(--secondary-color) !important;
+}
+
+.card-header.bg-light-green .card-title {
+  color: var(--card-text-secondary) !important;
+}
+
+.socio-card .card-header button {
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: transparent;
+  color: var(--card-button) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.socio-card .card-header button:hover {
+  background-color: var(--header-btn-hover);
+}
+
+/* ================================
+   LISTA y NOTAS CARD
+================================== */
+
+.socio-card .notas-card {
+  font-size: 0.95rem;
+  font-style: italic;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+}
+
+.socio-card .list-group {
+  border: 1px solid var(--card-border) !important;
+}
+
+.socio-card .list-group-item {
+  font-style: italic;
+  font-size: 0.95rem;
+  background-color: transparent;
+  border-radius: 0;
+  
+  color: var(--text-color);
+  border-color: var(--card-border);
+}
+
+.socio-card .list-group-item:hover {
+  background-color: var(--list-hover-bg);
+}
+
+.socio-card .card-subtitle.h6 {
+  color: var(--text-color) !important;
+}

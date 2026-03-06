@@ -1,0 +1,55 @@
+.balance-report.card {
+  border-radius: 1.75rem;
+  box-shadow: 0 6px 24px var(--shadow-color);
+  
+  background-color: var(--balance-report-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.report-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.balance-box {
+  border-radius: 1rem;
+  background-color: var(--bg-color);
+  padding: 1.25rem;
+  color: var(--text-color);
+}
+
+.balance-box p {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.balance-value {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.balance-timestamp {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.print-btn {
+  border-radius: 999px;
+  padding: 0.45rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  
+}
+
+.print-btn:hover {
+  background-color: var(--btn-bg-hover);
+  color: var(--btn-text-hover);
+  border: 1px solid var(--border-color);
+}

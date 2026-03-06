@@ -1,0 +1,18 @@
+POR HACER --------------------------------
+- implementar urlParams para filtros
+- documentación
+- mail wrapper
+
+RESUELTO ---------------------------------
+- añadir colaborador desde perfil
+- apuntarse lista espera
+- aceptar solicitudes LE/Colab (sobre todo por crear preusers)
+- mejorar queries para no filtrar en memoria -> IMPOSIBLE CON ENDPOINTS INTERNOS DE CORE: RESUELTO CON CACHING
+- normalizar el uso de services y repositories desde otros services y repositories
+- sistema comun de errores en back & front
+- nombre del requester
+- cambiar contraseña (?)
+- todos los socios en dropdown ingresos
+- validacion LE/COlab
+- createdAt custom en ing,gastos
+- editar createdAt

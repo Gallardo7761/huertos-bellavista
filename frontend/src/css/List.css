@@ -1,0 +1,16 @@
+.list-group-item {
+    background-color: var(--item-bg);
+    color: var(--item-text);
+    border: none !important;
+    border-radius: 12px;
+    
+}
+
+.list-group-item:hover {
+    background-color: var(--list-hover-bg) !important;
+}
+
+.list-group-item.active {
+    background-color: var(--list-active-bg) !important;
+    color: var(--text-color) !important;
+}

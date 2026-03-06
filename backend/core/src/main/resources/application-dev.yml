@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /v2/core
+
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/huertos
+    username: admin
+    password: ${DB_PASS}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.security: DEBUG
+
+filesDir: "/home/jomaa/.config/miarma-backend/files"
+
+jwt:
+  private-key-path: /home/jomaa/.config/miarma-backend/private.pem
+  public-key-path: /home/jomaa/.config/miarma-backend/public.pem

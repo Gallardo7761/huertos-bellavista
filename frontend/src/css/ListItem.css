@@ -1,0 +1,33 @@
+.custom-list-item {
+  background-color: var(--item-bg) !important;
+  color: var(--item-text) !important;
+  border: none !important;
+  border-radius: 1rem !important;
+  
+}
+
+.custom-list-item:hover {
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.subtitle {
+  color: var(--subtitle-color);
+}
+
+/* Imagen de perfil */
+.list-item-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+/* Índice */
+.list-item-index {
+  font-size: 2rem;
+  font-weight: bold;
+  width: 2rem;
+  text-align: center;
+  color: var(--primary-color);
+}

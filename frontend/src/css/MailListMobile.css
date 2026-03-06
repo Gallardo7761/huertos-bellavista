@@ -1,0 +1,34 @@
+.mail-list-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .mail-item-mobile {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .mail-item-mobile:hover {
+    background-color: var(--card-btn-hover);
+  }
+  
+  .mail-item-mobile.active {
+    border-color: var(--highlight-border);
+    background-color: var(--list-active-bg-light);
+  }
+  
+  .mail-item-mobile .subject {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+  
+  .mail-item-mobile .preview {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+  }
+  

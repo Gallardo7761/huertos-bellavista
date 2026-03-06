@@ -1,0 +1,45 @@
+/* ================================
+   INGRESO CARD - BASE
+================================== */
+
+.ingreso-card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color);
+  border: none !important;
+  
+}
+
+.ingreso-card.from-members {
+  border: 1px solid var(--card-border) !important;
+}
+
+.ingreso-card:hover {
+  /*transform: translateY(-5px);*/
+  box-shadow: 0 0.75rem 1.5rem var(--shadow-color);
+}
+
+.ingreso-card img {
+  object-fit: cover;
+}
+
+/* ================================
+   CARD HEADER
+================================== */
+
+.ingreso-card .card-header button {
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: transparent;
+  color: var(--card-button) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.ingreso-card .card-header button:hover {
+  background-color: var(--header-btn-hover);
+}
