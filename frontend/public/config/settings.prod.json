@@ -1,7 +1,7 @@
 {
     "apiConfig": {
-        "baseUrl": "https://api.miarma.net/v2/huertos",
-        "coreUrl": "https://api.miarma.net/v2/core",
+        "baseUrl": "https://api.huertosbellavista.es/v2/huertos",
+        "coreUrl": "https://api.huertosbellavista.es/v2/core",
         "endpoints": {
             "auth": {
                 "login": "/auth/login",

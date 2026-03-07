@@ -79,7 +79,7 @@ export const useData = (config, onError) => {
         headers: getAuthHeaders(),
         params: current.params,
       });
-      setData([...response.data]);
+      setData(response.data);
     } catch (err) {
       const error = handleAxiosError(err);
       setError(error);

@@ -178,7 +178,8 @@
                     .toList();
 
             return plotMembers.stream()
-                    .anyMatch(dto -> dto.metadata().getType().equals((byte)3));
+                    .anyMatch(dto -> dto.metadata().getType().equals((byte)3) ||
+                            dto.metadata().getType().equals((byte)0));
         }
 
         public Boolean hasGreenhouse(Integer memberNumber) {

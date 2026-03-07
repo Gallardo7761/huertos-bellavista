@@ -133,8 +133,6 @@ const SociosContent = ({ reqConfig }) => {
       setCreatingSocio(false);
       setTempSocio(null);
       setFieldErrors(null);
-      setSearchTerm(""); 
-      setFilters({...filters, todos: true}); 
     } catch (err) {
       setTempSocio({ ...newSocio });
       if (err?.status === 422 && err?.errors) {
@@ -146,9 +144,7 @@ const SociosContent = ({ reqConfig }) => {
   const handleEditSubmit = async (updatedSocio, userId) => {
     console.log(updatedSocio);
     try {
-      await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio, true);
-      setSearchTerm(""); 
-      setFilters({...filters, todos: true}); 
+      await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio, true); 
     } catch (err) {
       if (err?.status === 422 && err?.errors) {
         setFieldErrors(err.errors);

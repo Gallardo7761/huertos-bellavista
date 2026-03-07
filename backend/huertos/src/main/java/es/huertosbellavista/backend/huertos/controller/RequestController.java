@@ -3,7 +3,7 @@ package es.huertosbellavista.backend.huertos.controller;
 import es.huertosbellavista.backend.huertos.dto.RequestCountDto;
 import es.huertosbellavista.backend.huertos.dto.RequestDto;
 import es.huertosbellavista.backend.huertos.dto.RequestWithMetadataDto;
-import net.miarma.backend.huertos.dto.*;
+import es.huertosbellavista.backend.huertos.dto.*;
 import es.huertosbellavista.backend.huertos.mapper.RequestMapper;
 import es.huertosbellavista.backend.huertos.mapper.RequestWithMetadataMapper;
 import es.huertosbellavista.backend.huertos.model.Request;

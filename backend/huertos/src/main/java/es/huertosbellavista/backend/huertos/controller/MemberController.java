@@ -4,7 +4,7 @@ import es.huertosbellavista.backend.huertos.dto.DropdownDto;
 import es.huertosbellavista.backend.huertos.dto.MemberDto;
 import es.huertosbellavista.backend.huertos.dto.MemberProfileDto;
 import es.huertosbellavista.backend.huertos.dto.WaitlistCensoredDto;
-import net.miarma.backend.huertos.dto.*;
+import es.huertosbellavista.backend.huertos.dto.*;
 import es.huertosbellavista.backend.huertos.dto.view.VIncomesWithInfoDto;
 import es.huertosbellavista.backend.huertos.security.HuertosPrincipal;
 import es.huertosbellavista.backend.huertos.service.MemberService;
