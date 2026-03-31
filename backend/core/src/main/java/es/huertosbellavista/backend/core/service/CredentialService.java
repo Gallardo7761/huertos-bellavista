@@ -114,10 +114,6 @@ public class CredentialService {
     public Credential update(UUID credentialId, Credential changes) {
         Credential cred = getById(credentialId);
 
-        if (cred.getStatus() == (byte)0) {
-            throw new ForbiddenException("La cuenta está inactiva, contacta con un administrador");
-        }
-
         if (changes.getUsername() != null) cred.setUsername(changes.getUsername());
         if (changes.getEmail() != null) cred.setEmail(changes.getEmail());
         if (changes.getStatus() != null) cred.setStatus(changes.getStatus());

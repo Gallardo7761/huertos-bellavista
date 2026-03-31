@@ -93,7 +93,7 @@ public class UserMetadataService {
         if (changes.getRole() != null) metadata.setRole(changes.getRole());
         if (changes.getNotes() != null) metadata.setNotes(changes.getNotes());
         metadata.setAssignedAt(changes.getAssignedAt());
-        if (changes.getDeactivatedAt() != null) metadata.setDeactivatedAt(changes.getDeactivatedAt());
+        metadata.setDeactivatedAt(changes.getDeactivatedAt());
 
         return repository.save(metadata);
     }

@@ -1,7 +1,9 @@
 POR HACER --------------------------------
-- implementar urlParams para filtros
+- rango de años en PDF
 - documentación
 - mail wrapper
+- implementar urlParams para filtros
+
 
 RESUELTO ---------------------------------
 - añadir colaborador desde perfil
@@ -16,3 +18,4 @@ RESUELTO ---------------------------------
 - validacion LE/COlab
 - createdAt custom en ing,gastos
 - editar createdAt
+- dar de baja bien
