@@ -51,7 +51,6 @@ const useSessionRenewal = () => {
     try {
       const response = await axios.get(
         `${config.apiConfig.coreUrl}${config.apiConfig.endpoints.auth.refreshToken}`,
-        null,
         {
           headers: {
             Authorization: `Bearer ${token}`,
