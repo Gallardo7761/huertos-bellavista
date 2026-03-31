@@ -7,6 +7,7 @@ import {
   faCircleExclamation,
   faCircleInfo
 } from '@fortawesome/free-solid-svg-icons';
+import '../css/NotificationModal.css'
 
 const iconMap = {
   success: faCircleCheck,
@@ -21,13 +22,15 @@ const NotificationModal = ({
   title,
   message,
   variant = "info",
-  buttons = [{ label: "Aceptar", variant: "primary", onClick: onClose }]
+  buttons = []
 }) => {
+  const modalButtons = buttons.length > 0 ? buttons : [{ label: "Aceptar", onClick: onClose }];
+
   return (
-    <Modal show={show} onHide={onClose} centered>
-      <Modal.Header closeButton className={`bg-${variant} ${variant === 'info' ? 'text-dark' : 'text-white'}`}>
+    <Modal show={show} onHide={onClose} centered className="custom-themed-modal" data-variant={variant}>
+      <Modal.Header closeButton>
         <Modal.Title>
-          <FontAwesomeIcon icon={iconMap[variant] || faCircleInfo} className="me-2" />
+          <FontAwesomeIcon icon={iconMap[variant] || faCircleInfo} className="me-2 icon-variant" />
           {title}
         </Modal.Title>
       </Modal.Header>
@@ -37,14 +40,14 @@ const NotificationModal = ({
       </Modal.Body>
 
       <Modal.Footer>
-        {buttons.map((btn, index) => (
-          <Button
+        {modalButtons.map((btn, index) => (
+          <button
             key={index}
-            variant={btn.variant || "primary"}
+            className={`btn-custom-modal ${btn.variant || 'primary'}`}
             onClick={btn.onClick || onClose}
           >
             {btn.label}
-          </Button>
+          </button>
         ))}
       </Modal.Footer>
     </Modal>

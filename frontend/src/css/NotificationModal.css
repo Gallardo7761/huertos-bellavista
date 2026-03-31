@@ -1,0 +1,85 @@
+/* ================================
+   REESTILO MODAL PERSONALIZADO
+================================== */
+
+.custom-themed-modal .modal-content {
+  background-color: var(--modal-bg) !important;
+  border: 2px solid var(--modal-header-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px var(--shadow-color) !important;
+  overflow: hidden;
+}
+
+.custom-themed-modal .modal-header {
+  border-bottom: 1px solid var(--divider-color);
+  padding: 1.5rem;
+}
+
+.custom-themed-modal .modal-title {
+  font-family: "Product Sans Bold", sans-serif;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+}
+
+.custom-themed-modal[data-variant="success"] .icon-variant { color: var(--primary-color); }
+.custom-themed-modal[data-variant="danger"] .icon-variant { color: #dc3545; }
+.custom-themed-modal[data-variant="warning"] .icon-variant { color: #ffc107; }
+.custom-themed-modal[data-variant="info"] .icon-variant { color: var(--tertiary-color); }
+
+.custom-themed-modal .modal-body {
+  padding: 1.5rem;
+  font-family: "Open Sans", sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.custom-themed-modal .modal-footer {
+  border-top: none;
+  padding: 1rem 1.5rem 1.5rem;
+  gap: 10px;
+}
+
+.btn-custom-modal {
+  all: unset;
+  padding: 0.6rem 1.5rem;
+  border-radius: 12px;
+  font-family: "Product Sans", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-custom-modal.primary {
+  background-color: var(--btn-bg);
+  color: var(--btn-text) !important;
+}
+
+.btn-custom-modal.primary:hover {
+  background-color: var(--btn-bg-hover);
+  transform: translateY(-2px);
+}
+
+.btn-custom-modal.secondary {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.btn-custom-modal.secondary:hover {
+  background-color: var(--bg-hover-color);
+}
+
+.light .custom-themed-modal .btn-close {
+  filter: none;
+}
+
+.dark .custom-themed-modal .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 0.8;
+}
+
+.custom-themed-modal .btn-close:hover {
+  opacity: 1;
+}
