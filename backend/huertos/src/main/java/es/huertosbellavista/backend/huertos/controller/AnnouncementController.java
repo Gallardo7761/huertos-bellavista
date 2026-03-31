@@ -1,9 +1,13 @@
 package es.huertosbellavista.backend.huertos.controller;
 
 import es.huertosbellavista.backend.huertos.dto.AnnouncementDto;
+import es.huertosbellavista.backend.huertos.dto.view.VAnnouncementsWithPublishersDto;
 import es.huertosbellavista.backend.huertos.mapper.AnnouncementMapper;
+import es.huertosbellavista.backend.huertos.mapper.view.VAnnouncementsWithPublishersMapper;
 import es.huertosbellavista.backend.huertos.model.Announcement;
+import es.huertosbellavista.backend.huertos.model.view.VAnnouncementsWithPublishers;
 import es.huertosbellavista.backend.huertos.service.AnnouncementService;
+import es.huertosbellavista.backend.huertos.service.view.VAnnouncementsWithPublishersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,34 +19,36 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/announcements")
 public class AnnouncementController {
-
     private final AnnouncementService announcementService;
+    private final VAnnouncementsWithPublishersService vAnnouncementsWithPublishersService;
 
-    public AnnouncementController(AnnouncementService announcementService) {
+    public AnnouncementController(AnnouncementService announcementService,
+                                  VAnnouncementsWithPublishersService vAnnouncementsWithPublishersService) {
         this.announcementService = announcementService;
+        this.vAnnouncementsWithPublishersService = vAnnouncementsWithPublishersService;
     }
 
     @GetMapping
-    public ResponseEntity<List<AnnouncementDto.Response>> getAll() {
+    public ResponseEntity<List<VAnnouncementsWithPublishersDto>> getAll() {
         return ResponseEntity.ok(
-                announcementService.getAll()
-                        .stream()
-                        .map(AnnouncementMapper::toResponse)
-                        .toList()
+            vAnnouncementsWithPublishersService.getAll()
+                .stream()
+                .map(VAnnouncementsWithPublishersMapper::toDto)
+                .toList()
         );
     }
 
-    @GetMapping("/{announce_id}")
+    @GetMapping("/{announcement_id}")
     @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
-    public ResponseEntity<AnnouncementDto.Response> getById(@PathVariable("announce_id") UUID announcementId) {
-        Announcement announcement = announcementService.getById(announcementId);
-        return ResponseEntity.ok(AnnouncementMapper.toResponse(announcement));
+    public ResponseEntity<VAnnouncementsWithPublishersDto> getById(@PathVariable("announcement_id") UUID announcementId) {
+        VAnnouncementsWithPublishers announcement = vAnnouncementsWithPublishersService.getById(announcementId);
+        return ResponseEntity.ok(VAnnouncementsWithPublishersMapper.toDto(announcement));
     }
 
-    @PutMapping("/{announce_id}")
+    @PutMapping("/{announcement_id}")
     @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
     public ResponseEntity<AnnouncementDto.Response> update(
-            @PathVariable("announce_id") UUID announcementId,
+            @PathVariable("announcement_id") UUID announcementId,
             @RequestBody AnnouncementDto.Request dto
     ) {
         return ResponseEntity.ok(
@@ -60,9 +66,9 @@ public class AnnouncementController {
                 )));
     }
 
-    @DeleteMapping("/{announce_id}")
+    @DeleteMapping("/{announcement_id}")
     @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable("announce_id") UUID announcementId) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable("announcement_id") UUID announcementId) {
         announcementService.delete(announcementId);
         return ResponseEntity.ok(Map.of("message", "Deleted announcement: " + announcementId));
     }

@@ -5,17 +5,21 @@ import java.util.UUID;
 
 import jakarta.persistence.*;
 import net.miarma.backlib.util.UuidUtil;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "huertos_announces")
+@Table(name = "huertos_announcements")
 public class Announcement {
 	
 	@Id
-    @Column(name = "announce_id", columnDefinition = "BINARY(16)")
-    private byte[] announceIdBin;
+    @Column(name = "announcement_id", columnDefinition = "BINARY(16)")
+    private byte[] announcementIdBin;
 
 	@Transient
-	private UUID announceId;
+	private UUID announcementId;
+
+	@Column(name = "title", nullable = false, columnDefinition = "VARCHAR(128)")
+	private String title;
 
     @Column(name = "body", nullable = false, columnDefinition = "TEXT")
     private String body;
@@ -29,17 +33,14 @@ public class Announcement {
 	@Transient
 	private UUID publishedBy;
 
-	@Column(name = "published_by_name", nullable = false)
-	private String publishedByName;
-
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
     private Instant createdAt;
 
 	@PrePersist
 	@PreUpdate
 	private void prePersist() {
-		if (announceId != null) {
-			announceIdBin = UuidUtil.uuidToBin(announceId);
+		if (announcementId != null) {
+			announcementIdBin = UuidUtil.uuidToBin(announcementId);
 		}
 
 		if (publishedBy != null) {
@@ -49,8 +50,8 @@ public class Announcement {
 
 	@PostLoad
 	private void postLoad() {
-		if (announceIdBin != null) {
-			announceId = UuidUtil.binToUUID(announceIdBin);
+		if (announcementIdBin != null) {
+			announcementId = UuidUtil.binToUUID(announcementIdBin);
 		}
 
 		if (publishedByBin != null) {
@@ -58,12 +59,20 @@ public class Announcement {
 		}
 	}
 
-	public UUID getAnnounceId() {
-		return announceId;
+	public UUID getAnnouncementId() {
+		return announcementId;
 	}
 
-	public void setAnnounceId(UUID announceId) {
-		this.announceId = announceId;
+	public void setAnnouncementId(UUID announcementId) {
+		this.announcementId = announcementId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getBody() {
@@ -88,14 +97,6 @@ public class Announcement {
 
 	public void setPublishedBy(UUID publishedBy) {
 		this.publishedBy = publishedBy;
-	}
-
-	public String getPublishedByName() {
-		return publishedByName;
-	}
-
-	public void setPublishedByName(String publishedByName) {
-		this.publishedByName = publishedByName;
 	}
 
 	public Instant getCreatedAt() {

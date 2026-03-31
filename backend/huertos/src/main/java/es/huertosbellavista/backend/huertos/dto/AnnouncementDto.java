@@ -5,9 +5,18 @@ import java.util.UUID;
 
 public class AnnouncementDto {
     public static class Request {
+        private String title;
         private String body;
         private Byte priority;
         private UUID publishedBy;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
         public String getBody() {
             return body;
@@ -35,19 +44,27 @@ public class AnnouncementDto {
     }
 
     public static class Response {
-        private UUID announceId;
+        private UUID announcementId;
+        private String title;
         private String body;
         private Byte priority;
         private UUID publishedBy;
-        private String publishedByName;
         private Instant createdAt;
 
-        public UUID getAnnounceId() {
-            return announceId;
+        public UUID getAnnouncementId() {
+            return announcementId;
         }
 
-        public void setAnnounceId(UUID announceId) {
-            this.announceId = announceId;
+        public void setAnnouncementId(UUID announcementId) {
+            this.announcementId = announcementId;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public String getBody() {
@@ -73,10 +90,6 @@ public class AnnouncementDto {
         public void setPublishedBy(UUID publishedBy) {
             this.publishedBy = publishedBy;
         }
-
-        public String getPublishedByName() { return publishedByName; }
-
-        public void setPublishedByName(String publishedByName) { this.publishedByName = publishedByName; }
 
         public Instant getCreatedAt() {
             return createdAt;

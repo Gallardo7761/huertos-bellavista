@@ -3,7 +3,9 @@ package es.huertosbellavista.backend.huertos.service;
 import jakarta.transaction.Transactional;
 import es.huertosbellavista.backend.huertos.model.Announcement;
 import es.huertosbellavista.backend.huertos.repository.AnnouncementRepository;
+import net.miarma.backlib.exception.BadRequestException;
 import net.miarma.backlib.exception.NotFoundException;
+import net.miarma.backlib.exception.ValidationException;
 import net.miarma.backlib.util.UuidUtil;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,9 @@ import java.util.UUID;
 public class AnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
-    private final MemberService memberService;
 
     public AnnouncementService(AnnouncementRepository announcementRepository, MemberService memberService) {
         this.announcementRepository = announcementRepository;
-        this.memberService = memberService;
     }
 
     public List<Announcement> getAll() {
@@ -30,23 +30,38 @@ public class AnnouncementService {
             .toList();
     }
 
-    public Announcement getById(UUID announceId) {
-        byte[] idBytes = UuidUtil.uuidToBin(announceId);
+    public Announcement getById(UUID announcementId) {
+        byte[] idBytes = UuidUtil.uuidToBin(announcementId);
         return announcementRepository.findById(idBytes)
                 .orElseThrow(() -> new NotFoundException("Anuncio no encontrado"));
     }
 
     public Announcement create(Announcement announcement) {
-        if (announcement.getAnnounceId() == null) {
-            announcement.setAnnounceId(UUID.randomUUID());
+        if(announcement.getTitle().isBlank() || announcement.getTitle() == null) {
+            throw new ValidationException("title", "El título no puede estar vacío");
         }
-        announcement.setPublishedByName(memberService.getById(announcement.getPublishedBy()).user().getDisplayName());
-        announcement.setCreatedAt(Instant.now());
+
+        if(announcement.getBody().isBlank() || announcement.getBody() == null) {
+            throw new ValidationException("body", "El cuerpo no puede estar vacío");
+        }
+
+        if(announcement.getPriority() == null) {
+            throw new BadRequestException("La prioridad es obligatoria");
+        }
+
+        if(announcement.getPublishedBy() == null) {
+            throw new BadRequestException("El autor es obligatorio");
+        }
+
+        announcement.setAnnouncementId(UUID.randomUUID());
         return announcementRepository.save(announcement);
     }
 
-    public Announcement update(UUID announceId, Announcement changes) {
-        Announcement announcement = getById(announceId);
+    public Announcement update(UUID announcementId, Announcement changes) {
+        Announcement announcement = getById(announcementId);
+
+        if (changes.getTitle() != null)
+            announcement.setTitle(changes.getTitle());
 
         if (changes.getBody() != null)
             announcement.setBody(changes.getBody());
@@ -60,8 +75,8 @@ public class AnnouncementService {
         return announcementRepository.save(announcement);
     }
 
-    public void delete(UUID announceId) {
-        byte[] idBytes = UuidUtil.uuidToBin(announceId);
+    public void delete(UUID announcementId) {
+        byte[] idBytes = UuidUtil.uuidToBin(announcementId);
         if (!announcementRepository.existsById(idBytes))
             throw new NotFoundException("Anuncio no encontrado");
         announcementRepository.deleteById(idBytes);
