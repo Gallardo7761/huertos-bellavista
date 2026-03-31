@@ -33,14 +33,18 @@
   background-color: var(--header-btn-hover);
 }
 
-.anuncio-card .leer-mas-link {
-  font-weight: 600;
-  color: var(--accent-color);
+.anuncio-card .read-more {
+  color: var(--primary-color);
+  cursor: pointer;
 }
 
-.anuncio-card .leer-mas-link:hover {
+.anuncio-card .read-more::after {
+  content: "...";
+}
+
+.anuncio-card .read-more:hover {
+  color: var(--secondary-color);
   text-decoration: underline;
-  color: var(--btn-bg-hover);
 }
 
 .anuncio-card .text-muted {
@@ -91,7 +95,6 @@
   padding-left: 2em;
 }
 
-/* Estilo base del contenedor del editor */
 .rsw-editor {
   background-color: var(--input-bg) !important;
   border: 1px solid var(--input-border) !important;
@@ -102,7 +105,6 @@
   font-size: 0.95rem !important;
 }
 
-/* Estilo del área editable */
 .rsw-editor textarea {
   background-color: transparent !important;
   border: none !important;
@@ -113,18 +115,15 @@
   min-height: 120px !important;
 }
 
-/* Placeholder del textarea si lo añades dinámicamente */
 .rsw-editor textarea::placeholder {
   color: var(--placeholder-color) !important;
 }
 
-/* Enfoque del editor */
 .rsw-editor:focus-within {
   border-color: var(--accent-color) !important;
   box-shadow: 0 0 0 0.15rem rgba(67, 167, 72, 0.25);
 }
 
-/* Toolbar del editor */
 .rsw-toolbar {
   background-color: transparent !important;
   border-bottom: 1px solid var(--input-border) !important;
@@ -132,7 +131,6 @@
   margin-bottom: 0.5rem !important;
 }
 
-/* Botones del toolbar */
 .rsw-toolbar button {
   background: transparent !important;
   border: none !important;

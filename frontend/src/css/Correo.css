@@ -1,4 +1,3 @@
-/* Layout general */
 .correo-page {
   height: 100vh;
   overflow: hidden;
@@ -13,7 +12,6 @@
   overflow: hidden;
 }
 
-/* Gutter (barra de resize entre paneles) */
 .gutter {
   background-color: var(--divider-color);
   background-clip: content-box;
@@ -27,7 +25,6 @@
   transition: width 0.2s ease-in-out;
 }
 
-/* Panel de navegación (Sidebar + MailList) */
 .mail-nav-pane {
   display: flex;
   flex-direction: row;
@@ -44,7 +41,7 @@
 }
 
 /* ====================
-   Modo móvil (correo-mobile)
+   Modo móvil
 ==================== */
 @media screen and (max-width: 900px) {
   .split-wrapper {
@@ -56,7 +53,7 @@
   }
 
   .correo-page.viewing-mail .split-wrapper > :nth-child(1) {
-    display: none; /* Oculta panel de navegación */
+    display: none;
   }
 
   .correo-page.viewing-mail .split-wrapper > :nth-child(2) {

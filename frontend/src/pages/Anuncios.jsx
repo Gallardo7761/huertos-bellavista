@@ -152,10 +152,10 @@ const AnunciosContent = ({ reqConfig }) => {
           )}
           renderCard={(anuncio, idx) => (
             <AnuncioCard
-              key={anuncio.announceId}
+              key={anuncio.announcementId}
               anuncio={{...anuncio, idx: idx}}
               onUpdate={(a, id) => handleEditSubmit(a, id)}
-              onDelete={() => handleDelete(anuncio.announceId)}
+              onDelete={() => handleDelete(anuncio.announcementId)}
             />
           )}
         />

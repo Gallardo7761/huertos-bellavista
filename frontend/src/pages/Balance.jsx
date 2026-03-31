@@ -81,7 +81,6 @@ const Balance = () => {
         ) : (
           <div className="text-center my-5">
             <p>No se encontraron datos para el año {selectedYear}.</p>
-            {/* Aquí podrías poner un botón para crear el balance de este año si no existe */}
           </div>
         )}
       </ContentWrapper>

@@ -1,5 +1,5 @@
 .footer {
-  background-color: var(--navbar-bg); /* más similar al navbar */
+  background-color: var(--navbar-bg);
   color: var(--fg-color);
   border-top: 3px solid var(--border-color);
   font-size: 1rem;
@@ -35,7 +35,7 @@
   flex-direction: column;
   gap: 2rem;
   margin-bottom: 2rem;
-  background-color: var(--bg-hover-color); /* sutil contraste */
+  background-color: var(--bg-hover-color);
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);

@@ -42,6 +42,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
   const [showFullBody, setShowFullBody] = useState(false);
 
   const [formData, setFormData] = useState({
+    title: anuncio.title || '',
     body: anuncio.body || '',
     priority: anuncio.priority ?? 1,
     publishedBy: JSON.parse(localStorage.getItem('identity'))?.user?.userId,
@@ -50,6 +51,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
   useEffect(() => {
     if (!editMode) {
       setFormData({
+        title: anuncio.title || '',
         body: anuncio.body || '',
         priority: anuncio.priority ?? 1,
         publishedBy: JSON.parse(localStorage.getItem('identity'))?.user?.userId,
@@ -61,7 +63,7 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
     setEditMode(true);
   };
 
-  const handleDelete = () => typeof onDelete === 'function' && onDelete(anuncio.announceId);
+  const handleDelete = () => typeof onDelete === 'function' && onDelete(anuncio.announcementId);
 
   const handleCancel = () => {
     if (createMode && onCancel) return onCancel();
@@ -69,11 +71,13 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
   };
 
   const handleSave = () => {
+    const sanitizedTitle = DOMPurify.sanitize(formData.title);
     const sanitizedBody = DOMPurify.sanitize(formData.body);
+    formData.title = sanitizedTitle;
     formData.body = sanitizedBody;
     const updated = { ...anuncio, ...formData };
     if (createMode && typeof onCreate === 'function') return onCreate(updated);
-    if (typeof onUpdate === 'function') return onUpdate(updated, anuncio.announceId);
+    if (typeof onUpdate === 'function') return onUpdate(updated, anuncio.announcementId);
   };
 
   const handleChange = (field, value) => setFormData((prev) => ({ ...prev, [field]: value }));
@@ -97,11 +101,20 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
     <Card className="anuncio-card rounded-4 border-0 shadow-sm mb-4">
       <Card.Header className="d-flex justify-content-between align-items-center rounded-top-4 px-3 py-2">
         <div className="d-flex flex-column">
-          <span className="fw-bold">📢&emsp;Anuncio {!createMode ? ("#"+anuncio.idx) : ("")}</span>
+          {editMode || createMode ? (
+            <>
+              <Form.Control 
+                className="themed-input" 
+                size="sm"
+                value={formData.title} 
+                onChange={(e) => handleChange('title', e.target.value)} 
+                style={{ maxWidth: '220px' }} 
+              />
+            </>
+          ) : <span className="fw-bold">📢&nbsp;&nbsp;{anuncio.title}</span>}
           {!createMode ? (
             <small className="muted">
-              Publicado el {date} a las {time} por{' '}
-              <span className="fw-semibold">{anuncio.publishedByName}</span>
+              El {date} a las {time} por {anuncio.publisherPosition}
             </small>
           ) : (
             <></>
@@ -163,15 +176,15 @@ const AnuncioCard = ({ anuncio, isNew = false, onCreate, onUpdate, onDelete, onC
             <div className="mb-2" dangerouslySetInnerHTML={{ __html: displayBody }} />
 
             {isLongBody && (
-              <Button variant='info'
-                className="fw-medium text-dark mt-2"
+              <span 
+                className='read-more'
                 onClick={(e) => {
                   e.preventDefault();
                   setShowFullBody((prev) => !prev);
                 }}
               >
                 {showFullBody ? 'Leer menos' : 'Leer más'}
-              </Button>
+              </span>
             )}
           </>
         )}

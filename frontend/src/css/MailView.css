@@ -30,7 +30,6 @@
   line-height: 1.6;
 }
 
-/* Estilos mejorados para contenido HTML rico */
 .mail-content {
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.6;
@@ -38,7 +37,6 @@
   overflow-wrap: break-word;
 }
 
-/* Enlaces */
 .mail-content a {
   color: #0066cc;
   text-decoration: underline;
@@ -54,7 +52,6 @@
   color: #551a8b;
 }
 
-/* Imágenes */
 .mail-content img {
   max-width: 100%;
   height: auto;
@@ -64,7 +61,6 @@
   display: block;
 }
 
-/* Tablas */
 .mail-content table {
   width: 100%;
   border-collapse: collapse;
@@ -84,7 +80,6 @@
   font-weight: 600;
 }
 
-/* Listas */
 .mail-content ul,
 .mail-content ol {
   margin: 16px 0;
@@ -95,7 +90,6 @@
   margin: 4px 0;
 }
 
-/* Párrafos y espaciado */
 .mail-content p {
   margin: 16px 0;
 }
@@ -108,7 +102,6 @@
   margin-bottom: 0;
 }
 
-/* Encabezados */
 .mail-content h1,
 .mail-content h2,
 .mail-content h3,
@@ -126,7 +119,6 @@
   margin-top: 0;
 }
 
-/* Citas */
 .mail-content blockquote {
   margin: 16px 0;
   padding: 12px 16px;
@@ -136,7 +128,6 @@
   border-radius: 0 4px 4px 0;
 }
 
-/* Código */
 .mail-content code {
   background-color: var(--surface-color);
   padding: 2px 4px;
@@ -158,14 +149,12 @@
   padding: 0;
 }
 
-/* Divisores */
 .mail-content hr {
   border: none;
   border-top: 1px solid var(--divider-color);
   margin: 24px 0;
 }
 
-/* Texto en negrita y cursiva */
 .mail-content strong,
 .mail-content b {
   font-weight: 600;
@@ -176,7 +165,6 @@
   font-style: italic;
 }
 
-/* Adjuntos mejorados */
 .mail-attachments {
   margin-top: 24px;
   padding-top: 16px;
@@ -221,7 +209,6 @@
   margin-left: auto;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .mail-view {
     padding: 1rem;
