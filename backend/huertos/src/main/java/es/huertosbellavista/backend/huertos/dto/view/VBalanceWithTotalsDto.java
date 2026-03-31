@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public class VBalanceWithTotalsDto {
-    private Byte id;
+    private Short year;
     private BigDecimal initialBank;
     private BigDecimal initialCash;
     private BigDecimal totalBankExpenses;
@@ -13,12 +13,29 @@ public class VBalanceWithTotalsDto {
     private BigDecimal totalCashIncomes;
     private Instant createdAt;
 
-    public Byte getId() {
-        return id;
+    public VBalanceWithTotalsDto() {
     }
 
-    public void setId(Byte id) {
-        this.id = id;
+    public VBalanceWithTotalsDto(Short year, BigDecimal initialBank, BigDecimal initialCash,
+                                 BigDecimal totalBankExpenses, BigDecimal totalCashExpenses,
+                                 BigDecimal totalBankIncomes, BigDecimal totalCashIncomes,
+                                 Instant createdAt) {
+        this.year = year;
+        this.initialBank = initialBank;
+        this.initialCash = initialCash;
+        this.totalBankExpenses = totalBankExpenses;
+        this.totalCashExpenses = totalCashExpenses;
+        this.totalBankIncomes = totalBankIncomes;
+        this.totalCashIncomes = totalCashIncomes;
+        this.createdAt = createdAt;
+    }
+
+    public Short getYear() {
+        return year;
+    }
+
+    public void setYear(Short year) {
+        this.year = year;
     }
 
     public BigDecimal getInitialBank() {

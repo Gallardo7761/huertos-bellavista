@@ -39,7 +39,9 @@
             },
             "balance": {
                 "all": "/balance",
-                "withTotals": "/balance/with-totals"
+                "byYear": "/balance/:year",
+                "withTotals": "/balance/with-totals/:year",
+                "years": "/balance/years"
             },
             "announcements": {
                 "all": "/announcements",

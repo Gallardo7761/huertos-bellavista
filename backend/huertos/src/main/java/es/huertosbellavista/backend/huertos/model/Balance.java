@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 public class Balance {
 	
 	@Id
-    private Byte id = 1;
+    private Short year;
 
     @Column(name = "initial_bank", nullable = false)
     private BigDecimal initialBank;
@@ -24,12 +24,12 @@ public class Balance {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-	public Byte getId() {
-		return id;
+	public Short getYear() {
+		return year;
 	}
 
-	public void setId(Byte id) {
-		this.id = id;
+	public void setYear(Short year) {
+		this.year = year;
 	}
 
 	public BigDecimal getInitialBank() {

@@ -7,7 +7,7 @@ public class VBalanceWithTotalsMapper {
 
     public static VBalanceWithTotalsDto toDto(VBalanceWithTotals entity) {
         VBalanceWithTotalsDto dto = new VBalanceWithTotalsDto();
-        dto.setId(entity.getId());
+        dto.setYear(entity.getYear());
         dto.setInitialBank(entity.getInitialBank());
         dto.setInitialCash(entity.getInitialCash());
         dto.setTotalBankExpenses(entity.getTotalBankExpenses());

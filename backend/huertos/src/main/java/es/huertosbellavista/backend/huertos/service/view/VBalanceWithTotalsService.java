@@ -2,6 +2,7 @@ package es.huertosbellavista.backend.huertos.service.view;
 
 import java.util.List;
 
+import net.miarma.backlib.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -21,4 +22,6 @@ public class VBalanceWithTotalsService {
     public List<VBalanceWithTotals> getAll() {
         return repository.findAll();
     }
+
+    public VBalanceWithTotals getByYear(Short year) { return repository.findByYear(year).orElseThrow(() -> new NotFoundException("Balance no encontrado para el año " + year)); }
 }

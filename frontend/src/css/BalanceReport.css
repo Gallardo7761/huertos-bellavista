@@ -42,14 +42,5 @@
   font-weight: 500;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background-color: var(--btn-bg);
-  color: var(--btn-text);
-  
-}
-
-.print-btn:hover {
-  background-color: var(--btn-bg-hover);
-  color: var(--btn-text-hover);
-  border: 1px solid var(--border-color);
+  gap: 0.5rem;  
 }

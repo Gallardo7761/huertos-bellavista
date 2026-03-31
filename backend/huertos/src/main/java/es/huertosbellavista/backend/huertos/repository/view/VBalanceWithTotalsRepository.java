@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface VBalanceWithTotalsRepository extends Repository<VBalanceWithTotals, Byte> {
     List<VBalanceWithTotals> findAll();
-    Optional<VBalanceWithTotals> findById(Byte id);
+    Optional<VBalanceWithTotals> findByYear(Short year);
 }

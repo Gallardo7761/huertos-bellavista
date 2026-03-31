@@ -15,7 +15,7 @@ import java.time.Instant;
 public class VBalanceWithTotals {
 
     @Id
-    private Byte id;
+    private Short year;
 
     @Column(name = "initial_bank")
     private BigDecimal initialBank;
@@ -38,8 +38,8 @@ public class VBalanceWithTotals {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    public Byte getId() {
-        return id;
+    public Short getYear() {
+        return year;
     }
 
     public BigDecimal getInitialBank() {

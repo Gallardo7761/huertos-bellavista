@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Card, Button, Row, Col, Container } from 'react-bootstrap';
+import { Card, Button, Row, Col, Container, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPiggyBank,
   faCoins,
   faArrowDown,
   faArrowUp,
-  faPrint,
-  faClock
+  faClock,
+  faFilePdf
 } from '@fortawesome/free-solid-svg-icons';
 import PDFModal from '../PDFModal';
 import { BalancePDF } from './BalancePDF';
@@ -17,7 +17,7 @@ import '../../css/BalanceReport.css';
 const formatCurrency = (value) =>
   new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
 
-const BalanceReport = ({ balance }) => {
+const BalanceReport = ({ balance, years, selectedYear, onYearChange }) => {
   const [showPDF, setShowPDF] = useState(false);
 
   const showPDFModal = () => setShowPDF(true);
@@ -45,10 +45,29 @@ const BalanceReport = ({ balance }) => {
               <h1 className="report-title m-0">📊 Informe de Balance</h1>
             </Col>
             <Col xs="12" md="auto" className="text-center text-md-end">
-              <Button className="print-btn" onClick={showPDFModal}>
-                <FontAwesomeIcon icon={faPrint} className="me-2" />
-                Imprimir PDF
-              </Button>
+              <div className="d-flex justify-content-center justify-content-md-end align-items-center gap-2">
+                <Button
+                  className="print-btn d-flex align-items-center btn-danger"
+                  onClick={showPDFModal}
+                  style={{ height: '38px' }}
+                >
+                  <FontAwesomeIcon icon={faFilePdf} className="me-2" />
+                  Exportar
+                </Button>
+                <Form.Select
+                  className="themed-input m-0"
+                  size="sm"
+                  value={selectedYear}
+                  onChange={(e) => onYearChange(e.target.value)}
+                  style={{
+                    maxWidth: '100px',
+                    height: '38px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {years.map(y => <option key={y} value={y}>{y}</option>)}
+                </Form.Select>
+              </div>
             </Col>
           </Row>
 

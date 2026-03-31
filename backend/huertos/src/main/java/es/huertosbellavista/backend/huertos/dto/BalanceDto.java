@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public class BalanceDto {
-    private Byte id;
+    private Short year;
     private BigDecimal initialBank;
     private BigDecimal initialCash;
     private Instant createdAt;
 
-    public Byte getId() {
-        return id;
+    public Short getYear() {
+        return year;
     }
 
-    public void setId(Byte id) {
-        this.id = id;
+    public void setYear(Short year) {
+        this.year = year;
     }
 
     public BigDecimal getInitialBank() {

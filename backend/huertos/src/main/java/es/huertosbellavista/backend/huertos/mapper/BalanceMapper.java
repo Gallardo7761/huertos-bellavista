@@ -9,7 +9,7 @@ public class BalanceMapper {
         if (balance == null) return null;
 
         BalanceDto dto = new BalanceDto();
-        dto.setId(balance.getId());
+        dto.setYear(balance.getYear());
         dto.setInitialBank(balance.getInitialBank());
         dto.setInitialCash(balance.getInitialCash());
         dto.setCreatedAt(balance.getCreatedAt());
@@ -20,7 +20,7 @@ public class BalanceMapper {
         if (dto == null) return null;
 
         Balance balance = new Balance();
-        balance.setId(dto.getId());
+        balance.setYear(dto.getYear());
         balance.setInitialBank(dto.getInitialBank());
         balance.setInitialCash(dto.getInitialCash());
         balance.setCreatedAt(dto.getCreatedAt());
