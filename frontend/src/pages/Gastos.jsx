@@ -19,6 +19,9 @@ import { CONSTANTS } from '../util/constants';
 import CustomModal from '../components/CustomModal';
 import { Button } from 'react-bootstrap';
 import { useError } from '../context/ErrorContext';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AnimatedDropdown from '../components/AnimatedDropdown';
 
 const PAGE_SIZE = 10;
 
@@ -47,6 +50,7 @@ const GastosContent = ({ reqConfig }) => {
   const [tempGasto, setTempGasto] = useState(null);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [fieldErrors, setFieldErrors] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   const {
     filtered,
@@ -78,6 +82,14 @@ const GastosContent = ({ reqConfig }) => {
       );
     }
   });
+
+  const availableYears = data
+    ? [...new Set(data.map(exp => new Date(exp.createdAt).getFullYear()))].sort((a, b) => b - a)
+    : [new Date().getFullYear()];
+
+  const pdfExpenses = filtered.filter(exp =>
+    new Date(exp.createdAt).getFullYear() === parseInt(selectedYear)
+  );
 
   const handleCreate = () => {
     setCreatingGasto(true);
@@ -126,6 +138,41 @@ const GastosContent = ({ reqConfig }) => {
     setFieldErrors(null);
   };
 
+  const handleYearPDF = (year) => {
+    setSelectedYear(year);
+    setShowPDFModal(true);
+  };
+
+  const YearDropdownContent = ({ closeDropdown }) => {
+    return (
+      <>
+        <div className="dropdown-item d-flex align-items-center py-2" style={{ pointerEvents: 'none' }}>
+          <span className="fw-bold text-uppercase" style={{ fontSize: '0.75rem', color: 'var(--muted-color)', letterSpacing: '0.5px' }}>
+            Seleccionar Año
+          </span>
+        </div>
+
+        <hr className="dropdown-divider" />
+
+        {availableYears.map((y) => (
+          <div
+            key={y}
+            className="dropdown-item d-flex align-items-center py-2"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              handleYearPDF(y);
+              closeDropdown?.();
+            }}
+          >
+            <label className="m-0" style={{ cursor: 'pointer', width: '100%' }}>
+              Gastos {y}
+            </label>
+          </div>
+        ))}
+      </>
+    );
+  };
+
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
 
   return (
@@ -142,7 +189,14 @@ const GastosContent = ({ reqConfig }) => {
           onSearchChange={setSearchTerm}
           filtersComponent={<GastosFilter filters={filters} onChange={setFilters} />}
           onCreate={handleCreate}
-          onPDF={() => setShowPDFModal(true)}
+          pdfComponent={
+            <AnimatedDropdown
+              variant="transparent"
+              icon={<FontAwesomeIcon icon={faFilePdf} className='fa-md' />}
+            >
+              <YearDropdownContent />
+            </AnimatedDropdown>
+          }
         />
 
         <PaginatedCardGrid
@@ -169,7 +223,7 @@ const GastosContent = ({ reqConfig }) => {
         />
 
         <PDFModal show={showPDFModal} onClose={() => setShowPDFModal(false)} title="Vista previa del PDF">
-          <GastosPDF gastos={filtered} />
+          <GastosPDF gastos={pdfExpenses} year={selectedYear} />
         </PDFModal>
 
         <CustomModal

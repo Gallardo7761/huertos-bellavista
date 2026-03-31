@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { CONSTANTS } from '../util/constants';
 import IfRole from './Auth/IfRole';
 
-const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate, onPDF }) => (
+const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate, onPDF, pdfComponent }) => (
     <div className="sticky-toolbar search-toolbar-wrapper">
         <div className="search-toolbar">
             <input
@@ -26,6 +26,11 @@ const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate,
                         <Button variant="transparent" onClick={onPDF}>
                             <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
                         </Button>
+                    </IfRole>
+                )}
+                {pdfComponent && (
+                    <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+                        {pdfComponent}
                     </IfRole>
                 )}
                 {onCreate && (

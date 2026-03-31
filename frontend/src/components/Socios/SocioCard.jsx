@@ -164,6 +164,13 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
     fetchLastNumber();
   }, [createMode, editMode, getData]);
 
+  useEffect(() => {
+    if (formData.deactivatedAt && formData.status !== 0) {
+      setFormData(prev => ({ ...prev, status: 0 }));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.deactivatedAt]);
+
   const handleEdit = () => {
     setEditMode(true);
   };
@@ -209,6 +216,8 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
         deactivatedAt: formData.deactivatedAt || null
       }
     };
+
+    const finalStatus = formData.deactivatedAt ? 0 : formData.status;
     const updatedSocio = {
       user: {
         ...identity.user,
@@ -216,7 +225,7 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
       },
       account: {
         ...identity.account,
-        status: formData.status
+        status: finalStatus
       },
       metadata: {
         ...identity.metadata,
@@ -227,6 +236,9 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
         notes: formData.notes
       }
     };
+
+    console.log(updatedSocio);
+
     if (createMode && typeof onCreate === 'function') return onCreate(newSocio);
     if (typeof onUpdate === 'function') return onUpdate(updatedSocio, identity.user.userId);
   };

@@ -6,7 +6,7 @@ import cleanPlugin from 'vite-plugin-clean';
 export default defineConfig({
   plugins: [react(), cleanPlugin()],
   server: {
-    host: "0.0.0.0",
+    host: "localhost",
     port: 3000,
   },
   build: {

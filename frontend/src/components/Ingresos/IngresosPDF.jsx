@@ -75,13 +75,13 @@ const parseDate = (iso) => {
 const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? 'Banco' : 'Caja';
 const getFreqLabel = (freq) => freq === CONSTANTS.PAYMENT_FREQUENCY_BIYEARLY ? 'Semestral' : 'Anual';
 
-export const IngresosPDF = ({ ingresos }) => (
+export const IngresosPDF = ({ ingresos, year }) => (
   <Document>
     <Page size="A4" orientation="landscape" style={styles.page}>
       <View style={styles.headerContainer}>
         <Image src="/images/logo.png" style={styles.logo} />
         <View style={styles.headerText}>
-          <Text style={styles.header}>Listado de ingresos</Text>
+          <Text style={styles.header}>Listado de Ingresos - Año {year}</Text>
           <Text style={styles.subHeader}>Asociación Huertos La Salud - Bellavista • Generado el {new Date().toLocaleDateString()} a las {new Date().toLocaleTimeString()}</Text>
         </View>
       </View>

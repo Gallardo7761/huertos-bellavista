@@ -18,8 +18,11 @@ import { CONSTANTS } from '../util/constants';
 
 import '../css/Ingresos.css';
 import CustomModal from '../components/CustomModal';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useError } from '../context/ErrorContext';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import AnimatedDropdown from '../components/AnimatedDropdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const PAGE_SIZE = 10;
 
@@ -51,6 +54,7 @@ const IngresosContent = ({ reqConfig }) => {
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [fieldErrors, setFieldErrors] = useState(null);
   const [dropdown, setDropdown] = useState(new Map());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,6 +114,14 @@ const IngresosContent = ({ reqConfig }) => {
     }
   });
 
+  const availableYears = data
+    ? [...new Set(data.map(ing => new Date(ing.createdAt).getFullYear()))].sort((a, b) => b - a)
+    : [new Date().getFullYear()];
+
+  const pdfIncomes = filtered.filter(ing =>
+    new Date(ing.createdAt).getFullYear() === parseInt(selectedYear)
+  );
+
   const handleCreate = () => {
     if (dropdown.size === 0) return;
     const firstEntry = dropdown.entries().next().value;
@@ -161,6 +173,41 @@ const IngresosContent = ({ reqConfig }) => {
     setDeleteTargetId(id);
   };
 
+  const handleYearPDF = (year) => {
+    setSelectedYear(year);
+    setShowPDFModal(true);
+  };
+
+  const YearDropdownContent = ({ closeDropdown }) => {
+    return (
+      <>
+        <div className="dropdown-item d-flex align-items-center py-2" style={{ pointerEvents: 'none' }}>
+          <span className="fw-bold text-uppercase" style={{ fontSize: '0.75rem', color: 'var(--muted-color)', letterSpacing: '0.5px' }}>
+            Seleccionar Año
+          </span>
+        </div>
+
+        <hr className="dropdown-divider" />
+
+        {availableYears.map((y) => (
+          <div
+            key={y}
+            className="dropdown-item d-flex align-items-center py-2"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              handleYearPDF(y);
+              closeDropdown?.();
+            }}
+          >
+            <label className="m-0" style={{ cursor: 'pointer', width: '100%' }}>
+              Ingresos {y}
+            </label>
+          </div>
+        ))}
+      </>
+    );
+  };
+
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
 
   return (
@@ -176,7 +223,15 @@ const IngresosContent = ({ reqConfig }) => {
           onSearchChange={setSearchTerm}
           filtersComponent={<IngresosFilter filters={filters} onChange={setFilters} />}
           onCreate={dropdown.size > 0 ? handleCreate : null}
-          onPDF={() => setShowPDFModal(true)}
+          pdfComponent={
+            <AnimatedDropdown
+              variant="transparent"
+              icon={<FontAwesomeIcon icon={faFilePdf} className='fa-md' />}
+            >
+              <YearDropdownContent />
+            </AnimatedDropdown>
+          }
+
         />
 
         <PaginatedCardGrid
@@ -203,8 +258,8 @@ const IngresosContent = ({ reqConfig }) => {
           )}
         />
 
-        <PDFModal show={showPDFModal} onClose={() => setShowPDFModal(false)} title="Vista previa del PDF">
-          <IngresosPDF ingresos={filtered} />
+        <PDFModal show={showPDFModal} onClose={() => setShowPDFModal(false)} title={`Ingresos del año ${selectedYear}`}>
+          <IngresosPDF ingresos={pdfIncomes} year={selectedYear} />
         </PDFModal>
 
         <CustomModal

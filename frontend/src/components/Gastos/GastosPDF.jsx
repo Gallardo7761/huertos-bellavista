@@ -74,13 +74,13 @@ const parseDate = (iso) => {
 
 const getTypeLabel = (type) => type === CONSTANTS.PAYMENT_TYPE_BANK ? 'Banco' : 'Caja';
 
-export const GastosPDF = ({ gastos }) => (
+export const GastosPDF = ({ gastos, year }) => (
   <Document>
     <Page size="A4" orientation="landscape" style={styles.page}>
       <View style={styles.headerContainer}>
         <Image src="/images/logo.png" style={styles.logo} />
         <View style={styles.headerText}>
-          <Text style={styles.header}>Listado de Gastos</Text>
+          <Text style={styles.header}>Listado de Gastos - Año {year}</Text>
           <Text style={styles.subHeader}>Asociación Huertos La Salud - Bellavista • Generado el {new Date().toLocaleDateString()} a las {new Date().toLocaleTimeString()}</Text>
         </View>
       </View>
