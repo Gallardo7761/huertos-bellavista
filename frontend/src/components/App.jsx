@@ -19,8 +19,8 @@ import Documentacion from '../pages/Documentacion'
 
 import { CONSTANTS } from '../util/constants'
 import Perfil from '../pages/Perfil.jsx'
-import Correo from '../pages/Correo.jsx'
 import Maintenance from './Maintenance/Maintenance.jsx'
+import NotFound404 from './NotFound404.jsx'
 
 function App() {
   const { modal: sessionModal } = useSessionRenewal();
@@ -74,12 +74,7 @@ function App() {
             <Perfil />
           </ProtectedRoute>
         } />
-        <Route path="/correo" element={
-          <ProtectedRoute minimumRoles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
-            <Correo />
-          </ProtectedRoute>
-        } />
-        <Route path="/*" element={<Maintenance />} />
+        <Route path="/*" element={<NotFound404 />} />
       </Routes>
       {routesWithFooter.includes(useLocation().pathname) ? <Footer /> : null}
       {sessionModal}

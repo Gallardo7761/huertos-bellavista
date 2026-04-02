@@ -56,10 +56,6 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
         </span>&nbsp;
         Solicitudes
       </Link>
-
-      <Link to="/correo" className="dropdown-item nav-link" onClick={onNavigate}>
-        <FontAwesomeIcon icon={faEnvelope} className="me-2" />Correo
-      </Link>
     </AnimatedDropdown>
   );
 };
