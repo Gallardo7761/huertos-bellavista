@@ -1,6 +1,7 @@
     package es.huertosbellavista.backend.huertos.service;
 
     import es.huertosbellavista.backend.huertos.client.HuertosWebClient;
+    import es.huertosbellavista.backend.huertos.common.TriTuple;
     import es.huertosbellavista.backend.huertos.dto.*;
     import es.huertosbellavista.backend.huertos.dto.*;
     import es.huertosbellavista.backend.huertos.dto.view.VIncomesWithInfoDto;
@@ -211,5 +212,15 @@
                 throw new RuntimeException("No se pudo actualizar el socio");
             }
             return changes;
+        }
+
+        public List<TriTuple<String, Integer, String>> getAllContactsForEmail() {
+            return getAll().stream()
+                .map(m -> new TriTuple<>(
+                    m.user().getDisplayName(),
+                    m.metadata().getMemberNumber(),
+                    m.account().getEmail()
+                ))
+                .toList();
         }
     }

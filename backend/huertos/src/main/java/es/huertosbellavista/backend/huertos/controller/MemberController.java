@@ -1,5 +1,6 @@
 package es.huertosbellavista.backend.huertos.controller;
 
+import es.huertosbellavista.backend.huertos.common.TriTuple;
 import es.huertosbellavista.backend.huertos.dto.DropdownDto;
 import es.huertosbellavista.backend.huertos.dto.MemberDto;
 import es.huertosbellavista.backend.huertos.dto.MemberProfileDto;
@@ -7,12 +8,19 @@ import es.huertosbellavista.backend.huertos.dto.WaitlistCensoredDto;
 import es.huertosbellavista.backend.huertos.dto.*;
 import es.huertosbellavista.backend.huertos.dto.view.VIncomesWithInfoDto;
 import es.huertosbellavista.backend.huertos.security.HuertosPrincipal;
+import es.huertosbellavista.backend.huertos.service.EmailExportService;
 import es.huertosbellavista.backend.huertos.service.MemberService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,9 +29,11 @@ import java.util.UUID;
 public class MemberController {
 
     private final MemberService memberService;
+    private final EmailExportService emailExportService;
 
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, EmailExportService emailExportService) {
         this.memberService = memberService;
+        this.emailExportService = emailExportService;
     }
 
     @GetMapping
@@ -118,6 +128,42 @@ public class MemberController {
     @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
     public ResponseEntity<MemberDto> getByDni(@PathVariable("dni") String dni) {
         return ResponseEntity.ok(memberService.getByDni(dni));
+    }
+
+    @GetMapping("/email/export")
+    @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
+    public ResponseEntity<byte[]> exportEmails(
+        @RequestParam(defaultValue = "false") boolean diffOnly
+    ) {
+        List<TriTuple<String, Integer, String>> allContacts = memberService.getAllContactsForEmail();
+
+        List<TriTuple<String, Integer, String>> toExport;
+
+        if (diffOnly) {
+            List<String> lastEmails = emailExportService.loadLastSnapshot();
+            toExport = emailExportService.getNewContacts(allContacts, lastEmails);
+        } else {
+            toExport = allContacts;
+        }
+
+        String csv = emailExportService.generateCsv(toExport);
+
+        try {
+            emailExportService.saveSnapshot(emailExportService.generateCsv(allContacts));
+        } catch (IOException e) {
+            throw new RuntimeException("Error exportando correos");
+        }
+
+        return buildFileResponse(csv);
+    }
+
+    private ResponseEntity<byte[]> buildFileResponse(String csvContent) {
+        byte[] is = csvContent.getBytes(StandardCharsets.UTF_8);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("text/csv"));
+        headers.setContentDispositionFormData("attachment", "emails.csv");
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        return new ResponseEntity<>(is, headers, HttpStatus.OK);
     }
 
     @PutMapping("/{user_id:[0-9a-fA-F\\-]{36}}")

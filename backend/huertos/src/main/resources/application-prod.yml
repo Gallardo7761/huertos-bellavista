@@ -22,6 +22,8 @@ huertos:
   password: ${HUERTOS_PASS}
 
 mail:
+  list:
+    path: /data/emails.csv
   smtp:
     server: smtp.huertosbellavista.es
     port: 587
