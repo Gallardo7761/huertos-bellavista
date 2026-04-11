@@ -101,10 +101,8 @@ const SolicitudesContent = ({ reqConfig }) => {
         <SearchToolbar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          hideCreate
-          hidePDF
         />
-
+            
         <PaginatedCardGrid
           items={filtered}
           renderCard={(entry, idx) => (

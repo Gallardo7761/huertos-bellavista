@@ -19,6 +19,10 @@ import IngresoCard from '../components/Ingresos/IngresoCard';
 import '../css/Socios.css';
 import { Button } from 'react-bootstrap';
 import { useError } from '../context/ErrorContext';
+import { faAt, faFilePdf, faFilter } from '@fortawesome/free-solid-svg-icons';
+import AnimatedDropdown from '../components/AnimatedDropdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SociosExportarCorreo from '../components/Socios/SociosExportarCorreo';
 
 const PAGE_SIZE = 10;
 
@@ -144,7 +148,7 @@ const SociosContent = ({ reqConfig }) => {
   const handleEditSubmit = async (updatedSocio, userId) => {
     console.log(updatedSocio);
     try {
-      await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio, true); 
+      await putData(`${reqConfig.baseUrl}/${userId}`, updatedSocio, true);
     } catch (err) {
       if (err?.status === 422 && err?.errors) {
         setFieldErrors(err.errors);
@@ -188,6 +192,14 @@ const SociosContent = ({ reqConfig }) => {
   const showPDFPopup = () => setShowPDFModal(true);
   const closePDFPopup = () => setShowPDFModal(false);
 
+  const handleExportAll = () => {
+    
+  }
+
+  const handleExportNew = () => {
+
+  }
+
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
 
   return (
@@ -202,10 +214,20 @@ const SociosContent = ({ reqConfig }) => {
         <SearchToolbar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          filtersComponent={<SociosFilter filters={filters} onChange={setFilters} />}
-          //onCreate={handleCreate}
-          onPDF={showPDFPopup}
-        />
+        >
+          <AnimatedDropdown variant='transparent' icon={<FontAwesomeIcon icon={faAt} className='fa-md' />}>
+            <SociosExportarCorreo 
+              onAll={handleExportAll} 
+              onNew={handleExportNew} 
+            />
+          </AnimatedDropdown>
+          <AnimatedDropdown variant="transparent" icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}>
+            <SociosFilter filters={filters} onChange={setFilters} />
+          </AnimatedDropdown>
+          <Button variant="transparent" onClick={showPDFPopup}>
+            <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
+          </Button>
+        </SearchToolbar>
 
         <PaginatedCardGrid
           items={filtered}
@@ -223,7 +245,7 @@ const SociosContent = ({ reqConfig }) => {
             const position = identity.metadata.type === 0
               ? listaEsperaOrdenada.findIndex(i => i.user.userId === identity.user.userId) + 1
               : null;
-          
+
             return (
               <SocioCard
                 key={identity.user.userId}
@@ -237,7 +259,7 @@ const SociosContent = ({ reqConfig }) => {
               />
             );
           }}
-          
+
         />
       </ContentWrapper>
 

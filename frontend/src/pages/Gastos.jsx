@@ -19,7 +19,7 @@ import { CONSTANTS } from '../util/constants';
 import CustomModal from '../components/CustomModal';
 import { Button } from 'react-bootstrap';
 import { useError } from '../context/ErrorContext';
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AnimatedDropdown from '../components/AnimatedDropdown';
 
@@ -38,7 +38,7 @@ const Gastos = () => {
 
   return (
     <DataProvider config={reqConfig} onError={showError}>
-      <GastosContent reqConfig={reqConfig}/>
+      <GastosContent reqConfig={reqConfig} />
     </DataProvider>
   );
 };
@@ -187,17 +187,20 @@ const GastosContent = ({ reqConfig }) => {
         <SearchToolbar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          filtersComponent={<GastosFilter filters={filters} onChange={setFilters} />}
-          onCreate={handleCreate}
-          pdfComponent={
-            <AnimatedDropdown
-              variant="transparent"
-              icon={<FontAwesomeIcon icon={faFilePdf} className='fa-md' />}
-            >
-              <YearDropdownContent />
-            </AnimatedDropdown>
-          }
-        />
+        >
+          <AnimatedDropdown variant="transparent" icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}>
+            <GastosFilter filters={filters} onChange={setFilters} />
+          </AnimatedDropdown>
+          <Button variant="transparent" onClick={handleCreate}>
+            <FontAwesomeIcon icon={faPlus} className='fa-md' />
+          </Button>
+          <AnimatedDropdown
+            variant="transparent"
+            icon={<FontAwesomeIcon icon={faFilePdf} className='fa-md' />}
+          >
+            <YearDropdownContent />
+          </AnimatedDropdown>
+        </SearchToolbar>
 
         <PaginatedCardGrid
           items={filtered}

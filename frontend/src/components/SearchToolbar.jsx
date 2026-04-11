@@ -1,11 +1,4 @@
-import { faFilter, faFilePdf, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AnimatedDropdown from './AnimatedDropdown';
-import Button from 'react-bootstrap/Button';
-import { CONSTANTS } from '../util/constants';
-import IfRole from './Auth/IfRole';
-
-const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate, onPDF, pdfComponent }) => (
+const SearchToolbar = ({ searchTerm, onSearchChange, children }) => (
     <div className="sticky-toolbar search-toolbar-wrapper">
         <div className="search-toolbar">
             <input
@@ -16,30 +9,7 @@ const SearchToolbar = ({ searchTerm, onSearchChange, filtersComponent, onCreate,
                 onChange={(e) => onSearchChange(e.target.value)}
             />
             <div className="toolbar-buttons">
-                {filtersComponent && (
-                    <AnimatedDropdown variant="transparent" icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}>
-                        {filtersComponent}
-                    </AnimatedDropdown>
-                )}
-                {onPDF && (
-                    <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
-                        <Button variant="transparent" onClick={onPDF}>
-                            <FontAwesomeIcon icon={faFilePdf} className='fa-md' />
-                        </Button>
-                    </IfRole>
-                )}
-                {pdfComponent && (
-                    <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
-                        {pdfComponent}
-                    </IfRole>
-                )}
-                {onCreate && (
-                    <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
-                        <Button variant="transparent" onClick={onCreate}>
-                            <FontAwesomeIcon icon={faPlus} className='fa-md' />
-                        </Button>
-                    </IfRole>
-                )}
+                {children}
             </div>
         </div>
     </div>

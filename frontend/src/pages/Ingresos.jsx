@@ -20,7 +20,7 @@ import '../css/Ingresos.css';
 import CustomModal from '../components/CustomModal';
 import { Button, Form } from 'react-bootstrap';
 import { useError } from '../context/ErrorContext';
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 import AnimatedDropdown from '../components/AnimatedDropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -221,18 +221,20 @@ const IngresosContent = ({ reqConfig }) => {
         <SearchToolbar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          filtersComponent={<IngresosFilter filters={filters} onChange={setFilters} />}
-          onCreate={dropdown.size > 0 ? handleCreate : null}
-          pdfComponent={
-            <AnimatedDropdown
-              variant="transparent"
-              icon={<FontAwesomeIcon icon={faFilePdf} className='fa-md' />}
-            >
-              <YearDropdownContent />
-            </AnimatedDropdown>
-          }
-
-        />
+        >
+          <AnimatedDropdown variant="transparent" icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}>
+            <IngresosFilter filters={filters} onChange={setFilters} />
+          </AnimatedDropdown>
+          <Button variant="transparent" onClick={dropdown.size > 0 ? handleCreate : null}>
+            <FontAwesomeIcon icon={faPlus} className='fa-md' />
+          </Button>
+          <AnimatedDropdown
+            variant="transparent"
+            icon={<FontAwesomeIcon icon={faFilePdf} className='fa-md' />}
+          >
+            <YearDropdownContent />
+          </AnimatedDropdown>
+        </SearchToolbar>
 
         <PaginatedCardGrid
           items={filtered}

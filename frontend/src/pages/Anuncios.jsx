@@ -16,6 +16,11 @@ import CustomModal from '../components/CustomModal';
 import { Button } from 'react-bootstrap';
 import { EditorProvider } from 'react-simple-wysiwyg';
 import { useError } from '../context/ErrorContext';
+import { CONSTANTS } from '../util/constants';
+import { faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import IfRole from '../components/Auth/IfRole';
+import AnimatedDropdown from '../components/AnimatedDropdown';
 
 const PAGE_SIZE = 10;
 
@@ -105,7 +110,7 @@ const AnunciosContent = ({ reqConfig }) => {
       await postData(reqConfig.baseUrl, nuevo);
       setCreatingAnuncio(false);
       setTempAnuncio(null);
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setTempAnuncio({ ...nuevo });
     }
@@ -133,9 +138,14 @@ const AnunciosContent = ({ reqConfig }) => {
         <SearchToolbar
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
-          filtersComponent={<AnunciosFilter filters={filters} onChange={setFilters} />}
-          onCreate={handleCreate}
-        />
+        >
+          <AnimatedDropdown variant="transparent" icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}>
+            <AnunciosFilter filters={filters} onChange={setFilters} />
+          </AnimatedDropdown>
+          <Button variant="transparent" onClick={handleCreate}>
+            <FontAwesomeIcon icon={faPlus} className='fa-md' />
+          </Button>
+        </SearchToolbar>
 
         <PaginatedCardGrid
           items={filtered}
@@ -153,7 +163,7 @@ const AnunciosContent = ({ reqConfig }) => {
           renderCard={(anuncio, idx) => (
             <AnuncioCard
               key={anuncio.announcementId}
-              anuncio={{...anuncio, idx: idx}}
+              anuncio={{ ...anuncio, idx: idx }}
               onUpdate={(a, id) => handleEditSubmit(a, id)}
               onDelete={() => handleDelete(anuncio.announcementId)}
             />
