@@ -4,6 +4,6 @@
 /frontend/dist/
 
 # backend
-/backend/.idea/
-/backend/target/
-/backend/.env
+/huertos-backend/.idea/
+/huertos-backend/target/
+/huertos-backend/.env

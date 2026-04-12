@@ -1,7 +1,7 @@
 {
     "apiConfig": {
-        "baseUrl": "http://localhost:8081/v2/huertos",
-        "coreUrl": "http://localhost:8080/v2/core",
+        "baseUrl": "http://localhost:10001/v2/huertos",
+        "coreUrl": "http://localhost:10000/v2/core",
         "endpoints": {
             "auth": {
                 "login": "/auth/login",
