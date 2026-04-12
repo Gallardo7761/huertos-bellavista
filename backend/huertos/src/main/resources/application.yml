@@ -1,6 +1,17 @@
+server:
+  port: ${SERVER_PORT:10001}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/v2/huertos}
+
 spring:
   application:
-    name: huertos-service
+    name: ${SPRING_APPLICATION_NAME:huertos-service}
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mariadb://mariadb:3306/huertos}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     open-in-view: false
@@ -16,7 +27,25 @@ spring:
     time-zone: Europe/Madrid
 
 jwt:
-  expiration-ms: 3600000
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:/home/jomaa/.config/backend/private.pem}
+  public-key-path: ${JWT_PUBLIC_KEY_PATH:/home/jomaa/.config/backend/public.pem}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN
+
+filesDir: ${FILES_DIR:/files}
+
+core:
+  url: ${CORE_URL:http://core:10000/v2/core}
+
+huertos:
+  user: ${HUERTOS_USER}
+  password: ${HUERTOS_PASS}
 
 management:
   endpoints:
