@@ -7,9 +7,12 @@ import {
   faGear, faUsers, faMoneyBill, faWallet, faFileInvoice,
   faEnvelope,
   faBellConcierge,
-  faPeopleGroup
+  faPeopleGroup,
+  faLink,
+  faExternalLink
 } from '@fortawesome/free-solid-svg-icons';
 import useRequestCount from '../../hooks/useRequestCount';
+import { Nav } from 'react-bootstrap';
 
 const NavGestion = ({ onNavigate, externalExpanded }) => {
   const [showing, setShowing] = useState(false);
@@ -56,6 +59,18 @@ const NavGestion = ({ onNavigate, externalExpanded }) => {
         </span>&nbsp;
         Solicitudes
       </Link>
+
+      <Nav.Link
+        as={Link}
+        to="#"
+        title="Correo Web"
+        className="dropdown-item nav-link"
+        onClick={() => window.open("https://mail.huertosbellavista.es", "_blank")}
+      >
+        <FontAwesomeIcon icon={faEnvelope} className="me-2" />
+        Correo Web
+        (<FontAwesomeIcon icon={faExternalLink} size='xs' />)
+      </Nav.Link>
     </AnimatedDropdown>
   );
 };

@@ -192,13 +192,45 @@ const SociosContent = ({ reqConfig }) => {
   const showPDFPopup = () => setShowPDFModal(true);
   const closePDFPopup = () => setShowPDFModal(false);
 
+  const downloadExport = async (isDiffOnly) => {
+    const url = `${reqConfig.baseUrl.replace('/users', '/users/email/export')}?diffOnly=${isDiffOnly}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Accept': 'text/csv'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('No se pudo descargar la lista de correos');
+      }
+
+      const blob = await response.blob();
+      const objectUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = objectUrl;
+      link.download = `emails_${isDiffOnly ? 'nuevos' : 'todos'}.csv`;
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(objectUrl);
+    } catch (err) {
+      console.error("No se pudo descargar la lista de correos: " + err);
+    }
+  };
+
   const handleExportAll = () => {
-    
-  }
+    downloadExport(false);
+  };
 
   const handleExportNew = () => {
-
-  }
+    downloadExport(true);
+  };
 
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
 
@@ -216,9 +248,9 @@ const SociosContent = ({ reqConfig }) => {
           onSearchChange={setSearchTerm}
         >
           <AnimatedDropdown variant='transparent' icon={<FontAwesomeIcon icon={faAt} className='fa-md' />}>
-            <SociosExportarCorreo 
-              onAll={handleExportAll} 
-              onNew={handleExportNew} 
+            <SociosExportarCorreo
+              onAll={handleExportAll}
+              onNew={handleExportNew}
             />
           </AnimatedDropdown>
           <AnimatedDropdown variant="transparent" icon={<FontAwesomeIcon icon={faFilter} className='fa-md' />}>
