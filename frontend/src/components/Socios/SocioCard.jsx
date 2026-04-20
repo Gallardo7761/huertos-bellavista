@@ -147,7 +147,7 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
 
         const latestNumber = import.meta.env.MODE === 'production' ?
           await getData("https://api.huertosbellavista.es/v2/huertos/users/latest-number", {}, false)
-          : await getData("http://localhost:8081/v2/huertos/users/latest-number", {}, false);
+          : await getData("http://localhost:10001/v2/huertos/users/latest-number", {}, false);
 
         const nuevoNumero = latestNumber + 1;
         setLatestNumber(nuevoNumero);

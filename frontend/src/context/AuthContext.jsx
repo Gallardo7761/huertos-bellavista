@@ -98,6 +98,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("identity");
+    sessionStorage.removeItem("popup_requests_shown");
     setIdentity(null);
     setToken(null);
     setAuthStatus("unauthenticated");

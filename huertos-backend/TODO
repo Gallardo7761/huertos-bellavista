@@ -1,5 +1,8 @@
 POR HACER --------------------------------
+- nº solicitudes pendientes popup (UI)
+- PUT email
 - documentación
+- notificaciones WhatsApp announcements
 - implementar urlParams para filtros
 
 RESUELTO ---------------------------------
@@ -18,3 +21,4 @@ RESUELTO ---------------------------------
 - dar de baja bien
 - rango de años en PDF
 - mail wrapper -> IMPLEMENTADO CON poste.io
+- incrementar nº socio en requests_metadata al aceptar

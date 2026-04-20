@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
-import Mapa3D from '../components/Mapa3D';
 import CustomContainer from '../components/CustomContainer';
 import ContentWrapper from '../components/ContentWrapper';
 import CustomCarousel from '../components/CustomCarousel';
+import Mapa from '../components/Mapa';
 
 const Home = () => {
   return (
@@ -56,17 +56,7 @@ const Home = () => {
         <ContentWrapper>
           <h1 className='section-title'>Dónde estamos</h1>
           <hr className='section-divider' />
-          <div className="embed-responsive embed-responsive-16by9 col-sm-12">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d852.9089299216993!2d-5.964801462716831!3d37.32821983433692!3m2!1i1024!2i768!4f13.1!5e1!3m2!1ses!2ses!4v1719902018700!5m2!1ses!2ses"
-              style={{ width: '100%', height: '60vh', border: 0 }}
-              allowFullScreen={false}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Ubicación del huerto"
-              className='rounded-4'
-            ></iframe>
-          </div>
+          <Mapa lat={37.3282} lng={-5.9648} />
         </ContentWrapper>
       </section>
     </CustomContainer>

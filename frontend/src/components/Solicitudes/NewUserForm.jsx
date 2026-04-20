@@ -29,7 +29,7 @@ const NewUserForm = ({ onSubmit, userType, plotNumber, fieldErrors }) => {
       try {
         const latestNumber = import.meta.env.MODE === 'production' ? 
         await getData("https://api.huertosbellavista.es/v2/huertos/users/latest-number", {}, false)
-        : await getData("http://localhost:8081/v2/huertos/users/latest-number", {}, false);
+        : await getData("http://localhost:10001/v2/huertos/users/latest-number", {}, false);
         setForm((prev) => ({
           ...prev,
           memberNumber: latestNumber + 1

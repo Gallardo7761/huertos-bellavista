@@ -21,6 +21,9 @@ import { CONSTANTS } from '../util/constants'
 import Perfil from '../pages/Perfil.jsx'
 import Maintenance from './Maintenance/Maintenance.jsx'
 import NotFound404 from './NotFound404.jsx'
+import IfAuthenticated from './Auth/IfAuthenticated.jsx'
+import IfRole from './Auth/IfRole.jsx'
+import SolicitudesPopup from './Solicitudes/SolicitudesPopup.jsx'
 
 function App() {
   const { modal: sessionModal } = useSessionRenewal();
@@ -78,6 +81,9 @@ function App() {
       </Routes>
       {routesWithFooter.includes(useLocation().pathname) ? <Footer /> : null}
       {sessionModal}
+      <IfRole roles={[CONSTANTS.ROLE_ADMIN, CONSTANTS.ROLE_DEV]}>
+        <SolicitudesPopup />
+      </IfRole>
     </>
   )
 }

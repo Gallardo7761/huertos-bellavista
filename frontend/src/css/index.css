@@ -559,3 +559,11 @@ button.custom-toggler {
   pointer-events: none;
   opacity: 0.6;
 }
+
+.leaflet-control-zoom-in > span  {
+  color: #333 !important;
+}
+
+.leaflet-control-zoom-out > span {
+  color: #333 !important;
+}
