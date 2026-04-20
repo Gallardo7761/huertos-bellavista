@@ -133,7 +133,7 @@ public class MemberController {
     @GetMapping("/email/export")
     @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
     public ResponseEntity<byte[]> exportEmails(
-        @RequestParam(defaultValue = "false") boolean diffOnly
+        @RequestParam(name = "diffOnly", defaultValue = "false") boolean diffOnly
     ) {
         List<TriTuple<String, Integer, String>> allContacts = memberService.getAllContactsForEmail();
 
@@ -149,9 +149,9 @@ public class MemberController {
         String csv = emailExportService.generateCsv(toExport);
 
         try {
-            emailExportService.saveSnapshot(emailExportService.generateCsv(allContacts));
+            emailExportService.saveSnapshot(csv);
         } catch (IOException e) {
-            throw new RuntimeException("Error exportando correos");
+            throw new RuntimeException("Error exportando correos: " + e.getMessage());
         }
 
         return buildFileResponse(csv);

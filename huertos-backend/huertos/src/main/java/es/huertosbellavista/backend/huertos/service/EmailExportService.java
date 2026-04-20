@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 @Service
 public class EmailExportService {
     @Value("${mail.list.path:/tmp/email}")
-    private Path LAST_EMAIL_LIST_PATH;
+    private String LAST_EMAIL_LIST_PATH_STRING;
 
     public String generateCsv(List<TriTuple<String, Integer, String>> contacts) {
         StringBuilder sb = new StringBuilder();
@@ -29,10 +29,11 @@ public class EmailExportService {
     }
 
     public List<String> loadLastSnapshot() {
-        if (!Files.exists(LAST_EMAIL_LIST_PATH)) {
+        Path path = Paths.get(LAST_EMAIL_LIST_PATH_STRING);
+        if (!Files.exists(path)) {
             return Collections.emptyList();
         }
-        try(Stream<String> lines = Files.lines(LAST_EMAIL_LIST_PATH)) {
+        try(Stream<String> lines = Files.lines(path)) {
             return lines
                     .skip(1)
                     .map(line -> line.split(",")[2])
@@ -43,10 +44,11 @@ public class EmailExportService {
     }
 
     public void saveSnapshot(String csvContent) throws IOException {
-        if (LAST_EMAIL_LIST_PATH.getParent() != null) {
-            Files.createDirectories(LAST_EMAIL_LIST_PATH.getParent());
+        Path path = Paths.get(LAST_EMAIL_LIST_PATH_STRING);
+        if (path.getParent() != null) {
+            Files.createDirectories(path.getParent());
         }
-        Files.writeString(LAST_EMAIL_LIST_PATH, csvContent, StandardCharsets.UTF_8);
+        Files.writeString(path, csvContent, StandardCharsets.UTF_8);
     }
 
     public List<TriTuple<String, Integer, String>> getNewContacts(

@@ -1,9 +1,6 @@
 POR HACER --------------------------------
-- rango de años en PDF
 - documentación
-- mail wrapper
 - implementar urlParams para filtros
-
 
 RESUELTO ---------------------------------
 - añadir colaborador desde perfil
@@ -19,3 +16,5 @@ RESUELTO ---------------------------------
 - createdAt custom en ing,gastos
 - editar createdAt
 - dar de baja bien
+- rango de años en PDF
+- mail wrapper -> IMPLEMENTADO CON poste.io
