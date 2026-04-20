@@ -1,23 +1,20 @@
 services:
   core:
-    image: eclipse-temurin:25-jdk
+    image: gallardo7761/java25-maven
     container_name: core
     restart: unless-stopped
-
     ports:
       - "127.0.0.1:10000:10000"
-
+      - "127.0.0.1:5005:5005"
     networks:
       - backend-dev-net
-
     volumes:
-      - ./core/target:/data
+      - ./:/data
+      - /home/jomaa/.m2:/root/.m2
       - /home/jomaa/.config/backend/private.pem:/etc/backend/private.pem:ro
       - /home/jomaa/.config/backend/public.pem:/etc/backend/public.pem:ro
-
     working_dir: /data
-    command: ["java", "-jar", "core-1.0.0.jar"]
-
+    command: ["sh", "./entrypoint-core.sh"]
     environment:
       - SERVER_PORT=${CORE_PORT}
       - SERVER_SERVLET_CONTEXT_PATH=${CORE_CONTEXT_PATH}
@@ -31,28 +28,25 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   huertos:
-    image: eclipse-temurin:25-jdk
+    image: gallardo7761/java25-maven
     container_name: huertos
     restart: unless-stopped
-
     ports:
       - "127.0.0.1:10001:10001"
-
+      - "127.0.0.1:5006:5006"
     networks:
       - backend-dev-net
-
     depends_on:
       - core
-
     volumes:
-      - ./huertos/target:/data
-      - ./uploads/huertos:/files
+      - ./:/data
+      - ./uploads:/files
+      - ./mail:/mail
+      - /home/jomaa/.m2:/root/.m2
       - /home/jomaa/.config/backend/private.pem:/etc/backend/private.pem:ro
       - /home/jomaa/.config/backend/public.pem:/etc/backend/public.pem:ro
-
     working_dir: /data
-    command: ["java", "-jar", "huertos-1.0.0.jar"]
-
+    command: ["sh", "./entrypoint-huertos.sh"]
     environment:
       - SERVER_PORT=${HUERTOS_PORT}
       - SERVER_SERVLET_CONTEXT_PATH=${HUERTOS_CONTEXT_PATH}
@@ -63,11 +57,11 @@ services:
       - JWT_PRIVATE_KEY_PATH=${JWT_PRIVATE_KEY_PATH}
       - JWT_PUBLIC_KEY_PATH=${JWT_PUBLIC_KEY_PATH}
       - JWT_EXPIRATION_MS=${JWT_EXPIRATION_MS}
-
       - CORE_URL=${CORE_URL}
       - HUERTOS_USER=${HUERTOS_USER}
       - HUERTOS_PASS=${HUERTOS_PASS}
-
+      - FILES_DIR=${FILES_DIR}
+      - MAIL_LIST_PATH=${MAIL_LIST_PATH}
       - SPRING_PROFILES_ACTIVE=dev
 
 networks:
