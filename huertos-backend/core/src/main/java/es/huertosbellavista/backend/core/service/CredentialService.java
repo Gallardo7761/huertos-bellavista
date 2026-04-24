@@ -114,8 +114,17 @@ public class CredentialService {
     public Credential update(UUID credentialId, Credential changes) {
         Credential cred = getById(credentialId);
 
+        if (changes.getEmail() != null && !changes.getEmail().matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            throw new ValidationException("email", "Formato de email no válido");
+        }
+        cred.setEmail(changes.getEmail());
+
+        if (changes.getPassword() != null && changes.getPassword().length() < 6) {
+            throw new ValidationException("password", "La contraseña tiene que tener al menos 6 caracteres");
+        }
+        cred.setPassword(passwordEncoder.encode(changes.getPassword()));
+
         if (changes.getUsername() != null) cred.setUsername(changes.getUsername());
-        if (changes.getEmail() != null) cred.setEmail(changes.getEmail());
         if (changes.getStatus() != null) cred.setStatus(changes.getStatus());
 
         int updated = credentialRepository.update(

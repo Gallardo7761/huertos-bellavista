@@ -1,6 +1,7 @@
 package es.huertosbellavista.backend.core.mapper;
 
 import es.huertosbellavista.backend.core.dto.UpdateCredentialDto;
+import es.huertosbellavista.backend.core.dto.UpdateFullCredentialDto;
 import es.huertosbellavista.backend.core.model.Credential;
 import net.miarma.backlib.dto.CreateCredentialDto;
 import net.miarma.backlib.dto.CredentialDto;
@@ -72,6 +73,22 @@ public class CredentialMapper {
         c.setUsername(dto.getUsername());
         c.setStatus(dto.getStatus());
 
+        return c;
+    }
+
+    public static Credential toEntity(UpdateFullCredentialDto dto) {
+        if (dto == null) return null;
+
+        Credential c = new Credential();
+        c.setCredentialId(dto.getCredentialId());
+        c.setUserId(dto.getUserId());
+        c.setServiceId(dto.getServiceId());
+        c.setUsername(dto.getUsername());
+        c.setPassword(dto.getPassword());
+        c.setEmail(dto.getEmail());
+        c.setStatus(dto.getStatus());
+        c.setCreatedAt(dto.getCreatedAt());
+        c.setUpdatedAt(dto.getUpdatedAt());
         return c;
     }
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import es.huertosbellavista.backend.core.dto.UpdateCredentialDto;
+import es.huertosbellavista.backend.core.dto.UpdateFullCredentialDto;
 import es.huertosbellavista.backend.core.mapper.CredentialMapper;
 import es.huertosbellavista.backend.core.security.CorePrincipal;
 import net.miarma.backlib.dto.*;
@@ -84,7 +85,7 @@ public class CredentialController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CredentialDto> updateFull(
             @PathVariable("credential_id") UUID credentialId,
-            @RequestBody CredentialDto dto
+            @RequestBody UpdateFullCredentialDto dto
     ) {
         return ResponseEntity.ok(
             CredentialMapper.toDto(
