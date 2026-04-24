@@ -1,6 +1,5 @@
 POR HACER --------------------------------
-- nº solicitudes pendientes popup (UI)
-- PUT email
+- mostrar pass al aceptar req
 - documentación
 - notificaciones WhatsApp announcements
 - implementar urlParams para filtros
@@ -22,3 +21,6 @@ RESUELTO ---------------------------------
 - rango de años en PDF
 - mail wrapper -> IMPLEMENTADO CON poste.io
 - incrementar nº socio en requests_metadata al aceptar
+- nº solicitudes pendientes popup (UI)
+- PUT email
+- no mostrar count ni popup de solicitudes en estado != 0
