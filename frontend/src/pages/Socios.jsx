@@ -156,10 +156,6 @@ const SociosContent = ({ reqConfig }) => {
     }
   };
 
-  const handleDelete = async (userId) => {
-    setDeleteTargetId(userId);
-  };
-
   const handleViewIncomes = async (memberNumber) => {
     setSelectedMemberNumber(memberNumber);
     setShowIncomesModal(true);
@@ -169,7 +165,7 @@ const SociosContent = ({ reqConfig }) => {
 
     try {
       const url = reqConfig.incomesUrl.replace(":memberNumber", memberNumber);
-      const res = await getData(url);
+      const res = await getData(url, {}, false);
       setIncomes(res);
     } catch (err) {
       console.error(err);
@@ -283,7 +279,6 @@ const SociosContent = ({ reqConfig }) => {
                 key={identity.user.userId}
                 identity={identity}
                 onUpdate={handleEditSubmit}
-                onDelete={handleDelete}
                 onCancel={handleCancelCreate}
                 onViewIncomes={() => handleViewIncomes(identity.metadata.memberNumber)}
                 positionIfWaitlist={position}

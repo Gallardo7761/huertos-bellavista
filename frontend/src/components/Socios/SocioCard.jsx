@@ -90,7 +90,7 @@ const getPFP = (tipo) => {
 
 const MotionCard = _motion.create(Card);
 
-const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCancel, onViewIncomes, positionIfWaitlist, fieldErrors }) => {
+const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onCancel, onViewIncomes, positionIfWaitlist, fieldErrors }) => {
   const createMode = isNew;
   const [editMode, setEditMode] = useState(isNew);
   const [showPassword, setShowPassword] = useState(false);
@@ -175,8 +175,6 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
     setEditMode(true);
   };
 
-  const handleDelete = () => typeof onDelete === "function" && onDelete(identity.user.userId);
-
   const handleCancel = () => {
     if (isNew && typeof onCancel === 'function') return onCancel();
     setEditMode(false);
@@ -225,10 +223,14 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
       },
       account: {
         ...identity.account,
+        email: formData.email,
+        password: formData.password,
         status: finalStatus
       },
       metadata: {
         ...identity.metadata,
+        dni: formData.dni,
+        phone: formData.phone,
         type: formData.type,
         plotNumber: formData.plotNumber,
         assignedAt: formData.assignedAt,
@@ -318,10 +320,6 @@ const SocioCard = ({ identity, isNew = false, onCreate, onUpdate, onDelete, onCa
                 </div>
                 <div className="dropdown-item d-flex align-items-center" onClick={() => { handleViewIncomes(); closeDropdown(); }}>
                   <FontAwesomeIcon icon={faMoneyBill} className="me-2" />Ver ingresos
-                </div>
-                <hr className="dropdown-divider" />
-                <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => { handleDelete(); closeDropdown(); }}>
-                  <FontAwesomeIcon icon={faTrash} className="me-2" />Eliminar
                 </div>
               </>
             )}
