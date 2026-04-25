@@ -1,5 +1,4 @@
 POR HACER --------------------------------
-- mostrar pass al aceptar req
 - documentación
 - notificaciones WhatsApp announcements
 - implementar urlParams para filtros
@@ -24,3 +23,5 @@ RESUELTO ---------------------------------
 - nº solicitudes pendientes popup (UI)
 - PUT email
 - no mostrar count ni popup de solicitudes en estado != 0
+- hashear reqs
+- mostrar pass al aceptar req
