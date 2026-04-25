@@ -32,6 +32,7 @@ import AnimatedDropdown from '../components/AnimatedDropdown';
 import { useAuth } from '../hooks/useAuth';
 import { CONSTANTS } from '../util/constants';
 import { useError } from '../context/ErrorContext';
+import IfNotType from '../components/Auth/IfNotType';
 
 const parseDate = (date) => {
   if (!date) return 'NO';
@@ -221,40 +222,42 @@ const PerfilContent = ({ config }) => {
                 >
                   {({ closeDropdown }) => (
                     <>
-                      {!hasGreenHouse && !hasGreenHouseRequest && (
-                        <div className="dropdown-item d-flex align-items-center" onClick={() => {
-                          sendSimpleRequest(CONSTANTS.REQUEST_TYPE_ADD_GREENHOUSE);
-                          closeDropdown();
-                        }}>
-                          <FontAwesomeIcon icon={faSeedling} className="me-2" />Solicitar invernadero
-                        </div>
-                      )}
-                      {!hasCollaborator && !hasCollaboratorRequest && (
-                        <div className="dropdown-item d-flex align-items-center" onClick={() => {
-                          setShowAddCollaboratorModal(true);
-                          setFieldErrors(null);
-                          closeDropdown();
-                        }}>
-                          <FontAwesomeIcon icon={faUserPlus} className="me-2" />Añadir un colaborador
-                        </div>
-                      )}
-                      <hr className="dropdown-divider" />
-                      {hasGreenHouse && !hasGreenHouseRequest && (
-                        <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => {
-                          sendSimpleRequest(CONSTANTS.REQUEST_TYPE_REMOVE_GREENHOUSE);
-                          closeDropdown();
-                        }}>
-                          <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />Dejar invernadero
-                        </div>
-                      )}
-                      {hasCollaborator && !hasCollaboratorRequest && (
-                        <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => {
-                          setShowRemoveCollaboratorModal(true);
-                          closeDropdown();
-                        }}>
-                          <FontAwesomeIcon icon={faUserSlash} className="me-2" />Quitar colaborador
-                        </div>
-                      )}
+                      <IfNotType types={[0]}>
+                        {!hasGreenHouse && !hasGreenHouseRequest && (
+                          <div className="dropdown-item d-flex align-items-center" onClick={() => {
+                            sendSimpleRequest(CONSTANTS.REQUEST_TYPE_ADD_GREENHOUSE);
+                            closeDropdown();
+                          }}>
+                            <FontAwesomeIcon icon={faSeedling} className="me-2" />Solicitar invernadero
+                          </div>
+                        )}
+                        {!hasCollaborator && !hasCollaboratorRequest && (
+                          <div className="dropdown-item d-flex align-items-center" onClick={() => {
+                            setShowAddCollaboratorModal(true);
+                            setFieldErrors(null);
+                            closeDropdown();
+                          }}>
+                            <FontAwesomeIcon icon={faUserPlus} className="me-2" />Añadir un colaborador
+                          </div>
+                        )}
+                        <hr className="dropdown-divider" />
+                        {hasGreenHouse && !hasGreenHouseRequest && (
+                          <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => {
+                            sendSimpleRequest(CONSTANTS.REQUEST_TYPE_REMOVE_GREENHOUSE);
+                            closeDropdown();
+                          }}>
+                            <FontAwesomeIcon icon={faArrowRightFromBracket} className="me-2" />Dejar invernadero
+                          </div>
+                        )}
+                        {hasCollaborator && !hasCollaboratorRequest && (
+                          <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => {
+                            setShowRemoveCollaboratorModal(true);
+                            closeDropdown();
+                          }}>
+                            <FontAwesomeIcon icon={faUserSlash} className="me-2" />Quitar colaborador
+                          </div>
+                        )}
+                      </IfNotType>
                       <div className="dropdown-item d-flex align-items-center text-danger" onClick={() => {
                         sendSimpleRequest(CONSTANTS.REQUEST_TYPE_UNREGISTER);
                         closeDropdown();

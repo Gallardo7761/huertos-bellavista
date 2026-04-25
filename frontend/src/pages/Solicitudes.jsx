@@ -13,6 +13,8 @@ import SolicitudCard from '../components/Solicitudes/SolicitudCard';
 import { Button } from 'react-bootstrap';
 import CustomModal from '../components/CustomModal';
 import { useError } from '../context/ErrorContext';
+import { faCheck, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const PAGE_SIZE = 10;
 
@@ -40,6 +42,9 @@ const Solicitudes = () => {
 const SolicitudesContent = ({ reqConfig }) => {
   const { data, dataLoading, putData, deleteData } = useDataContext();
   const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [password, setPassword] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const {
     filtered,
@@ -63,7 +68,9 @@ const SolicitudesContent = ({ reqConfig }) => {
   const handleAccept = async (entry) => {
     const url = reqConfig.acceptUrl.replace(":requestId", entry.requestId);
     try {
-      await putData(url, {});
+      const res = await putData(url, {});
+      setPassword(res?.password);
+      setShowPasswordModal(true);
       setSearchTerm("");
     } catch (err) {
       console.error("❌ Error al aceptar solicitud:", err.message);
@@ -85,6 +92,12 @@ const SolicitudesContent = ({ reqConfig }) => {
     setDeleteTargetId(id);
   }
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(password);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   if (dataLoading) return <p className="text-center my-5"><LoadingIcon /></p>;
 
   return (
@@ -102,7 +115,7 @@ const SolicitudesContent = ({ reqConfig }) => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-            
+
         <PaginatedCardGrid
           items={filtered}
           renderCard={(entry, idx) => (
@@ -138,6 +151,23 @@ const SolicitudesContent = ({ reqConfig }) => {
             >
               Confirmar
             </Button>
+          </div>
+        </CustomModal>
+
+        <CustomModal
+          title="Contraseña del socio"
+          show={showPasswordModal}
+          onClose={() => setShowPasswordModal(false)}
+        >
+          <div className='p-3 text-center'>
+            <p>Esta es la contraseña del nuevo socio. Se le deberá enviar para que pueda entrar a la web. <strong>Es (muy) recomendable que la cambie.</strong></p>
+
+            <div className="d-flex justify-content-center align-items-center gap-2 mt-3">
+              <FontAwesomeIcon icon={copied ? faCheck : faCopy} size='xl' className='m-0 me-2 p-0' />
+              <h2 className='text-center password-copyable m-0' onClick={handleCopy}>
+                {password}
+              </h2>
+            </div>
           </div>
         </CustomModal>
 
