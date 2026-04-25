@@ -51,6 +51,7 @@ public class RequestDto {
         private String name;
         private RequestMetadataDto metadata;
         private Instant createdAt;
+        private String hash;
 
         public UUID getRequestId() {
             return requestId;
@@ -106,6 +107,14 @@ public class RequestDto {
 
         public void setCreatedAt(Instant createdAt) {
             this.createdAt = createdAt;
+        }
+
+        public String getHash() {
+            return hash;
+        }
+
+        public void setHash(String hash) {
+            this.hash = hash;
         }
     }
 }

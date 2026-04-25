@@ -181,6 +181,7 @@ public class MemberService {
                 .toList();
 
         return plotMembers.stream()
+                .filter(m -> m.metadata().getPlotNumber() > 0)
                 .anyMatch(dto -> dto.metadata().getType().equals((byte)3) ||
                         dto.metadata().getType().equals((byte)0));
     }

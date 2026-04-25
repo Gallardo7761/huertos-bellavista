@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import es.huertosbellavista.backend.huertos.util.HashUtil;
 import es.huertosbellavista.backend.huertos.validation.RequestValidator;
 import net.miarma.backlib.exception.ConflictException;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,13 @@ public class RequestService {
         if (request.getMetadata() != null) {
             RequestValidator.validate(request.getMetadata(), request.getType());
         }
+
+        String hash = HashUtil.hashRequest(request);
+        if (requestRepository.existsByHash(hash)) {
+            throw new ConflictException("Solicitud duplicada");
+        }
+
+        request.setHash(hash);
 
         return requestRepository.save(request);
     }

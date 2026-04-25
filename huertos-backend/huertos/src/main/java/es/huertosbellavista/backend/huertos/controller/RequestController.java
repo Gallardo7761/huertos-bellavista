@@ -9,6 +9,7 @@ import es.huertosbellavista.backend.huertos.mapper.RequestWithMetadataMapper;
 import es.huertosbellavista.backend.huertos.model.Request;
 import es.huertosbellavista.backend.huertos.service.RequestAcceptanceService;
 import es.huertosbellavista.backend.huertos.service.RequestService;
+import net.miarma.backlib.dto.UserWithCredentialDto;
 import net.miarma.backlib.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +63,7 @@ public class RequestController {
         return ResponseEntity.ok(
             requestService.getAll()
                 .stream()
+                .filter(r -> r.getStatus() == (byte)0)
                 .map(RequestMapper::toResponse)
                 .collect(Collectors.collectingAndThen(
                     Collectors.counting(),
@@ -132,10 +134,18 @@ public class RequestController {
 
     @PutMapping("/{request_id}/accept")
     @PreAuthorize("hasAnyRole('HUERTOS_ROLE_ADMIN', 'HUERTOS_ROLE_DEV')")
-    public ResponseEntity<Map<String, String>> acceptRequest(@PathVariable("request_id") UUID requestId) {
+    public ResponseEntity<AcceptanceResponseDto> acceptRequest(@PathVariable("request_id") UUID requestId) {
         Request r = requestAcceptanceService.acceptRequest(requestId);
-        requestAcceptanceService.handleSideEffects(r);
-        return ResponseEntity.ok(Map.of("message", "Accepted request: " + r.getRequestId()));
+        RegistrationResultDto creds = requestAcceptanceService.handleSideEffects(r);
+
+        String username = (creds != null) ? creds.uwc().account().getUsername() : null;
+        String password = (creds != null) ? creds.rawPassword() : null;
+
+        return ResponseEntity.ok(new AcceptanceResponseDto(
+                "Accepted request: " + r.getRequestId(),
+                username,
+                password
+        ));
     }
 
     @PutMapping("/{request_id}/reject")

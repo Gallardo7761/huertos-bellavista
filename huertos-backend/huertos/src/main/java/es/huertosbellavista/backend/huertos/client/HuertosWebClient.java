@@ -1,5 +1,6 @@
 package es.huertosbellavista.backend.huertos.client;
 
+import es.huertosbellavista.backend.huertos.dto.RegistrationResultDto;
 import es.huertosbellavista.backend.huertos.dto.RequestMetadataDto;
 import es.huertosbellavista.backend.huertos.util.UsernameGenerator;
 import net.miarma.backlib.dto.*;
@@ -64,7 +65,7 @@ public class HuertosWebClient {
         return arr == null ? List.of() : Arrays.asList(arr);
     }
 
-    public UserWithCredentialDto createUser(RequestMetadataDto metadataDto) {
+    public RegistrationResultDto createUser(RequestMetadataDto metadataDto) {
         CreateUserDto userDto = new CreateUserDto(metadataDto.displayName(), null);
         HttpEntity<CreateUserDto> userRequestEntity = new HttpEntity<>(userDto);
 
@@ -84,12 +85,14 @@ public class HuertosWebClient {
             throw new RuntimeException("No se pudo crear al usuario");
         }
 
+        String rawPassword = PasswordGenerator.generate(8);
+
         CreateCredentialDto credDto = new CreateCredentialDto(
                 createdUser.getUserId(),
                 (byte) 1,
                 UsernameGenerator.generate(metadataDto.displayName(), metadataDto.memberNumber()),
                 metadataDto.email(),
-                PasswordGenerator.generate(8),
+                rawPassword,
                 (byte) 1
         );
 
@@ -111,7 +114,10 @@ public class HuertosWebClient {
             throw new RuntimeException("No se pudo crear la cuenta del usuario");
         }
 
-        return new UserWithCredentialDto(createdUser, createdCred);
+        return new RegistrationResultDto(
+            new UserWithCredentialDto(createdUser, createdCred),
+            rawPassword
+        );
     }
 
     public void updateUser(UUID userId, UserWithCredentialDto dto) {

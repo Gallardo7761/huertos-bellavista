@@ -196,4 +196,19 @@ public class RequestMetadata {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "RequestMetadata{" +
+                "displayName='" + displayName + '\'' +
+                ", dni='" + dni + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", city='" + city + '\'' +
+                ", username='" + username + '\'' +
+                ", type=" + type +
+                '}';
+    }
 }

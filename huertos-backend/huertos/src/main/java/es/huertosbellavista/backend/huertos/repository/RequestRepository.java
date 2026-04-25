@@ -15,4 +15,5 @@ public interface RequestRepository extends JpaRepository<Request, byte[]> {
     """)
     Optional<Request> findByIdWithMetadata(@Param("id") byte[] id);
 
+    boolean existsByHash(String hash);
 }

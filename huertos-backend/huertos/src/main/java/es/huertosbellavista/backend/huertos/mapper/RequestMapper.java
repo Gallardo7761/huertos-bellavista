@@ -14,6 +14,7 @@ public class RequestMapper {
         dto.setStatus(entity.getStatus());
         dto.setUserId(entity.getUserId());
         dto.setCreatedAt(entity.getCreatedAt());
+        dto.setHash(entity.getHash());
 
         if (entity.getMetadata() != null) {
             dto.setMetadata(

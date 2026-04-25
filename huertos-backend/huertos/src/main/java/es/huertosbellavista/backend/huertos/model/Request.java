@@ -33,6 +33,9 @@ public class Request {
 	@Column(name = "created_at", nullable = false)
 	private Instant createdAt;
 
+	@Column(name = "hash", unique = true, length = 64)
+	private String hash;
+
 	@OneToOne(mappedBy = "request", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private RequestMetadata metadata;
 
@@ -73,4 +76,12 @@ public class Request {
 
 	public RequestMetadata getMetadata() { return metadata; }
 	public void setMetadata(RequestMetadata metadata) { this.metadata = metadata; }
+
+	public String getHash() {
+		return hash;
+	}
+
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 }

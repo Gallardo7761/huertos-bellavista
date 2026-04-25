@@ -1,6 +1,7 @@
 package es.huertosbellavista.backend.huertos.service;
 
 import es.huertosbellavista.backend.huertos.client.HuertosWebClient;
+import es.huertosbellavista.backend.huertos.dto.RegistrationResultDto;
 import es.huertosbellavista.backend.huertos.mapper.RequestMetadataMapper;
 import es.huertosbellavista.backend.huertos.model.Request;
 import es.huertosbellavista.backend.huertos.model.RequestMetadata;
@@ -41,49 +42,54 @@ public class RequestAcceptanceService {
         return request;
     }
 
-    public void handleSideEffects(Request request) {
+    public RegistrationResultDto handleSideEffects(Request request) {
         RequestMetadata metadata = request.getMetadata();
 
-        switch (request.getType()) {
+        return switch (request.getType()) {
 
-            case 0: // REGISTER
-                handleRegister(metadata);
-                break;
+            case 0 -> // REGISTER
+                    handleRegister(metadata);
 
-            case 1: // UNREGISTER
+            case 1 -> { // UNREGISTER
                 handleUnregister(metadata);
-                break;
+                yield null;
+            }
 
-            case 2: // ADD_COLLABORATOR
-                handleAddCollaborator(metadata);
-                break;
+            case 2 -> // ADD_COLLABORATOR
+                    handleAddCollaborator(metadata);
 
-            case 3: // REMOVE_COLLABORATOR
+            case 3 -> { // REMOVE_COLLABORATOR
                 handleRemoveCollaborator(metadata);
-                break;
+                yield null;
+            }
 
-            case 4: // ADD_GREENHOUSE
+            case 4 -> { // ADD_GREENHOUSE
                 handleAddGreenhouse(metadata);
-                break;
+                yield null;
+            }
 
-            case 5: // REMOVE_GREENHOUSE
+            case 5 -> { // REMOVE_GREENHOUSE
                 handleRemoveGreenhouse(metadata);
-                break;
+                yield null;
+            }
 
-            default:
+            default ->
                 throw new BadRequestException("Tipo de solicitud no soportado");
-        }
+        };
     }
 
-    private void handleRegister(RequestMetadata metadata) {
-        UserWithCredentialDto createdUser =
+    private RegistrationResultDto handleRegister(RequestMetadata metadata) {
+        RegistrationResultDto createdUser =
                 huertosWebClient.createUser(RequestMetadataMapper.toDto(metadata));
 
-        UserMetadata userMetadata = buildBaseUserMetadata(metadata, createdUser.user().getUserId());
+        UserMetadata userMetadata = buildBaseUserMetadata(metadata,
+                createdUser.uwc().user().getUserId());
         userMetadata.setType((byte) 0); // socio
         userMetadata.setRole((byte) 0);
 
         metadataService.create(userMetadata);
+
+        return createdUser;
     }
 
     private void handleUnregister(RequestMetadata metadata) {
@@ -91,19 +97,21 @@ public class RequestAcceptanceService {
         huertosWebClient.updateCredentialStatus(toRemove.getUserId(), (byte)1, (byte)0);
     }
 
-    private void handleAddCollaborator(RequestMetadata metadata) {
-        UserWithCredentialDto newCollab =
+    private RegistrationResultDto handleAddCollaborator(RequestMetadata metadata) {
+        RegistrationResultDto newCollab =
                 huertosWebClient.createUser(RequestMetadataMapper.toDto(metadata));
 
         UserMetadata collabMeta = buildBaseUserMetadata(
                 metadata,
-                newCollab.user().getUserId()
+                newCollab.uwc().user().getUserId()
         );
 
         collabMeta.setType((byte) 3); // colaborador
         collabMeta.setRole((byte) 0);
 
         metadataService.create(collabMeta);
+
+        return newCollab;
     }
 
     private void handleRemoveCollaborator(RequestMetadata metadata) {
